@@ -1,0 +1,42 @@
+<resources>
+    <string name="app_name">Gestao Saúde</string>
+    <!-- nomes do menu -->
+    <string name="action_home">Home</string>
+    <string name="action_noticias">Notícias</string>
+    <string name="action_questionario">Questionário</string>
+    <string name="action_utilidades">Utilidades</string>
+    <string name="action_configuracao">Configuração</string>
+
+    <string name="action_action_IMC">Calcular IMC</string>
+    <string name="action_Exercicio">Dica de Exercícios IMC</string>
+    <string name="action_Dieta">Dicas de Dieta IMC</string>
+    <string name="title_activity_medalhas">Medalhas</string>
+    <string name="medalhas">Medalhas</string>
+    <string name="facanhas">Façanhas</string>
+    <string name="cD_medalhas">Botão medalhas</string>
+    <string name="cD_trofeu">Botão troféu</string>
+    <string name="trofeus">Trofeus</string>
+    <string name="cD_conquistas">Botao conquistas</string>
+    <string name="conquistas">Conquistas</string>
+    <string name="desafios">Desafios</string>
+    <string name="questionarios">Questionários</string>
+    <string name="nome_medalha_prev">Nome da Medalha</string>
+    <string name="medal_icon_dsc">Icone que representa a medalha</string>
+    <string name="xp_txt">Experiência: </string>
+    <string name="dd_mm_aaaa_format">DD/MM/AAAA</string>
+    <string name="txt_dsc_medalha">Descrição da medalha</string>
+    <string name="data_criacao">Data de criação:</string>
+    <string name="xp_count_format">00XP</string>
+    <string name="qtd_owned_by_user_label">Quantidade obtida pelo usuário:</string>
+    <string name="zero">0</string>
+    <string name="medalha_label">Medalha</string>
+    <string name="descricao_label">Descrição:</string>
+    <string name="lista_de_desafios_header">Lista de Desafios:</string>
+    <string name="metas">Metas</string>
+    <string name="voltar">Voltar</string>
+    <string name="iniciar_desafio">Iniciar Desafio</string>
+    <string name="criado_em">Criado em:</string>
+    <string name="descricao">Descrição</string>
+    <string name="titulo_do_desafio">Título do Desafio</string>
+    <!-- ******************************************** -->
+</resources>

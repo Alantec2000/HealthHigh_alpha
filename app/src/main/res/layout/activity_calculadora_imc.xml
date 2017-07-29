@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/txtViewAltura"
+        android:layout_width="215dp"
+        android:layout_height="43dp"
+        android:layout_marginLeft="85dp"
+        android:layout_marginTop="0dp"
+        android:ems="10"
+        android:inputType="numberDecimal"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView8" />
+
+    <EditText
+        android:id="@+id/txtViewPeso"
+        android:layout_width="215dp"
+        android:layout_height="43dp"
+        android:layout_marginLeft="85dp"
+        android:layout_marginTop="0dp"
+        android:ems="10"
+        android:inputType="numberDecimal"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView7" />
+
+    <Button
+        android:id="@+id/btnCalcularIMC"
+        android:layout_width="94dp"
+        android:layout_height="48dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="32dp"
+        android:text="Calcular"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtViewPeso" />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="17dp"
+        android:text="Digite o Peso"
+        android:layout_marginLeft="85dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="32dp"
+        app:layout_constraintTop_toBottomOf="@+id/txtViewAltura" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="87dp"
+        android:layout_height="17dp"
+        android:text="Digite a Altura"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="32dp"
+        android:layout_marginLeft="85dp"
+        app:layout_constraintLeft_toLeftOf="parent" />
+</android.support.constraint.ConstraintLayout>
