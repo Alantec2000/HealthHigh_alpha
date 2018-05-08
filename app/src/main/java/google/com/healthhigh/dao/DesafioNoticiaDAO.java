@@ -3,7 +3,7 @@ package google.com.healthhigh.dao;
 import android.content.Context;
 
 public class DesafioNoticiaDAO extends DAO {
-    private static final String
+    public static final String
             TABLE_NAME = "hhwm_desafio_noticia",
             ID = "id_desafio_noticia",
             ID_NOTICIA = "i_id_noticia_desafio_noticia",

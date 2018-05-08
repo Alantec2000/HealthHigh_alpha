@@ -11,7 +11,6 @@ import android.widget.TextView;
 import com.google.healthhigh.R;
 
 import google.com.healthhigh.activities.LendoNoticiaActivity;
-import google.com.healthhigh.activities.QuestionarioActivity;
 import google.com.healthhigh.domain.Noticia;
 
 /**
@@ -21,7 +20,9 @@ import google.com.healthhigh.domain.Noticia;
 public class NoticiaViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
     private TextView txt_titulo_noticia;
     private TextView txt_status_visualizacao;
+    private TextView txt_status_publicacao;
     private TextView txt_descricao;
+    private TextView txt_data_criacao;
     private ImageView img_icone_noticia;
     private Button btn_ler;
     private Noticia noticia;
@@ -31,6 +32,8 @@ public class NoticiaViewHolder extends RecyclerView.ViewHolder implements View.O
         txt_descricao = (TextView) v.findViewById(R.id.txt_descricao);
         img_icone_noticia = (ImageView) v.findViewById(R.id.img_icone_noticia);
         txt_status_visualizacao = (TextView) v.findViewById(R.id.txt_status_visualizacao);
+        txt_status_publicacao = (TextView) v.findViewById(R.id.txt_status_publicacao);
+        txt_data_criacao = (TextView) v.findViewById(R.id.txt_data_criacao);
         btn_ler = (Button) v.findViewById(R.id.btn_ler);
         btn_ler.setOnClickListener(this);
     }
@@ -67,6 +70,14 @@ public class NoticiaViewHolder extends RecyclerView.ViewHolder implements View.O
         this.txt_status_visualizacao = txt_status_visualizacao;
     }
 
+    public TextView getTxt_data_criacao() {
+        return txt_data_criacao;
+    }
+
+    public void setTxt_data_criacao(TextView txt_data_criacao) {
+        this.txt_data_criacao = txt_data_criacao;
+    }
+
     public TextView getTxt_descricao() {
         return txt_descricao;
     }
@@ -81,6 +92,14 @@ public class NoticiaViewHolder extends RecyclerView.ViewHolder implements View.O
 
     public void setBtn_ler(Button btn_ler) {
         this.btn_ler = btn_ler;
+    }
+
+    public TextView getTxt_status_publicacao() {
+        return txt_status_publicacao;
+    }
+
+    public void setTxt_status_publicacao(TextView txt_status_publicacao) {
+        this.txt_status_publicacao = txt_status_publicacao;
     }
 
     @Override

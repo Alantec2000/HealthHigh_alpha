@@ -1,14 +1,11 @@
 package google.com.healthhigh.domain;
 
-import google.com.healthhigh.activities.Interacao;
-
 /**
  * Created by Alan on 29/05/2017.
  */
 
 public class Noticia extends TipoMeta{
     private String titulo, corpo;
-    private Desafio desafio_atual;
     private InteracaoNoticia interacao_noticia;
     public String getTitulo() {
         return titulo;
@@ -40,6 +37,10 @@ public class Noticia extends TipoMeta{
     }
 
     public boolean foiLida(){
-        return !(interacao_noticia != null && interacao_noticia.getData_visualizacao() != 0);
+        return getData_visualizacao() != 0;
+    }
+
+    public boolean publicacaoFoiLida() {
+        return (interacao_noticia != null && interacao_noticia.getData_visualizacao() != 0);
     }
 }

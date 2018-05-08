@@ -70,7 +70,7 @@ public abstract class DAO extends CreateDB {
         }
     }
 
-    protected long insert(String table_name, ContentValues cv, String where, String[] where_params){
+    protected long insert(String table_name, ContentValues cv){
         long ret = 0;
         try{
             ret = write_db.insert(table_name, null, cv);

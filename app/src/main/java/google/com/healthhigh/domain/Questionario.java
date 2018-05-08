@@ -2,9 +2,6 @@ package google.com.healthhigh.domain;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
-import google.com.healthhigh.activities.Interacao;
 
 /**
  * Created by Alan on 22/10/2017.

@@ -1,7 +1,5 @@
 package google.com.healthhigh.domain;
 
-import google.com.healthhigh.activities.Interacao;
-
 /**
  * Created by Alan on 25/04/2018.
  */

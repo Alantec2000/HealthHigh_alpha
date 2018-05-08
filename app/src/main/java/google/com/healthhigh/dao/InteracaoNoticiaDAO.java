@@ -2,12 +2,11 @@ package google.com.healthhigh.dao;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.sqlite.SQLiteException;
 
 import google.com.healthhigh.domain.InteracaoNoticia;
 
 public class InteracaoNoticiaDAO extends DAO {
-    private static final String
+    public static final String
             TABLE_NAME = "hhmw_interacao_noticia",
             ID = "id_interacao_noticia",
             ID_PUBLICACAO = "id_publicacao_interacao_noticia",

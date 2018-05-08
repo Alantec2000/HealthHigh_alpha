@@ -1,8 +1,4 @@
-package google.com.healthhigh.activities;
-
-import google.com.healthhigh.domain.Desafio;
-import google.com.healthhigh.domain.Publicacao;
-import google.com.healthhigh.domain.TipoMeta;
+package google.com.healthhigh.domain;
 
 public abstract class Interacao {
     private long id, data_criacao, data_visualizacao;

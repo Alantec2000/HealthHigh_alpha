@@ -22,6 +22,12 @@ public abstract class DataHelper {
         return sdf.format(d);
     }
 
+    public static String toDateString(long tempo){
+        Date d = new Date((tempo)*1000);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
+        return sdf.format(d);
+    }
+
     public static long now(){
         return System.currentTimeMillis();
     }

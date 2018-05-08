@@ -1,7 +1,5 @@
 package google.com.healthhigh.domain;
 
-import google.com.healthhigh.activities.Interacao;
-
 public class InteracaoNoticia extends Interacao {
     private long tempo_leitura;
     private Noticia noticia;

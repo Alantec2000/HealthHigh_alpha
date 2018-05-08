@@ -1,8 +1,8 @@
 package google.com.healthhigh.activities;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.ViewTreeObserver;
 import android.widget.ScrollView;
@@ -41,8 +41,13 @@ public class LendoNoticiaActivity extends AppCompatActivity implements ViewTreeO
                 titulo_noticia.setText(noticia.getTitulo());
                 corpo_noticia.setText(noticia.getCorpo());
                 if(!noticia.foiLida()){
-                    noticia_controller.setNoticiaLida(noticia.getInteracao_noticia());
+                    noticia_controller.setNoticiaLida(noticia);
                 }
+//                if(!noticia.publicacaoFoiLida()){
+//                    if(noticia.getInteracao_noticia() == null)
+//                        noticia_controller.inserirNovaInteracao(noticia);
+//                    noticia_controller.setInteracaoNoticiaLida(noticia.getInteracao_noticia());
+//                }
             } else {
                 MessageDialog.showMessage(this, "Notícia não encontrado!", "Erro ao obter notícia");
             }

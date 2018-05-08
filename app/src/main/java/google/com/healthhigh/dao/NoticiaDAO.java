@@ -2,7 +2,6 @@ package google.com.healthhigh.dao;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.sqlite.SQLiteException;
 
 import google.com.healthhigh.domain.Noticia;
 
@@ -37,22 +36,6 @@ public class NoticiaDAO extends DAO {
         super(context);
     }
 
-    public void inserirNoticia(Noticia n){
-        ContentValues cv = getContentValues(n);
-        long id_n = 0;
-        try{
-
-        } catch(SQLiteException e) {
-            imprimeErroSQLite(e);
-        } finally {
-            if(id_n > 0) {
-                n.setId(id_n);
-            } else {
-                n = null;
-            }
-        }
-    }
-
     private ContentValues getContentValues(Noticia n) {
         ContentValues cv = new ContentValues();
         if(n.getId() > 0){
@@ -60,11 +43,29 @@ public class NoticiaDAO extends DAO {
         }
         cv.put(CORPO, n.getCorpo());
         cv.put(TITULO, n.getTitulo());
+        cv.put(DATA_CRIACAO, n.getData_criacao());
+        cv.put(DATA_VISUALIZACAO, n.getData_visualizacao());
         return cv;
     }
 
     @Override
     protected void prepareContentReceiver() {
 
+    }
+
+    public void inserirNoticia(Noticia n){
+        ContentValues cv = getContentValues(n);
+        long id = insert(TABLE_NAME, cv);
+        if(id > 0){
+            n.setId(id);
+        } else {
+            n = null;
+        }
+    }
+
+    public boolean atualizarNoticia(Noticia n) {
+        ContentValues cv = getContentValues(n);
+        boolean rows = update(TABLE_NAME, cv, ID + " = ?", new String[]{String.valueOf(n.getId())});
+        return rows;
     }
 }

@@ -1,10 +1,6 @@
 package google.com.healthhigh.domain;
 
-import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
-
-import google.com.healthhigh.activities.Interacao;
 
 public abstract class TipoMeta {
     protected long id, data_criacao, data_visualizacao;
