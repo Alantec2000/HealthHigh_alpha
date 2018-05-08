@@ -12,12 +12,13 @@ import java.util.List;
 import google.com.healthhigh.adapter.DesafioAdapter;
 import google.com.healthhigh.dao.DesafioDAO;
 import google.com.healthhigh.domain.Desafio;
+import google.com.healthhigh.utils.Toaster;
 
-public class CarregaTelaInicial extends AsyncTask<Void, Void, List<Desafio>> {
+public class CarregaDesafiosPreview extends AsyncTask<Void, Void, List<Desafio>> {
     private Context c;
     private RecyclerView rv;
 
-    public CarregaTelaInicial(Context c, RecyclerView rv){
+    public CarregaDesafiosPreview(Context c, RecyclerView rv){
         this.c = c;
         this.rv = rv;
     }

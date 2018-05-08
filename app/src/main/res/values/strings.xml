@@ -38,5 +38,30 @@
     <string name="criado_em">Criado em:</string>
     <string name="descricao">Descrição</string>
     <string name="titulo_do_desafio">Título do Desafio</string>
+    <string name="realizando_desafio">Realizando Desafio</string>
+    <string name="passos_label">Passos:</string>
+    <string name="tempo_label">Tempo:</string>
+    <string name="_00">00</string>
+    <string name="hh_mm_ss">00:00:00</string>
+    <string name="meta_atual_label">Meta atual:</string>
+    <string name="iniciar">Iniciar</string>
+    <string name="flag_meta_selecionada">Meta Selecionada</string>
+    <string name="tempo_limite">Tempo limite</string>
+    <string name="tipo">Tipo</string>
+    <string name="quantidade">quantidade</string>
+    <string name="descricao_da_meta">Descrição da meta</string>
+    <string name="titulo_da_meta">Titulo da meta</string>
+    <string name="meta_n_0">META Nº0</string>
+    <string name="nome_label">Nome:</string>
+    <string name="titulo_label">Título:</string>
+    <string name="nome_hint_label">Nome</string>
+    <string name="descricao_hint_label">Descrição</string>
+    <string name="metas_hint_label">Metas</string>
+    <string name="metas_label">Metas:</string>
+    <string name="save_new_label">Salvar Novo</string>
+    <string name="premiacao_label">Premiação:</string>
+    <string name="cancel_label">Cancelar</string>
+    <string name="status_label">Status:</string>
+    <string name="data_desafio_concluido_label">Concluído em:</string>
     <!-- ******************************************** -->
 </resources>

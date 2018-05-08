@@ -1,21 +1,18 @@
 package google.com.healthhigh.activities;
 
 import android.content.pm.ActivityInfo;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.healthhigh.R;
 
-import org.w3c.dom.Text;
-
 import google.com.healthhigh.dao.ItemDAO;
 import google.com.healthhigh.domain.Item;
 import google.com.healthhigh.utils.BitmapUtil;
 import google.com.healthhigh.utils.DataHelper;
-import google.com.healthhigh.utils.Toaster;
 
 public class DetalhesMedalhaActivity extends AppCompatActivity {
     private Handler h = new Handler();

@@ -3,23 +3,12 @@ package google.com.healthhigh.dao;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 
-import google.com.healthhigh.activities.MedalhasActivity;
-import google.com.healthhigh.domain.Item;
-
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.TimeZone;
 
-import google.com.healthhigh.db.CreateDB;
-import google.com.healthhigh.domain.Meta;
-import google.com.healthhigh.utils.DataHelper;
-import google.com.healthhigh.utils.Toaster;
+import google.com.healthhigh.domain.Item;
 public class ItemDAO extends DAO {
     private Context context = null;
     private List<Item> itens;

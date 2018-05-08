@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scroll_lendo_noticia">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Outubro Rosa UMC"
+            style="@style/lista_header"
+            android:padding="10dp"
+            android:layout_margin="8dp"
+            android:textAlignment="center"
+            android:textStyle="bold"
+            android:id="@+id/txt_titulo_noticia"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/question_mark"
+                android:layout_centerInParent="true"/>
+        </RelativeLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Corpo da noticia"
+            android:id="@+id/txt_corpo_noticia"
+            android:layout_margin="10dp"/>
+    </LinearLayout>
+</ScrollView>

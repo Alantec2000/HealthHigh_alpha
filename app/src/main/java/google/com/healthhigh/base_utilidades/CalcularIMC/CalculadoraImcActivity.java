@@ -1,12 +1,16 @@
 package google.com.healthhigh.base_utilidades.CalcularIMC;
+
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import java.util.Locale;
-import google.com.healthhigh.base.Base;
+
 import com.google.healthhigh.R;
+
+import java.util.Locale;
+
+import google.com.healthhigh.base.Base;
 
 public class CalculadoraImcActivity extends Base {
 

@@ -3,10 +3,7 @@ package google.com.healthhigh.utils;
 import android.content.Context;
 import android.content.res.Resources;
 import android.support.v4.widget.NestedScrollView;
-import android.util.AttributeSet;
 import android.util.TypedValue;
-
-import java.util.logging.LogManager;
 
 /**
  * Created by Alan on 17/06/2017.

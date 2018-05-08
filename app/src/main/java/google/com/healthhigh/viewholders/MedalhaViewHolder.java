@@ -3,7 +3,6 @@ package google.com.healthhigh.viewholders;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -11,10 +10,7 @@ import android.widget.TextView;
 import com.google.healthhigh.R;
 
 import google.com.healthhigh.activities.DetalhesMedalhaActivity;
-import google.com.healthhigh.activities.MedalhasActivity;
 import google.com.healthhigh.domain.Item;
-import google.com.healthhigh.utils.ItemList;
-import google.com.healthhigh.utils.Toaster;
 
 /**
  * Created by Alan on 24/06/2017.

@@ -12,7 +12,7 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
-    <style name="l1_tittle">
+    <style name="l1_title" parent="ellipsend">
         <item name="android:text">Título</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">18sp</item>
@@ -24,6 +24,9 @@
         <item name="android:ellipsize">end</item>
     </style>
     <style name="oneLineText" parent="ellipsend">
+        <item name="android:maxLines">1</item>
+    </style>
+    <style name="oneLineTitle" parent="l1_title">
         <item name="android:maxLines">1</item>
     </style>
     <style name="twoLineText" parent="ellipsend">

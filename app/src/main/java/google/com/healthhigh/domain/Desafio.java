@@ -1,8 +1,7 @@
 package google.com.healthhigh.domain;
 
-import android.util.Log;
-
-import java.util.TreeMap;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Alan on 16/05/2017.
@@ -10,15 +9,31 @@ import java.util.TreeMap;
 
 public class Desafio {
     private String TAG = "DESAFIO";
-    private long id;
+    public static final String TAG_ID = "desafio_id";
     private String titulo;
     private String descricao;
-    private int tipo;
-    private boolean aceito;
-    private int tentativas;
+
+    private int status = 1;
+    private long id;
     private long data_criacao;
     private long data_aceito;
-    private TreeMap<Integer, Meta> metas = new TreeMap<Integer, Meta>();
+    private long data_conclusao;
+
+    private int tipo;
+    private int quantidade;
+    private int tentativas;
+
+    public static final int PENDENTE = 1;
+    public static final int VISUALIZADO = 2;
+    public static final int EM_EXECUCAO = 3;
+    public static final int CONCLUIDO = 4;
+    public static final int ENCERRADO = 5;
+
+    private Publicacao publicacao;
+    private InteracaoDesafio interacao_desafio
+            ;
+    private boolean aceito;
+    private List<Meta> metas = new ArrayList<>();
     public Desafio() {}
 
     public Desafio(long id, String t, String d, int td, boolean fa, int tn) {
@@ -41,24 +56,14 @@ public class Desafio {
 
     public void setData_aceito(long data_aceito) {this.data_aceito = data_aceito;}
 
-    public void addMeta(Integer id, Meta m){metas.put(id, m);}
+    public void addMeta(Meta m){this.metas.add(m);}
 
-    public Meta getMeta(Integer id) {
-        Meta m = null;
-        try {
-            m = metas.get(id);
-        } catch (Exception e){
-            Log.e(TAG, "Meta " + id.toString() + " Não existe neste desafio!");
-        }
-        return m;
+    public List<Meta> getMetas() {
+        return metas;
     }
 
-    public TreeMap<Integer, Meta> getMetas(){
-        return this.metas;
-    }
-
-    public void setMetas(TreeMap<Integer, Meta> m){
-        metas = m;
+    public void setMetas(List<Meta> metas) {
+        this.metas = metas;
     }
 
     public int getTentativas() {
@@ -95,5 +100,69 @@ public class Desafio {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public int getQuantidade() {
+        return quantidade;
+    }
+
+    public void setQuantidade(int quantidade) {
+        this.quantidade = quantidade;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public long getData_conclusao() {
+        return data_conclusao;
+    }
+
+    public void setData_conclusao(long data_conclusao) {
+        this.data_conclusao = data_conclusao;
+    }
+
+    public static String getStatusText(int status){
+        String status_text;
+        switch (status){
+            case PENDENTE:
+                status_text = "Pendente";
+            break;
+            case VISUALIZADO:
+                status_text = "Visualizado";
+            break;
+            case EM_EXECUCAO:
+                status_text = "Em execução";
+            break;
+            case CONCLUIDO:
+                status_text = "Concluido";
+            break;
+            case ENCERRADO:
+                status_text = "Encerrado";
+            break;
+            default:
+                status_text = "Indefinido";
+        }
+        return status_text;
+    }
+
+    public Publicacao getPublicacao() {
+        return publicacao;
+    }
+
+    public void setPublicacao(Publicacao publicacao) {
+        this.publicacao = publicacao;
+    }
+
+    public InteracaoDesafio getInteracao_desafio() {
+        return interacao_desafio;
+    }
+
+    public void setInteracao_desafio(InteracaoDesafio interacao_desafio) {
+        this.interacao_desafio = interacao_desafio;
     }
 }

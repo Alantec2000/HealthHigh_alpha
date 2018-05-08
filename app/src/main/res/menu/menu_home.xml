@@ -2,15 +2,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="alexandre.healthhigh.NoticiaActivityOLD">
-
     <item
         android:id="@+id/action_noticias"
-        android:orderInCategory="100"
         android:title="@string/action_noticias"
         app:showAsAction="never" />
     <item
+        android:id="@+id/db_manager"
+        android:title="DB Manager"
+        app:showAsAction="never"/>
+    <item
         android:id="@+id/action_questionario"
-        android:orderInCategory="100"
         android:title="@string/action_questionario"
         app:showAsAction="never" />
 
@@ -21,7 +22,11 @@
         app:showAsAction="never" />
     <item
         android:id="@+id/action_configuracao"
-        android:orderInCategory="100"
         android:title="@string/action_configuracao"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_desafios"
+        android:title="Desafios"
+        app:showAsAction="never"
+        />
 </menu>

@@ -3,8 +3,6 @@ package google.com.healthhigh.utils;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-import com.google.healthhigh.R;
-
 import java.io.ByteArrayOutputStream;
 
 /**

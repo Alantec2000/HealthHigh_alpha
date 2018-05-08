@@ -20,7 +20,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/l1_tittle"
+            style="@style/l1_title"
             android:id="@+id/nomeMedalha"
             android:layout_below="@id/medalhaIcone"/>
         <TextView

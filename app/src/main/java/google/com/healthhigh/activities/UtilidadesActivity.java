@@ -6,12 +6,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 
+import com.google.healthhigh.R;
+
 import google.com.healthhigh.base.Base;
 import google.com.healthhigh.base_utilidades.CalcularIMC.CalculadoraImcActivity;
 import google.com.healthhigh.base_utilidades.DicaDietaActivity;
 import google.com.healthhigh.base_utilidades.DicaExercicioActivity;
-
-import com.google.healthhigh.R;
 
 public class UtilidadesActivity extends Base {
     private ImageButton btnIMC, btnExer, btnDieta;

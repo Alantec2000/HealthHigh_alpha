@@ -1,17 +1,12 @@
 package google.com.healthhigh.domain;
 
-import java.util.Calendar;
-import java.util.Date;
-
 /**
  * Created by Alan on 10/06/2017.
  */
 
 public class Meta {
-    private int id,
-                tipo,
-                qtde;
-    private long tempo, data;
+    private int tipo, qtde;
+    private long id, tempo, data;
     private String
             nome,
             descricao;
@@ -21,7 +16,7 @@ public class Meta {
         String retorno;
         switch (tipo){
             case 0:
-                retorno = "Caminhada";
+                retorno = "Questionario";
                 break;
             case 1:
                 retorno = "Corrida";
@@ -38,11 +33,11 @@ public class Meta {
         return retorno;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

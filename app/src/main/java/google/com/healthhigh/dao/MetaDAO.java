@@ -7,7 +7,6 @@ import android.database.Cursor;
 import java.util.TreeMap;
 
 import google.com.healthhigh.domain.Meta;
-import google.com.healthhigh.utils.Toaster;
 
 public class MetaDAO extends DAO{
     static String
@@ -19,7 +18,7 @@ public class MetaDAO extends DAO{
             QUANTIDADE = "i_qtde",
             TEMPO = "i_tempo",
             DATA = "i_data";
-    private TreeMap<Integer, Meta> metas;
+    private TreeMap<Long, Meta> metas;
     private Meta meta;
 
     public MetaDAO(Context context) {
@@ -41,8 +40,8 @@ public class MetaDAO extends DAO{
         return "DROP TABLE IF EXISTS " + TABLE_NAME + ";";
     }
 
-    public TreeMap<Integer, Meta> getMetas(){
-        String sql = "SELECT * FROM " + this.TABLE_NAME + ";";
+    public TreeMap<Long, Meta> getMetas(){
+        String sql = "SELECT * FROM " + TABLE_NAME + ";";
         getSelectQueryContent(sql, new Behavior() {
             @Override
             public void setContent(Cursor c) {
@@ -83,7 +82,7 @@ public class MetaDAO extends DAO{
 
     @Override
     protected void prepareContentReceiver() {
-        metas = new TreeMap<Integer, Meta>();
+        metas = new TreeMap<Long, Meta>();
         meta = new Meta();
     }
 }

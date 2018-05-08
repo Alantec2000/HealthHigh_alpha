@@ -1,29 +1,45 @@
 package google.com.healthhigh.activities;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import google.com.healthhigh.base.Base;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
+
 import com.google.healthhigh.R;
 
-public class NoticiaActivity extends Base {
+import java.util.List;
 
+import google.com.healthhigh.adapter.NoticiaAdapter;
+import google.com.healthhigh.base.Base;
+import google.com.healthhigh.controller.NoticiaController;
+import google.com.healthhigh.domain.Noticia;
+
+public class NoticiaActivity extends Base implements View.OnClickListener {
+    public final int request_code = 1;
+    public RecyclerView rv;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_noticia);
-        LinearLayout layout = (LinearLayout) findViewById(R.id.layoutNoticia);
+        setNoticias();
+    }
 
-         for(int i=0; i<100;i++){
-             LayoutInflater inflater = LayoutInflater.from(this);
+    private void setNoticias() {
+        rv = (RecyclerView) findViewById(R.id.rv_lista_noticias);
+        NoticiaController noticia_controller = new NoticiaController(this);
+        List<Noticia> noticias = noticia_controller.obterListaNoticias(0);
+        rv.setAdapter(new NoticiaAdapter(this, noticias));
+        rv.setLayoutManager(new LinearLayoutManager(this));
+    }
 
-             //Cria o textView inflando o arquivo de layout, "infla o xml".
-             TextView text = (TextView) inflater.inflate(R.layout.inflate_textview, layout,false);
+    @Override
+    public void onClick(View v) {
 
-             //agora basta usar a view inflada normalmente
-             text.setText("texto: "+i);
-             layout.addView(text);
-        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
     }
 }

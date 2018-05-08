@@ -3,7 +3,6 @@ package google.com.healthhigh.utils;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.TimeZone;
 /*
 * Classe utilitária, contendo métodos auxiliáres para manipulação de datas;
 * SimpleDateFormat lêtras:
@@ -21,6 +20,10 @@ public abstract class DataHelper {
         Date d = new Date((tempo)*1000);
         SimpleDateFormat sdf = new SimpleDateFormat(format);
         return sdf.format(d);
+    }
+
+    public static long now(){
+        return System.currentTimeMillis();
     }
 
     public static Calendar dateToCalendar(String time){

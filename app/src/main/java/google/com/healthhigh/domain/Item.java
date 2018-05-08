@@ -1,6 +1,5 @@
 package google.com.healthhigh.domain;
 
-import java.util.Calendar;
 import java.util.List;
 
 public class Item {

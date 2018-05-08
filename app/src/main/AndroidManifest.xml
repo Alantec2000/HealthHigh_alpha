@@ -4,8 +4,10 @@
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-feature android:name="android.hardware.sensor.accelerometer"
-                  android:required="false"/>
+
+    <uses-feature
+        android:name="android.hardware.sensor.accelerometer"
+        android:required="false" />
 
     <application
         android:allowBackup="true"
@@ -18,16 +20,17 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name="google.com.healthhigh.activities.HomeActivity"
-            android:label="@string/action_home">
+            android:label="HHM">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name="google.com.healthhigh.activities.MedalhasActivity"
             android:label="@string/title_activity_medalhas"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme" />
         <activity
             android:name="google.com.healthhigh.activities.QuestionarioActivity"
             android:label="@string/action_questionario"
@@ -48,9 +51,14 @@
             android:name="google.com.healthhigh.base_utilidades.DicaExercicioActivity"
             android:label="@string/action_Exercicio"
             android:parentActivityName="google.com.healthhigh.activities.UtilidadesActivity" />
-        <activity android:name="google.com.healthhigh.activities.DetalhesMedalhaActivity"
+        <activity
+            android:name="google.com.healthhigh.activities.AndroidDatabaseManager"
+            android:label="DB Manager"
+            android:parentActivityName="google.com.healthhigh.activities.HomeActivity" />
+        <activity
+            android:name="google.com.healthhigh.activities.DetalhesMedalhaActivity"
             android:label="@string/medalha_label"
-            android:parentActivityName="google.com.healthhigh.activities.MedalhasActivity"/>
+            android:parentActivityName="google.com.healthhigh.activities.MedalhasActivity" />
         <activity
             android:name="google.com.healthhigh.base_utilidades.DicaDietaActivity"
             android:label="@string/action_Dieta"
@@ -59,6 +67,15 @@
         <activity
             android:name="google.com.healthhigh.activities.ListaDesafiosActivity"
             android:label="Desafios" />
-        <service android:name=".ServicoSensorPasso" />
+        <activity
+            android:name="google.com.healthhigh.activities.RealizandoDesafioActivity"
+            android:label="@string/realizando_desafio" />
+        <activity android:name="google.com.healthhigh.activities.FormularioDesafioActivity" />
+        <activity android:name="google.com.healthhigh.activities.FormularioMetaActivity" />
+        <activity android:name="google.com.healthhigh.activities.ListaQuestionariosActivity" />
+        <activity android:name="google.com.healthhigh.activities.ListaQuestionariosFakeActivity" />
+        <activity android:name="google.com.healthhigh.activities.QuestionarioFakeActivity" />
+        <activity android:name="google.com.healthhigh.activities.LendoNoticiaActivity"></activity>
     </application>
+
 </manifest>
