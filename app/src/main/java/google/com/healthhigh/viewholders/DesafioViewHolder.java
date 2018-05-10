@@ -27,10 +27,10 @@ public class DesafioViewHolder extends RecyclerView.ViewHolder implements View.O
     public DesafioViewHolder(View v){
         super(v);
         v.setOnClickListener(this);
-        foto = (ImageView) v.findViewById(R.id.iconeDesafio);
-        titulo = (TextView) v.findViewById(R.id.tituloDesafio);
-        tentativas = (TextView) v.findViewById(R.id.contadorTentativas);
-        descricao = (TextView) v.findViewById(R.id.descricaoDesafio);
+        foto = (ImageView) v.findViewById(R.id.img_icone);
+        titulo = (TextView) v.findViewById(R.id.txt_titulo);
+        tentativas = (TextView) v.findViewById(R.id.txt_data_criacao);
+        descricao = (TextView) v.findViewById(R.id.txt_descricao);
         c = v.getContext();
     }
     public TextView getTitulo() {
@@ -42,10 +42,10 @@ public class DesafioViewHolder extends RecyclerView.ViewHolder implements View.O
     public ImageView getFoto() {
         return foto;
     }
-    public TextView getTentativas() {
+    public TextView setData_criacao() {
         return tentativas;
     }
-    public void setD(Desafio d) {
+    public void setDesafio(Desafio d) {
         this.d = d;
     }
 

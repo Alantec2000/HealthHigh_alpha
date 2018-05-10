@@ -3,13 +3,14 @@ package google.com.healthhigh.domain;
 public abstract class Interacao {
     private long id, data_criacao, data_visualizacao;
     protected TipoMeta meta;
+    protected Publicacao publicacao;
 
-    public Publicacao getPublicacaoAtual(){
-        Publicacao p = null;
-        if(getDesafioAtual() != null){
-            p = getDesafioAtual().getPublicacao();
-        }
-        return p;
+    public void setPublicacao(Publicacao publicacao) {
+        this.publicacao = publicacao;
+    }
+
+    public Publicacao getPublicacao(){
+        return publicacao;
     }
     public Desafio getDesafioAtual(){
         return getMeta().getDesafio_atual();
@@ -48,6 +49,6 @@ public abstract class Interacao {
     }
 
     public long getIdPublicacao() {
-        return getPublicacaoAtual() != null ? getPublicacaoAtual().getId() : 0;
+        return getPublicacao() != null ? getPublicacao().getId() : 0;
     }
 }

@@ -11,6 +11,7 @@ import com.google.healthhigh.R;
 import java.util.List;
 
 import google.com.healthhigh.domain.Desafio;
+import google.com.healthhigh.utils.DataHelper;
 import google.com.healthhigh.viewholders.DesafioViewHolder;
 
 /**
@@ -38,8 +39,8 @@ public class DesafioAdapter extends RecyclerView.Adapter {
         Desafio d = desafios.get(position);
         dHolder.getTitulo().setText(d.getTitulo());
         dHolder.getDescricao().setText(d.getDescricao());
-        dHolder.getFoto().setImageResource(R.drawable.taekwondo);
-        dHolder.setD(d);
+        dHolder.setData_criacao().setText(DataHelper.toDateString(d.getData_criacao()));
+        dHolder.setDesafio(d);
     }
 
     @Override

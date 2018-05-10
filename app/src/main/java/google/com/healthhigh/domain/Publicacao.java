@@ -1,5 +1,7 @@
 package google.com.healthhigh.domain;
 
+import google.com.healthhigh.utils.DataHelper;
+
 /**
  * Created by Alan on 17/04/2018.
  */
@@ -76,5 +78,10 @@ public class Publicacao {
 
     public void setDesafio(Desafio desafio) {
         this.desafio = desafio;
+    }
+
+    public boolean isVigente() {
+        long now = DataHelper.now();
+        return (getData_inicio() < now && getData_fim() > now);
     }
 }

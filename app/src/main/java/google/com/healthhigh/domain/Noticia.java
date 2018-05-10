@@ -43,4 +43,8 @@ public class Noticia extends TipoMeta{
     public boolean publicacaoFoiLida() {
         return (interacao_noticia != null && interacao_noticia.getData_visualizacao() != 0);
     }
+
+    public long getTempoLeitura() {
+        return (interacao_noticia != null ? interacao_noticia.getTempo_leitura(): 0);
+    }
 }

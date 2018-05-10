@@ -63,5 +63,7 @@
     <string name="cancel_label">Cancelar</string>
     <string name="status_label">Status:</string>
     <string name="data_desafio_concluido_label">Concluído em:</string>
+    <string name="vs_novo">Novo</string>
+    <string name="status_publicacao">Status Publicacao</string>
     <!-- ******************************************** -->
 </resources>

@@ -9,12 +9,8 @@ import android.widget.TextView;
 
 import com.google.healthhigh.R;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import google.com.healthhigh.activities.QuestionarioActivity;
 import google.com.healthhigh.controller.QuestionarioController;
-import google.com.healthhigh.domain.Desafio;
 import google.com.healthhigh.domain.Questionario;
 import google.com.healthhigh.utils.MessageDialog;
 
@@ -35,7 +31,7 @@ public class QuestionarioViewHolder extends RecyclerView.ViewHolder implements V
         responder = (Button) v.findViewById(R.id.btn_responder);
         data_criacao = (TextView) v.findViewById(R.id.txt_data_criacao);
         status_publicacao = (TextView) v.findViewById(R.id.txt_status_publicacao);
-        status_visualizacao = (TextView) v.findViewById(R.id.txt_status_visualizacao);
+        status_visualizacao = (TextView) v.findViewById(R.id.txt_data_criacao);
         context = v.getContext();
         responder.setOnClickListener(this);
     }

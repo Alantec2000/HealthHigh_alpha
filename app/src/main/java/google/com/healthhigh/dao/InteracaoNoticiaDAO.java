@@ -50,7 +50,6 @@ public class InteracaoNoticiaDAO extends DAO {
 
     private ContentValues getContentValues(InteracaoNoticia interacao_noticia) {
         ContentValues cv = new ContentValues();
-        cv.put(ID, interacao_noticia.getId());
         if(interacao_noticia.getIdMeta() != 0){
             cv.put(ID_NOTICIA, interacao_noticia.getNoticia().getId());
         }
@@ -61,5 +60,15 @@ public class InteracaoNoticiaDAO extends DAO {
         cv.put(DATA_VISUALIZACAO, interacao_noticia.getData_visualizacao());
         cv.put(TEMPO_LEITURA, interacao_noticia.getTempo_leitura());
         return cv;
+    }
+
+    public void inserirInteracaoNoticia(InteracaoNoticia i_n) {
+        ContentValues cv = getContentValues(i_n);
+        long id = insert(TABLE_NAME, cv);
+        if(id > 0){
+            i_n.setId(id);
+        } else {
+            i_n = null;
+        }
     }
 }

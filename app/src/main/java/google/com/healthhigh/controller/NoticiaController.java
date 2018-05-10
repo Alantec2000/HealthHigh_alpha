@@ -114,13 +114,18 @@ public class NoticiaController extends DAO {
                   i_n.setData_criacao(c.getLong(c.getColumnIndex(InteracaoNoticiaDAO.DATA_CRIACAO)));
                   i_n.setData_visualizacao(c.getLong(c.getColumnIndex(InteracaoNoticiaDAO.DATA_VISUALIZACAO)));
                   i_n.setInteracao_desafio(d.getInteracao_desafio());
+                  i_n.setPublicacao(d.getPublicacao());
                   i_n.setNoticia(n);
                 } while (c.moveToNext());
             } else {
-                inserirNovaInteracao(n, d);
+                i_n = inserirNovaInteracao(n, d);
             }
         } catch (SQLiteException e){
+            i_n = null;
             imprimeErroSQLite(e);
+        } catch (Exception e) {
+            i_n = null;
+            e.printStackTrace();
         }
         return i_n;
     }
@@ -134,10 +139,25 @@ public class NoticiaController extends DAO {
         i_n_d.atualizaInteracaoNoticia(interacao_noticia);
     }
 
-    public void inserirNovaInteracao(Noticia noticia, Desafio d) {
+    public InteracaoNoticia inserirNovaInteracao(Noticia noticia, Desafio d) throws Exception {
         InteracaoNoticia i_n = new InteracaoNoticia();
-        i_n.setData_visualizacao(DataHelper.now());
+        i_n.setData_criacao(DataHelper.now());
+        i_n.setData_visualizacao(0);
         i_n.setTempo_leitura(0);
-//        i_n.setNoticia();
+        i_n.setNoticia(noticia);
+        if(d.getPublicacao() == null){
+            throw new Exception("Desafio informado não está publicado!");
+        }
+        i_n.setPublicacao(d.getPublicacao());
+        noticia.setInteracao_noticia(i_n);
+        i_n_d.inserirInteracaoNoticia(i_n);
+        return i_n;
+    }
+
+    public InteracaoNoticia atualizarInteracaoNoticia(InteracaoNoticia i_n) {
+        if(i_n != null && i_n.getPublicacao() != null && i_n.getNoticia() != null && i_n.getNoticia().getDesafio_atual() != null){
+            i_n_d.atualizaInteracaoNoticia(i_n);
+        }
+        return i_n;
     }
 }

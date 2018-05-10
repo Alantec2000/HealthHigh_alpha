@@ -11,19 +11,20 @@ import com.google.healthhigh.R;
 import java.util.List;
 
 import google.com.healthhigh.adapter.DesafioAdapter;
+import google.com.healthhigh.controller.DesafioController;
 import google.com.healthhigh.dao.DesafioDAO;
 import google.com.healthhigh.dao.MetaDAO;
 import google.com.healthhigh.domain.Desafio;
 import google.com.healthhigh.domain.Meta;
 
 public class ListaDesafiosActivity extends AppCompatActivity {
-    private DesafioDAO dDao;
+    private DesafioController d_c;
     Intent intent = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_desafios);
-        dDao = new DesafioDAO(this);
+        d_c = new DesafioController(this);
         addDesafioTeste();
 //        addMetaTeste();
         setDesafioList();
@@ -59,7 +60,7 @@ public class ListaDesafiosActivity extends AppCompatActivity {
     }
     private void setDesafioList() {
         RecyclerView rv = (RecyclerView) findViewById(R.id.listaCompletaDesafios);
-        List<Desafio> desafios = dDao.getDesafiosList(0);
+        List<Desafio> desafios = d_c.getDesafios(0l);
         rv.setAdapter(new DesafioAdapter(desafios, this));
         rv.setLayoutManager(new LinearLayoutManager(this));
         rv.setNestedScrollingEnabled(false);

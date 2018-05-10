@@ -75,7 +75,10 @@
         <activity android:name="google.com.healthhigh.activities.ListaQuestionariosActivity" />
         <activity android:name="google.com.healthhigh.activities.ListaQuestionariosFakeActivity" />
         <activity android:name="google.com.healthhigh.activities.QuestionarioFakeActivity" />
-        <activity android:name="google.com.healthhigh.activities.LendoNoticiaActivity"></activity>
+        <activity android:name="google.com.healthhigh.activities.LendoNoticiaActivity" />
+        <service android:name="google.com.healthhigh.services.ServiceCalcularTempoDeLeitura" >
+            <intent-filter><action android:name="google.com.healthhigh.services.CONTAR_TEMPO_LEITURA_NOTICIA" /></intent-filter>
+        </service>
     </application>
 
 </manifest>

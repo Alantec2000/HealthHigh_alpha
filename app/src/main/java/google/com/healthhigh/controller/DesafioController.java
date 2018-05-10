@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteException;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -35,9 +36,12 @@ import google.com.healthhigh.utils.MessageDialog;
 
 public class DesafioController extends DAO {
     private static String tag = "DesafioController";
+    private DesafioDAO d_d;
+
 
     public DesafioController(Context context) {
         super(context);
+        d_d = new DesafioDAO(context);
     }
 
     @Override
@@ -196,5 +200,63 @@ public class DesafioController extends DAO {
             }
         }
         return d_as;
+    }
+
+    public List<Desafio> getDesafios(long id) {
+        List<Desafio> desafios;
+        Map<Long, Desafio> desafios_map = new TreeMap<>();
+        String select =
+                "SELECT * FROM " + DesafioDAO.TABLE_NAME + " as d " +
+
+                // Obtém publicações do desafio
+                "LEFT JOIN " + PublicacaoDAO.TABLE_NAME + " as p ON " +
+                "p." + PublicacaoDAO.ID_DESAFIO + " = d." + DesafioDAO.ID + " " +
+
+                "LEFT JOIN " + InteracaoDesafioDAO.TABLE_NAME + " as intd ON " +
+                "intd." + InteracaoDesafioDAO.ID_DESAFIO + " = d." + DesafioDAO.ID + " AND " +
+                "intd." + InteracaoDesafioDAO.ID_PUBLICACAO + " = p." + PublicacaoDAO.ID;
+        if(id > 0) {
+            select += " WHERE " + DesafioDAO.ID + " = " + String.valueOf(id);
+        }
+        long now = DataHelper.now();
+        Cursor c = executeSelect(select);
+        try{
+            if(c.moveToFirst()){
+                Log.v("Cursor Object", DatabaseUtils.dumpCursorToString(c));
+                do {
+                    Desafio d;
+                    long d_id = c.getLong(c.getColumnIndex(DesafioDAO.ID));
+                    if(desafios_map.containsKey(d_id)){
+                        d = desafios_map.get(d_id);
+                    } else {
+                        d = DesafioDAO.getDesafio(c);
+                        desafios_map.put(d_id, d);
+                    }
+
+                    if(!c.isNull(c.getColumnIndex(PublicacaoDAO.ID))){
+                        // Obtenho a publicação e verifico se ela é a última inserida. Se for, então ela substituirá a que estiver associada ao desafio na iteração atual
+                        Publicacao p = PublicacaoDAO.getPublicacao(c);
+                        if(d.getPublicacao() == null || (d.getPublicacao() != null && d.getPublicacao().getData_criacao() < p.getData_criacao())){
+                            d.setPublicacao(p);
+                            InteracaoDesafio i_d;
+                            if(!c.isNull(c.getColumnIndex(InteracaoDesafioDAO.ID))){
+                                i_d = InteracaoDesafioDAO.getInteracaoDesafio(c);
+                            } else {
+                                i_d = setNovaInteracaoDesafioVazia(d, p);
+                            }
+                            if(i_d != null){
+                                d.setInteracao_desafio(i_d);
+                            }
+                        }
+                    }
+                }while (c.moveToNext());
+            }
+        } catch (SQLiteException e){
+            imprimeErroSQLite(e);
+        } finally {
+            c.close();
+            desafios = new ArrayList<>(desafios_map.values());
+        }
+        return desafios;
     }
 }

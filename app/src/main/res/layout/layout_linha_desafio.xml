@@ -1,54 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:clickable="true"
     android:background="?attr/selectableItemBackground"
     style="@style/linha_desafio"
     android:padding="5dp">
+
     <ImageView
+        android:id="@+id/img_icone"
         android:layout_width="60sp"
         android:layout_height="60sp"
-        android:src="@drawable/taekwondo"
-        android:id="@+id/iconeDesafio"
-        android:padding="5dp"/>
-    <LinearLayout
-        android:id="@+id/containerDesafio"
-        android:layout_width="match_parent"
+        android:layout_margin="10dp"
+        android:layout_marginBottom="8dp"
+        android:padding="5dp"
+        android:src="@drawable/corrida"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/txt_titulo"
+        style="@style/oneLineTitle"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@+id/iconeDesafio"
-        android:orientation="vertical">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:weightSum="2"
-            android:orientation="horizontal">
-            <TextView
-                android:id="@+id/tituloDesafio"
-                android:layout_width="0dp"
-                android:layout_height="18sp"
-                android:layout_weight="2"
-                android:textSize="13sp"
-                android:text="Título do desafio"
-                android:maxLines="1"
-                android:ellipsize="end"
-                />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="00"
-                android:background="#eee"
-                android:padding="3dp"
-                android:id="@+id/contadorTentativas"
-                android:visibility="gone"/>
-        </LinearLayout>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Descrição do desafio"
-            android:id="@+id/descricaoDesafio"
-            android:scrollHorizontally="true"
-            android:ellipsize="end"
-            android:maxLines="2"/>
-    </LinearLayout>
-</RelativeLayout>
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/img_icone"
+        android:layout_marginStart="8dp"
+        android:text="Título do desafio"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="dd/mm/yy"
+        style="@style/lista_header"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="10dp"
+        android:layout_margin="8dp"
+        android:id="@+id/txt_data_criacao"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txt_status_visualizacao"
+        android:text="@string/vs_novo"
+        app:layout_constraintStart_toEndOf="@id/txt_titulo"
+        app:layout_constraintEnd_toStartOf="@id/txt_data_criacao"
+        android:layout_marginTop="10dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txt_status_publicacao"
+        android:text="@string/status_publicacao"
+        app:layout_constraintTop_toBottomOf="@id/txt_titulo"
+        app:layout_constraintStart_toEndOf="@id/img_icone"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Descrição do desafio"
+        android:id="@+id/txt_descricao"
+        style="@style/oneLineText"
+        app:layout_constraintTop_toBottomOf="@+id/txt_status_publicacao"
+        app:layout_constraintStart_toEndOf="@id/img_icone"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        />
+
+</android.support.constraint.ConstraintLayout>

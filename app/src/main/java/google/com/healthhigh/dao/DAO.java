@@ -25,10 +25,9 @@ public abstract class DAO extends CreateDB {
     }
 
     protected void imprimeErroSQLite(SQLiteException e) {
-        Log.e(SQLITE_ERROR, e.getMessage() + "\n" + e.getStackTrace().toString());
+        Log.e(SQLITE_ERROR, e.getMessage());
+        e.printStackTrace();
     }
-
-
 
     protected interface Behavior{
         void setContent(Cursor c);
