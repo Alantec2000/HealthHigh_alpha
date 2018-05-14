@@ -64,6 +64,7 @@
             android:label="@string/action_Dieta"
             android:parentActivityName="google.com.healthhigh.activities.UtilidadesActivity" />
         <activity android:name="google.com.healthhigh.activities.DetalhesDesafios" />
+        <activity android:name="google.com.healthhigh.activities.DetalhesDesafiosNew" />
         <activity
             android:name="google.com.healthhigh.activities.ListaDesafiosActivity"
             android:label="Desafios" />

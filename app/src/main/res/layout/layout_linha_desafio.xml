@@ -9,7 +9,7 @@
     android:padding="5dp">
 
     <ImageView
-        android:id="@+id/img_icone"
+        android:id="@+id/img_icone_desafio"
         android:layout_width="60sp"
         android:layout_height="60sp"
         android:layout_margin="10dp"
@@ -20,12 +20,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
     <TextView
-        android:id="@+id/txt_titulo"
+        android:id="@+id/txt_titulo_desafio"
         style="@style/oneLineTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toEndOf="@id/img_icone"
+        app:layout_constraintStart_toEndOf="@id/img_icone_desafio"
         android:layout_marginStart="8dp"
         android:text="Título do desafio"
         />
@@ -38,22 +38,24 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="10dp"
         android:layout_margin="8dp"
-        android:id="@+id/txt_data_criacao"/>
+        android:id="@+id/txt_data_criacao_desafio"/>
+
     <TextView
+        android:id="@+id/txt_status_visualizacao_desafio"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/txt_status_visualizacao"
+        android:layout_marginTop="8dp"
         android:text="@string/vs_novo"
-        app:layout_constraintStart_toEndOf="@id/txt_titulo"
-        app:layout_constraintEnd_toStartOf="@id/txt_data_criacao"
-        android:layout_marginTop="10dp"/>
+        app:layout_constraintEnd_toStartOf="@id/txt_data_criacao_desafio"
+        app:layout_constraintStart_toEndOf="@id/txt_titulo_desafio"
+        app:layout_constraintTop_toTopOf="parent" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/txt_status_publicacao"
+        android:id="@+id/txt_status_publicacao_desafio"
         android:text="@string/status_publicacao"
-        app:layout_constraintTop_toBottomOf="@id/txt_titulo"
-        app:layout_constraintStart_toEndOf="@id/img_icone"
+        app:layout_constraintTop_toBottomOf="@id/txt_titulo_desafio"
+        app:layout_constraintStart_toEndOf="@id/img_icone_desafio"
         android:layout_marginTop="10dp"
         android:layout_marginStart="10dp"
         />
@@ -61,10 +63,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Descrição do desafio"
-        android:id="@+id/txt_descricao"
+        android:id="@+id/txt_descricao_desafio"
         style="@style/oneLineText"
-        app:layout_constraintTop_toBottomOf="@+id/txt_status_publicacao"
-        app:layout_constraintStart_toEndOf="@id/img_icone"
+        app:layout_constraintTop_toBottomOf="@+id/txt_status_publicacao_desafio"
+        app:layout_constraintStart_toEndOf="@id/img_icone_desafio"
         android:layout_marginTop="10dp"
         android:layout_marginStart="10dp"
         />

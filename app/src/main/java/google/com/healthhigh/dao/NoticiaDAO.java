@@ -2,6 +2,7 @@ package google.com.healthhigh.dao;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 
 import google.com.healthhigh.domain.Noticia;
 
@@ -34,6 +35,16 @@ public class NoticiaDAO extends DAO {
 
     public NoticiaDAO(Context context) {
         super(context);
+    }
+
+    public static Noticia getNoticia(Cursor c){
+        Noticia n = new Noticia();
+        n.setId(c.getLong(c.getColumnIndex(ID)));
+        n.setTitulo(c.getString(c.getColumnIndex(TITULO)));
+        n.setCorpo(c.getString(c.getColumnIndex(CORPO)));
+        n.setData_visualizacao(c.getLong(c.getColumnIndex(DATA_VISUALIZACAO)));
+        n.setData_criacao(c.getLong(c.getColumnIndex(DATA_CRIACAO)));
+        return n;
     }
 
     private ContentValues getContentValues(Noticia n) {

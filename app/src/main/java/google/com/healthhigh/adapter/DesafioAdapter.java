@@ -11,6 +11,8 @@ import com.google.healthhigh.R;
 import java.util.List;
 
 import google.com.healthhigh.domain.Desafio;
+import google.com.healthhigh.domain.InteracaoDesafio;
+import google.com.healthhigh.domain.Publicacao;
 import google.com.healthhigh.utils.DataHelper;
 import google.com.healthhigh.viewholders.DesafioViewHolder;
 
@@ -39,7 +41,9 @@ public class DesafioAdapter extends RecyclerView.Adapter {
         Desafio d = desafios.get(position);
         dHolder.getTitulo().setText(d.getTitulo());
         dHolder.getDescricao().setText(d.getDescricao());
-        dHolder.setData_criacao().setText(DataHelper.toDateString(d.getData_criacao()));
+        dHolder.getData_criacao().setText(DataHelper.toDateString(d.getData_criacao()));
+        dHolder.getStatus_visualizacao().setVisibility(d.getData_visualizacao() > 0 ? View.INVISIBLE : View.VISIBLE);
+        dHolder.getStatus_publicacao().setText(d.getStatusPublicacao());
         dHolder.setDesafio(d);
     }
 

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteException;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -17,7 +18,6 @@ import google.com.healthhigh.dao.DAO;
 import google.com.healthhigh.dao.DesafioDAO;
 import google.com.healthhigh.dao.DesafioQuestionarioDAO;
 import google.com.healthhigh.dao.InteracaoQuestionarioDAO;
-import google.com.healthhigh.dao.PublicacaoDAO;
 import google.com.healthhigh.dao.QuestaoAlternativaDAO;
 import google.com.healthhigh.dao.QuestaoOpinativaDAO;
 import google.com.healthhigh.dao.QuestaoOptativaDAO;
@@ -59,6 +59,47 @@ public class QuestionarioController extends DAO {
         tq_dao = new TipoQuestaoDAO(context);
         q_dao = new QuestionarioDAO(context);
         i_q_dao = new InteracaoQuestionarioDAO(context);
+    }
+
+    public abstract class questionario_behavior implements Behavior {
+        Questionario q = new Questionario();
+        Map<Long, Questionario> questionarios = new TreeMap<>();
+        Desafio desafio_atual = new Desafio();
+        final Context c;
+
+        public questionario_behavior(Context context) {
+            c = context;
+            resetContent();
+        }
+
+        public void resetContent(){
+            q = new Questionario();
+            questionarios = new TreeMap<>();
+        }
+
+        public Desafio getDesafio_atual() {
+            return desafio_atual;
+        }
+
+        public void setDesafio_atual(Desafio desafio_atual) {
+            this.desafio_atual = desafio_atual;
+        }
+
+        public Questionario getQ() {
+            return q;
+        }
+
+        public void setQ(Questionario q) {
+            this.q = q;
+        }
+
+        public Map<Long, Questionario> getQuestionarios() {
+            return questionarios;
+        }
+
+        public void setQuestionarios(Map<Long, Questionario> questionarios) {
+            this.questionarios = questionarios;
+        }
     }
 
     @Override
@@ -106,6 +147,38 @@ public class QuestionarioController extends DAO {
         return questionarios;
     }
 
+    public List<Questionario> getQuestionariosDesafio(Desafio d) {
+        List<Questionario> questionarios = new ArrayList<>();
+        String select =
+                "SELECT * FROM " + QuestionarioDAO.TABLE_NAME + " as q " +
+                " INNER JOIN " + DesafioQuestionarioDAO.TABLE_NAME + " as dq ON " +
+                "dq." + DesafioQuestionarioDAO.ID_QUESTIONARIO + " = q." + QuestionarioDAO.ID +
+                " INNER JOIN " + DesafioDAO.TABLE_NAME + " as d ON " +
+                " d." + DesafioDAO.ID + " = dq." + DesafioQuestionarioDAO.ID_DESAFIO +
+                " WHERE d." + DesafioDAO.ID + " = " + String.valueOf(d) + ";";
+
+        DesafioController d_c = new DesafioController(context);
+        questionario_behavior q_b = new questionario_behavior(context) {
+            @Override
+            public void setContent(Cursor c) {
+                Questionario q;
+                long id_q = c.getLong(c.getColumnIndex(QuestionarioDAO.ID));
+                if(questionarios.containsKey(id_q)){
+                    q = questionarios.get(id_q);
+                } else {
+                    q = QuestionarioDAO.getQuestionario(c);
+                    questionarios.put(id_q, q);
+                }
+                q.setDesafio_atual(desafio_atual);
+                getInteracaoQuestionarioAtual(q, desafio_atual.getPublicacao());
+                obterQuestoes(q);
+            }
+        };
+        q_b.setDesafio_atual(d);
+        getSelectQueryContent(select, q_b);
+        return new ArrayList<Questionario>(q_b.getQuestionarios().values());
+    }
+
     private List<Questionario> getQuestionariosCursor(String select) {
         Map<Long, Questionario> questionarioMap = new TreeMap<>();
         List<Questionario> questionarios;
@@ -128,31 +201,13 @@ public class QuestionarioController extends DAO {
                         if(d_as.containsKey(d_a.getId())) {
                             q.setDesafio_atual(d_a);
                         }
-                        if(d_a.getInteracao_desafio() != null && d_a.getInteracao_desafio().isRealizando_no_momento()){
+                        if(d_a.getInteracao_desafio() != null && d_a.getInteracao_desafio().estaRealizando()){
                             InteracaoQuestionario i_q = getInteracaoQuestionarioAtual(q, d_a.getInteracao_desafio());
                             q.setInteracao_questionario(i_q);
                         }
                         q.setDesafios_associados(d_as);
                     }
-
-                    // Bloco obtém as questões do questionário se elas ainda não foram obtidas
-                    if (q.getL_questoes() == null) {
-                        q.setL_questoes(new ArrayList<TipoQuestao>());
-                        Map<Long, QuestaoAlternativa> questoes_alternativa = getQuestaoAlternativaCursor(q);
-                        Map<Long, QuestaoOptativa> questoes_optativas = getQuestaoOptativaCursor(q);
-                        Map<Long, QuestaoOpinativa> questoes_opinativas = getQuestaoOpinativaCursor(q);
-
-                        List<TipoQuestao> questoes = q.getL_questoes();
-                        for (Long id_qa : questoes_alternativa.keySet()) {
-                            questoes.add(questoes_alternativa.get(id_qa));
-                        }
-                        for (Long id_qopt : questoes_optativas.keySet()) {
-                            questoes.add(questoes_optativas.get(id_qopt));
-                        }
-                        for (Long id_qopn : questoes_opinativas.keySet()) {
-                            questoes.add(questoes_opinativas.get(id_qopn));
-                        }
-                    }
+                    obterQuestoes(q);
                 } while (c.moveToNext());
             }
         } catch (SQLiteException e) {
@@ -162,11 +217,42 @@ public class QuestionarioController extends DAO {
         return questionarios;
     }
 
+    private void obterQuestoes(@NonNull Questionario q) {
+        if(q.getL_questoes() != null){
+            q.setL_questoes(new ArrayList<TipoQuestao>());
+            Map<Long, QuestaoAlternativa> questoes_alternativa = getQuestaoAlternativaCursor(q);
+            Map<Long, QuestaoOptativa> questoes_optativas = getQuestaoOptativaCursor(q);
+            Map<Long, QuestaoOpinativa> questoes_opinativas = getQuestaoOpinativaCursor(q);
+
+            List<TipoQuestao> questoes = q.getL_questoes();
+            for (Long id_qa : questoes_alternativa.keySet()) {
+                questoes.add(questoes_alternativa.get(id_qa));
+            }
+            for (Long id_qopt : questoes_optativas.keySet()) {
+                questoes.add(questoes_optativas.get(id_qopt));
+            }
+            for (Long id_qopn : questoes_opinativas.keySet()) {
+                questoes.add(questoes_opinativas.get(id_qopn));
+            }
+        }
+    }
+
     private InteracaoQuestionario insereNovaInteracaoVazia(Questionario q, InteracaoDesafio i_d) {
         InteracaoQuestionario i_q = new InteracaoQuestionario();
         InteracaoQuestionarioDAO i_q_dao = new InteracaoQuestionarioDAO(context);
         ContentValues cv = new ContentValues();
         cv.put(InteracaoQuestionarioDAO.ID_PUBLICACAO, i_d.getPublicacao().getId());
+        cv.put(InteracaoQuestionarioDAO.ID_QUESTIONARIO, q.getId());
+        cv.put(InteracaoQuestionarioDAO.DATA_CRIACAO, DataHelper.now());
+        i_q_dao.insereInteracaoQuestionario(cv, i_q);
+        return i_q;
+    }
+
+    private InteracaoQuestionario insereNovaInteracaoVazia(Questionario q, Publicacao p) {
+        InteracaoQuestionario i_q = new InteracaoQuestionario();
+        InteracaoQuestionarioDAO i_q_dao = new InteracaoQuestionarioDAO(context);
+        ContentValues cv = new ContentValues();
+        cv.put(InteracaoQuestionarioDAO.ID_PUBLICACAO, p.getId());
         cv.put(InteracaoQuestionarioDAO.ID_QUESTIONARIO, q.getId());
         cv.put(InteracaoQuestionarioDAO.DATA_CRIACAO, DataHelper.now());
         i_q_dao.insereInteracaoQuestionario(cv, i_q);
@@ -197,6 +283,35 @@ public class QuestionarioController extends DAO {
                 }
             } else {
                 i_q = insereNovaInteracaoVazia(q,i_d);
+            }
+        }
+        return i_q;
+    }
+
+    private InteracaoQuestionario getInteracaoQuestionarioAtual(Questionario q, Publicacao p) {
+        InteracaoQuestionario i_q = null;
+        if(p != null && p.getId() > 0){
+            String select =
+                    "SELECT * FROM " + InteracaoQuestionarioDAO.TABLE_NAME +
+                            " WHERE " + InteracaoQuestionarioDAO.ID_PUBLICACAO + " = " + String.valueOf(p.getId()) +
+                            " AND " + InteracaoQuestionarioDAO.ID_QUESTIONARIO + " = " + String.valueOf(q.getId());
+            Cursor c = executeSelect(select);
+            if(c.getCount() > 0){
+                try {
+                    if (c.moveToFirst()) {
+                        Log.v("Cursor Object", DatabaseUtils.dumpCursorToString(c));
+                        do {
+                            i_q = new InteracaoQuestionario();
+                            i_q = InteracaoQuestionarioDAO.getInteracaoQuestionario(c);
+                            i_q.setPublicacao(p);
+                            i_q.setQuestionario(q);
+                        }while (c.moveToNext());
+                    }
+                } catch (SQLiteException e) {
+                    imprimeErroSQLite(e);
+                }
+            } else {
+                i_q = insereNovaInteracaoVazia(q, p);
             }
         }
         return i_q;

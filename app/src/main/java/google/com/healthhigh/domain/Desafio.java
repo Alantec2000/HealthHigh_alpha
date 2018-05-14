@@ -2,6 +2,10 @@ package google.com.healthhigh.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
+import google.com.healthhigh.utils.DataHelper;
 
 /**
  * Created by Alan on 16/05/2017.
@@ -18,6 +22,7 @@ public class Desafio {
     private long data_criacao;
     private long data_aceito;
     private long data_conclusao;
+    private long data_visualizacao;
 
     private int tipo;
     private int quantidade;
@@ -34,6 +39,7 @@ public class Desafio {
             ;
     private boolean aceito;
     private List<Meta> metas = new ArrayList<>();
+    private Map<Long, TipoMeta> metas_list = new TreeMap<>();
     public Desafio() {}
 
     public Desafio(long id, String t, String d, int td, boolean fa, int tn) {
@@ -42,6 +48,14 @@ public class Desafio {
         this.descricao = d;
         this.tipo = td;
         this.tentativas = tn;
+    }
+
+    public Map<Long, TipoMeta> getMetas_list() {
+        return metas_list;
+    }
+
+    public void setMetas_list(Map<Long, TipoMeta> metas_list) {
+        this.metas_list = metas_list;
     }
 
     public boolean isAceito() {return aceito;}
@@ -164,5 +178,45 @@ public class Desafio {
 
     public void setInteracao_desafio(InteracaoDesafio interacao_desafio) {
         this.interacao_desafio = interacao_desafio;
+    }
+
+    public long getData_visualizacao() {
+        return data_visualizacao;
+    }
+
+    public void setData_visualizacao(long data_visualizacao) {
+        this.data_visualizacao = data_visualizacao;
+    }
+
+    public String getStatusPublicacao() {
+        String status = "Indefinido";
+        Publicacao p = getPublicacao();
+        if(p != null){
+            if(p.isVigente()){
+                InteracaoDesafio i_d = getInteracao_desafio();
+                status = "Desafio Publicado";
+                if(i_d != null) {
+                    if(i_d.getData_visualizacao() > 0){
+                        status = "Desafio Publicado";
+                        if(i_d.estaRealizando()){
+                            status = "Realizando";
+                        } else if(i_d.getData_cancelamento() > 0) {
+                            status = "Cancelado";
+                        } else if (i_d.getData_conclusao() > 0) {
+                            status = "Concluído";
+                        }
+                    } else {
+                        status = "Publicação nova";
+                    }
+                } else {
+                    status = "Publicação nova";
+                }
+            } else if(p.getData_fim() < DataHelper.now()) {
+                status = "Publicação encerrada";
+            }
+        } else {
+            status = "Não publicado";
+        }
+        return null;
     }
 }

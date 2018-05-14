@@ -18,14 +18,17 @@ public abstract class DataHelper {
 
     public static String parseUT(long tempo, String format){
         Date d = new Date(tempo);
+        return formatDate(d, format);
+    }
+
+    private static String formatDate(Date d, String format) {
         SimpleDateFormat sdf = new SimpleDateFormat(format);
         return sdf.format(d);
     }
 
     public static String toDateString(long tempo){
         Date d = new Date(tempo);
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
-        return sdf.format(d);
+        return formatDate(d, "dd/MM/yy");
     }
 
     public static long now(){

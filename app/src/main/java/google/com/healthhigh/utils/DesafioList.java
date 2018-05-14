@@ -30,10 +30,10 @@ public class DesafioList implements View.OnClickListener{
         LayoutInflater i = LayoutInflater.from(c);
         for(Desafio x : desafios){
             View v = i.inflate(R.layout.layout_linha_desafio, null);
-            ImageView iv = (ImageView) v.findViewById(R.id.img_icone);
-            TextView tv = (TextView) v.findViewById(R.id.txt_titulo);
-            TextView cv = (TextView) v.findViewById(R.id.txt_data_criacao);
-            TextView dv = (TextView) v.findViewById(R.id.txt_descricao);
+            ImageView iv = (ImageView) v.findViewById(R.id.img_icone_noticia);
+            TextView tv = (TextView) v.findViewById(R.id.txt_titulo_noticia);
+            TextView cv = (TextView) v.findViewById(R.id.txt_data_criacao_noticia);
+            TextView dv = (TextView) v.findViewById(R.id.txt_preview_corpo_noticia);
             iv.setImageResource(R.drawable.corrida);
             tv.setText(x.getTitulo());
             cv.setText(Integer.toString(x.getTentativas()));
@@ -58,11 +58,10 @@ public class DesafioList implements View.OnClickListener{
         final TextView tentativas;
 
         public viewHolder(View v){
-            foto = (ImageView) v.findViewById(R.id.img_icone);
-            titulo = (TextView) v.findViewById(R.id.txt_titulo);
-            tentativas = (TextView) v.findViewById(R.id.txt_data_criacao);
-            descricao = (TextView) v.findViewById(R.id.txt_descricao);
+            foto = (ImageView) v.findViewById(R.id.img_icone_desafio);
+            titulo = (TextView) v.findViewById(R.id.txt_titulo_desafio);
+            tentativas = (TextView) v.findViewById(R.id.txt_data_criacao_desafio);
+            descricao = (TextView) v.findViewById(R.id.txt_descricao_desafio);
         }
     }
-
 }

@@ -5,13 +5,13 @@ package google.com.healthhigh.domain;
  * Essa classe é responsável por armazenar a interação entre desafio e usuário
  */
 
-public class InteracaoDesafio {
+public class InteracaoDesafio extends Interacao {
     private long id;
     private long data_aceito;
     private long data_conclusao;
+    private long data_cancelamento;
     private boolean realizando_no_momento;
     private Desafio desafio = new Desafio();
-    private Publicacao publicacao = new Publicacao();
 
     public long getId() {
         return id;
@@ -37,7 +37,7 @@ public class InteracaoDesafio {
         this.data_conclusao = data_conclusao;
     }
 
-    public boolean isRealizando_no_momento() {
+    public boolean estaRealizando() {
         return realizando_no_momento;
     }
 
@@ -45,12 +45,12 @@ public class InteracaoDesafio {
         this.realizando_no_momento = realizando_no_momento;
     }
 
-    public Publicacao getPublicacao() {
-        return publicacao;
+    public long getData_cancelamento() {
+        return data_cancelamento;
     }
 
-    public void setPublicacao(Publicacao publicacao) {
-        this.publicacao = publicacao;
+    public void setData_cancelamento(long data_cancelamento) {
+        this.data_cancelamento = data_cancelamento;
     }
 
     public long getData_conclusao() {

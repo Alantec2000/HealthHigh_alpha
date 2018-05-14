@@ -16,6 +16,7 @@ import google.com.healthhigh.dao.DesafioDAO;
 import google.com.healthhigh.dao.MetaDAO;
 import google.com.healthhigh.domain.Desafio;
 import google.com.healthhigh.domain.Meta;
+import google.com.healthhigh.utils.DataHelper;
 
 public class ListaDesafiosActivity extends AppCompatActivity {
     private DesafioController d_c;
@@ -40,8 +41,8 @@ public class ListaDesafiosActivity extends AppCompatActivity {
             d.setTipo(1);
             d.setQuantidade(quantidades[i-1]);
             d.setAceito(false);
-            d.setData_criacao(System.currentTimeMillis()/1000);
-            d.setData_aceito(System.currentTimeMillis()/1000);
+            d.setData_criacao(DataHelper.now());
+            d.setData_aceito(DataHelper.now());
             d.setTentativas(0);
             dd.insereDesafio(d);
         }
@@ -53,7 +54,7 @@ public class ListaDesafiosActivity extends AppCompatActivity {
             m.setNome("Meta " + i);
             m.setDescricao("Descrição da " + m.getNome());
             m.setTipo(0);
-            m.setData(System.currentTimeMillis());
+            m.setData(DataHelper.now());
             m.setQtde(i);
             md.insereMeta(m);
         }

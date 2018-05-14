@@ -34,7 +34,7 @@ public class DetalhesDesafios extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detalhes_desafios);
         dao = new DesafioXMetaDAO(this);
-        rv = (RecyclerView) findViewById(R.id.listaMetasDesafio);
+        rv = (RecyclerView) findViewById(R.id.rv_lista_metas_desafio);
         setEventBotoes();
     }
 
@@ -69,11 +69,11 @@ public class DetalhesDesafios extends AppCompatActivity implements View.OnClickL
             if(d != null){
 //                associaMetasDesafios(d);
                 TextView titulo = (TextView) findViewById(R.id.tituloDetalhesDesafio);
-                TextView descricao = (TextView) findViewById(R.id.descricaoDetalheDesafio);
+                TextView descricao = (TextView) findViewById(R.id.txt_descricao_desafio);
                 TextView data_criacao = (TextView) findViewById(R.id.dataCriacaoDetalheDesafio);
                 TextView statusDesafio = (TextView) findViewById(R.id.statusDesafio);
                 TextView dataConclusao = (TextView) findViewById(R.id.data_conclusao_desafio);
-                TextView dataConclusao_label = (TextView) findViewById(R.id.data_conclusao_desafio_label);
+                TextView dataConclusao_label = (TextView) findViewById(R.id.txt_data_status_desafio);
                 data_criacao.setText(DataHelper.parseUT(d.getData_criacao(), "dd/MM/yy"));
                 statusDesafio.setText(Desafio.getStatusText(d.getStatus()));
                 titulo.setText(d.getTitulo());

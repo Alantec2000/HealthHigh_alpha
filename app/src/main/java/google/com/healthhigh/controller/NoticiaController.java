@@ -9,12 +9,15 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import google.com.healthhigh.dao.DAO;
 import google.com.healthhigh.dao.DesafioDAO;
 import google.com.healthhigh.dao.DesafioNoticiaDAO;
 import google.com.healthhigh.dao.InteracaoNoticiaDAO;
 import google.com.healthhigh.dao.NoticiaDAO;
+import google.com.healthhigh.dao.PublicacaoDAO;
 import google.com.healthhigh.domain.Desafio;
 import google.com.healthhigh.domain.InteracaoNoticia;
 import google.com.healthhigh.domain.Noticia;
@@ -35,6 +38,40 @@ public class NoticiaController extends DAO {
         n_d = new NoticiaDAO(context);
         i_n_d = new InteracaoNoticiaDAO(context);
         d_c = new DesafioController(context);
+    }
+
+    private abstract class NoticiaBehavior implements Behavior {
+        protected final Context context;
+        protected Noticia noticia;
+        protected Map<Long, Noticia> noticias;
+        protected Desafio desafio_atual;
+
+        public NoticiaBehavior(Context c) {
+            context = c;
+            resetContent();
+        }
+
+        public void resetContent(){
+            noticia = new Noticia();
+            noticias = new TreeMap<>();
+            desafio_atual = new Desafio();
+        }
+
+        public Context getContext() {
+            return context;
+        }
+
+        public Noticia getNoticia() {
+            return noticia;
+        }
+
+        public Map<Long, Noticia> getNoticias() {
+            return noticias;
+        }
+
+        public void setDesafio_atual(Desafio desafio_atual) {
+            this.desafio_atual = desafio_atual;
+        }
     }
 
     @Override
@@ -134,6 +171,7 @@ public class NoticiaController extends DAO {
         noticia.setData_visualizacao(DataHelper.now());
         n_d.atualizarNoticia(noticia);
     }
+
     public void setInteracaoNoticiaLida(@NonNull InteracaoNoticia interacao_noticia) {
         interacao_noticia.setData_visualizacao(DataHelper.now());
         i_n_d.atualizaInteracaoNoticia(interacao_noticia);
@@ -159,5 +197,36 @@ public class NoticiaController extends DAO {
             i_n_d.atualizaInteracaoNoticia(i_n);
         }
         return i_n;
+    }
+
+    public List<Noticia> getNoticiasDesafio(Desafio d) {
+        String select = "SELECT * FROM " + NoticiaDAO.TABLE_NAME + " as n " +
+                "INNER JOIN " + DesafioNoticiaDAO.TABLE_NAME + " as dn ON " +
+                "n." + NoticiaDAO.ID + " = dn." + DesafioNoticiaDAO.ID_NOTICIA + " " +
+                "INNER JOIN " + DesafioDAO.TABLE_NAME + " as d ON " +
+                "d." + DesafioDAO.ID + " = dn." + DesafioNoticiaDAO.ID_DESAFIO + " " +
+                "WHERE d." + DesafioDAO.ID + " = " + String.valueOf(d.getId());
+        NoticiaBehavior n_b = new NoticiaBehavior(context) {
+            @Override
+            public void setContent(Cursor c) {
+                Noticia n;
+                long id_n = c.getLong(c.getColumnIndex(NoticiaDAO.ID));
+                if(noticias.containsKey(id_n)){
+                    n = noticias.get(id_n);
+                } else {
+                    n = NoticiaDAO.getNoticia(c);
+                    noticias.put(id_n, n);
+                }
+                if(desafio_atual.getPublicacao() != null){
+                    InteracaoNoticia i_n = getInteracaoDesafioAtual(n,desafio_atual);
+                    if(i_n != null){
+                        n.setInteracao_noticia(i_n);
+                    }
+                }
+            }
+        };
+        n_b.setDesafio_atual(d);
+        getSelectQueryContent(select, n_b);
+        return new ArrayList<>(n_b.getNoticias().values());
     }
 }

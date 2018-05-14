@@ -17,6 +17,8 @@ public abstract class DAO extends CreateDB {
     protected SQLiteDatabase write_db = null;
     protected SQLiteDatabase read_db = null;//Não tem diferença do write_db, somente na legibilidade do código...
     protected Context context;
+
+
     public DAO(Context context) {
         super(context);
         this.context = context;

@@ -26,6 +26,7 @@ import google.com.healthhigh.domain.QuestaoAlternativa;
 import google.com.healthhigh.domain.QuestaoOpinativa;
 import google.com.healthhigh.domain.QuestaoOptativa;
 import google.com.healthhigh.domain.Questionario;
+import google.com.healthhigh.utils.DataHelper;
 
 public class ListaQuestionariosActivity extends AppCompatActivity {
     private QuestionarioController q_controller;
@@ -35,7 +36,7 @@ public class ListaQuestionariosActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_questionarios);
         q_controller = new QuestionarioController(this);
-//        addQuestionarioTeste();
+        addQuestionarioTeste();
         setListaQuestionario();
     }
 
@@ -43,7 +44,7 @@ public class ListaQuestionariosActivity extends AppCompatActivity {
         Questionario q = new Questionario();
         q.setTitulo("Questionario 1");
         q.setDescricao("Primeiro questionario de Teste");
-        q.setData_criacao(System.currentTimeMillis()/1000);
+        q.setData_criacao(DataHelper.now());
         QuestionarioDAO q_dao = new QuestionarioDAO(this);
         q_dao.insereQuestionario(q);
         if(q != null){
@@ -57,7 +58,7 @@ public class ListaQuestionariosActivity extends AppCompatActivity {
         QuestaoOptativa qopt = new QuestaoOptativa();
         qopt.setQuestionario(q);
         qopt.setDescricao("Primeira questão optativa! Diga Sim ou não?");
-        qopt.setData_criacao(System.currentTimeMillis()/1000);
+        qopt.setData_criacao(DataHelper.now());
         QuestaoOptativaDAO qopt_dao = new QuestaoOptativaDAO(this);
         qopt_dao.inserirQuestaoOptativa(qopt);
         if(qopt != null) {
@@ -70,7 +71,7 @@ public class ListaQuestionariosActivity extends AppCompatActivity {
         QuestaoOpinativa qopn = new QuestaoOpinativa();
         qopn.setQuestionario(q);
         qopn.setDescricao("Primeira questão opinativa! Justifique sua resposta... pode ser qualquer uma:");
-        qopn.setData_criacao(System.currentTimeMillis()/1000L);
+        qopn.setData_criacao(DataHelper.now());
         QuestaoOpinativaDAO qopn_dao = new QuestaoOpinativaDAO(this);
         qopn_dao.insereQuestaoOpinativa(qopn);
         if(qopn != null) {
@@ -83,7 +84,7 @@ public class ListaQuestionariosActivity extends AppCompatActivity {
         QuestaoAlternativa qa = new QuestaoAlternativa();
         qa.setQuestionario(q);
         qa.setDescricao("Primeira questão alternativa que eu faço! Quais das alternativas abaixo você irá selecionar?");
-        qa.setData_criacao(System.currentTimeMillis()/1000L);
+        qa.setData_criacao(DataHelper.now());
         QuestaoAlternativaDAO qa_dao = new QuestaoAlternativaDAO(this);
         qa_dao.insereQuestaoAlternativa(qa);
         if(qa != null){
@@ -92,7 +93,7 @@ public class ListaQuestionariosActivity extends AppCompatActivity {
             for(int i = 1; i < 5; i++){
                 Alternativa a = new Alternativa();
                 a.setDescricao("Alternativa " + String.valueOf(i));
-                a.setData_criacao(System.currentTimeMillis()/1000L);
+                a.setData_criacao(DataHelper.now());
                 a.setQuestaoAlternativa(qa);
                 a_dao.inserirAlternativa(a);
             }

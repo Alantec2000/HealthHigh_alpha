@@ -29,9 +29,9 @@ public class QuestionarioViewHolder extends RecyclerView.ViewHolder implements V
         titulo = (TextView) v.findViewById(R.id.txt_titulo);
         descricao = (TextView) v.findViewById(R.id.txt_descricao);
         responder = (Button) v.findViewById(R.id.btn_responder);
-        data_criacao = (TextView) v.findViewById(R.id.txt_data_criacao);
+        data_criacao = (TextView) v.findViewById(R.id.txt_data_criacao_noticia);
         status_publicacao = (TextView) v.findViewById(R.id.txt_status_publicacao);
-        status_visualizacao = (TextView) v.findViewById(R.id.txt_data_criacao);
+        status_visualizacao = (TextView) v.findViewById(R.id.txt_data_criacao_noticia);
         context = v.getContext();
         responder.setOnClickListener(this);
     }
