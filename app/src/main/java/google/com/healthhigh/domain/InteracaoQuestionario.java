@@ -9,6 +9,31 @@ public class InteracaoQuestionario extends Interacao{
     private InteracaoDesafio interacao_desafio;
     private long data_inicio, data_termino;
 
+    public String statusQuestionario() {
+        String status = "Indefinido";
+        if(getPublicacao() != null){
+            Publicacao p = getPublicacao();
+            //Publicação em vigência
+            if (p.isVigente()) {
+                if(getData_visualizacao() > 0) {
+                    status = "Pendente";
+                    if(getData_inicio() > 0 && getData_termino() <= 0){
+                        status = "Iniciado";
+                    } else if(getData_termino() > 0){
+                        status = "Finalizado";
+                    }
+                } else {
+                    status = "Nova Publicação";
+                }
+            } else {
+                status = "Publicação Encerrada";
+            }
+        } else {
+            status = "Não publicado";
+        }
+        return status;
+    }
+
     @Override
     public TipoMeta getMeta() {
         return questionario;

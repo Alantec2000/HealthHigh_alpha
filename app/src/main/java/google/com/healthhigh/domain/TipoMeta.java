@@ -3,6 +3,7 @@ package google.com.healthhigh.domain;
 import java.util.Map;
 
 public abstract class TipoMeta {
+    public static final int QUESTIONARIO = 1, NOTICIA = 2, ATIVIDADE = 3, EVENTO = 4;
     protected long id, data_criacao, data_visualizacao;
     protected Desafio desafio_atual;
     protected Map<Long, Desafio> desafios_associados;
@@ -10,6 +11,8 @@ public abstract class TipoMeta {
     public long getId() {
         return id;
     }
+
+    public abstract int getTipo();
 
     public long getData_criacao() {
         return data_criacao;

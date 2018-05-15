@@ -11,7 +11,6 @@ import com.google.healthhigh.R;
 import java.util.List;
 
 import google.com.healthhigh.domain.InteracaoQuestionario;
-import google.com.healthhigh.domain.Publicacao;
 import google.com.healthhigh.domain.Questionario;
 import google.com.healthhigh.utils.DataHelper;
 import google.com.healthhigh.viewholders.QuestionarioViewHolder;
@@ -47,52 +46,15 @@ public class QuestionarioAdapter extends RecyclerView.Adapter {
         q_h.getData_criacao().setText(DataHelper.parseUT(q.getData_criacao(), "dd/MM/yy"));
         long now = DataHelper.now();
         q_h.getResponder().setEnabled(true);
-        if (q_h.getQuestionario().getDesafio_atual() != null) {
-            if(q_h.getQuestionario().getDesafio_atual().getPublicacao() != null){
-                Publicacao p = q_h.getQuestionario().getDesafio_atual().getPublicacao();
-                InteracaoQuestionario i_q = q_h.getQuestionario().getInteracao_questionario();
-                //Publicação em vigência
-                if (p.getData_inicio() < now && p.getData_fim() > now) {
-                    // Desafio aceito
-                    if (i_q != null) {
-                        q_h.getStatus_publicacao().setText(getStatusQuestionario(i_q));
-                    } else {
-                        q_h.getStatus_publicacao().setText("Nova Publicação");
-                    }
-                } else
-                    // Publicação fora de vigência
-                    if (p.getData_inicio() < now && p.getData_fim() < now) {
-                        q_h.getStatus_publicacao().setText("Publicação Encerrada");
-                        q_h.getResponder().setEnabled(false);
-                    }
-            } else {
-                q_h.getStatus_publicacao().setText("Não publicado");
-            }
+        String status = "Indefinido";
+        if (q.getDesafio_atual() != null) {
+            status = q.getInteracao_questionario().statusQuestionario();
         } else {
             q_h.getResponder().setEnabled(false);
             int d_count = q.getDesafios_associados() != null ? q.getDesafios_associados().size() : 0;
-            q_h.getStatus_publicacao().setText( d_count + " Desafio(s) associado(s)");
+            status = d_count + " Desafio(s) associado(s)";
         }
-    }
-
-    private String getStatusQuestionario(InteracaoQuestionario q) {
-        String ret = "Indefinido";
-        if(q != null){
-            // Questionário visualizado
-            if(q.getData_visualizacao() > 0){
-                ret = "Pendente";
-                if(q.getData_inicio() > 0 && q.getData_termino() <= 0){
-                    ret = "Iniciado";
-                } else if(q.getData_inicio() > 0 && q.getData_termino() > 0){
-                    ret = "Finalizado";
-                }
-            } else if(q.getQuestionario().getDesafio_atual().getPublicacao().getData_fim() > DataHelper.now()) {
-                ret = "Nova Publicação";
-            } else {
-                ret = "Encerrado";
-            }
-        }
-        return ret;
+        q_h.getStatus_publicacao().setText(status);
     }
 
     @Override

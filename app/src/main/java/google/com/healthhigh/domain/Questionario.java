@@ -58,6 +58,11 @@ public class Questionario extends TipoMeta {
         return id;
     }
 
+    @Override
+    public int getTipo() {
+        return QUESTIONARIO;
+    }
+
     public void setId(long id) {
         this.id = id;
     }

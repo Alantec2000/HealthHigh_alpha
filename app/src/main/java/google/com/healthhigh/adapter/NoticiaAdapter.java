@@ -10,6 +10,7 @@ import com.google.healthhigh.R;
 
 import java.util.List;
 
+import google.com.healthhigh.domain.InteracaoNoticia;
 import google.com.healthhigh.domain.Noticia;
 import google.com.healthhigh.utils.DataHelper;
 import google.com.healthhigh.viewholders.NoticiaViewHolder;
@@ -42,21 +43,14 @@ public class NoticiaAdapter extends RecyclerView.Adapter {
         n_holder.getTxt_descricao().setText(n.getCorpo());
         n_holder.getTxt_status_visualizacao().setVisibility(n.getData_visualizacao() != 0 ? View.INVISIBLE : View.VISIBLE);
         n_holder.getTxt_data_criacao().setText(DataHelper.toDateString(n.getData_criacao()));
+        String status = "Indefinido";
         if(n.getDesafio_atual() != null){
-            // Publicação em vigência
-            if(n.getDesafio_atual().getPublicacao().getData_fim() > DataHelper.now()){
-                //Publicação da notícia já foi visualizada
-                if(n.getInteracao().getData_visualizacao() > 0){
-                    n_holder.getTxt_status_publicacao().setText("Publicação Lida");
-                } else {
-                    n_holder.getTxt_status_publicacao().setText("Publicação Nova");
-                }
-            } else {
-                n_holder.getTxt_status_publicacao().setText("Publicação encerrada");
-            }
+            status = n.getInteracao_noticia().statusNoticia();
         } else {
-            n_holder.getTxt_status_publicacao().setText("Desafio não aceito");
+            status = "Desafio Não Aceito";
         }
+        n_holder.getTxt_status_publicacao().setText(status);
+
     }
 
     @Override

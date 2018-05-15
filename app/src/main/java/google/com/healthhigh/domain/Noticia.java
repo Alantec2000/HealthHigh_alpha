@@ -12,6 +12,11 @@ public class Noticia extends TipoMeta{
     }
 
     @Override
+    public int getTipo() {
+        return NOTICIA;
+    }
+
+    @Override
     public Interacao getInteracao() {
         return getInteracao_noticia();
     }
@@ -47,4 +52,6 @@ public class Noticia extends TipoMeta{
     public long getTempoLeitura() {
         return (interacao_noticia != null ? interacao_noticia.getTempo_leitura(): 0);
     }
+
+
 }

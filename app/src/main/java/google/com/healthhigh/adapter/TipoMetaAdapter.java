@@ -10,9 +10,10 @@ import com.google.healthhigh.R;
 
 import java.util.List;
 
-import google.com.healthhigh.domain.Meta;
+import google.com.healthhigh.domain.InteracaoNoticia;
+import google.com.healthhigh.domain.Noticia;
+import google.com.healthhigh.domain.Questionario;
 import google.com.healthhigh.domain.TipoMeta;
-import google.com.healthhigh.utils.DataHelper;
 import google.com.healthhigh.viewholders.MetaViewHolder;
 import google.com.healthhigh.viewholders.TipoMetaViewHolder;
 
@@ -36,8 +37,29 @@ public class TipoMetaAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        TipoMeta tm = metas.get(position);
         TipoMetaViewHolder tm_vh = (TipoMetaViewHolder) holder;
-
+        tm_vh.setMeta(tm);
+        switch (tm.getTipo()){
+            case TipoMeta.QUESTIONARIO:
+                Questionario q = (Questionario) tm;
+                tm_vh.getTxt_nome_meta().setText("Questionário");
+                tm_vh.getTxt_nome_meta().setText(q.getTitulo());
+                tm_vh.getTxt_status_meta().setText(q.getInteracao_questionario().statusQuestionario());
+            break;
+            case TipoMeta.NOTICIA:
+                Noticia n = (Noticia) tm;
+                tm_vh.getTxt_nome_meta().setText("Notícia");
+                tm_vh.getTxt_nome_meta().setText(n.getTitulo());
+                tm_vh.getTxt_status_meta().setText(n.getInteracao_noticia().statusNoticia());
+            break;
+            case TipoMeta.ATIVIDADE:
+                tm_vh.getTxt_nome_meta().setText("Atividade");
+            break;
+            case TipoMeta.EVENTO:
+                tm_vh.getTxt_nome_meta().setText("Evento");
+            break;
+        }
     }
 
     @Override

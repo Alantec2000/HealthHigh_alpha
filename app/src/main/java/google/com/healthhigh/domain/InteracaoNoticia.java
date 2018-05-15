@@ -5,6 +5,25 @@ public class InteracaoNoticia extends Interacao {
     private Noticia noticia;
     private InteracaoDesafio interacao_desafio;
 
+    public String statusNoticia(){
+        String status = "Indefinido";
+        if(getPublicacao() != null) {
+            if(getPublicacao().isVigente()){
+                //Publicação da notícia já foi visualizada
+                if(getData_visualizacao() > 0){
+                    status = "Lida";
+                } else {
+                    status = "Publicação Nova";
+                }
+            } else {
+                status = "Publicação encerrada";
+            }
+        } else {
+            status = "Não Publicada";
+        }
+        return status;
+    }
+
     @Override
     public TipoMeta getMeta() {
         return noticia;

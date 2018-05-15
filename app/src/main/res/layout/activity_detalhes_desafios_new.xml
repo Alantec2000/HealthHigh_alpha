@@ -106,25 +106,49 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txt_status_desafio"
             android:layout_marginTop="8dp"
-            android:layout_marginStart="8dp" android:paddingEnd="5dp"/>
+            android:layout_marginStart="8dp"
+            android:paddingEnd="5dp"/>
+
+        <TextView
+            android:id="@+id/txt_status_publicacao_desafio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="10dp"
+            android:text="Status publicação"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/txt_data_status_desafio"
+            app:layout_constraintTop_toBottomOf="@id/txt_descricao_desafio"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Status publicação"
-            android:id="@+id/txt_status_publicacao"/>
+            android:id="@+id/txt_data_inicio_publicacao_desafio"
+            app:layout_constraintTop_toBottomOf="@+id/txt_status_publicacao_desafio"
+            app:layout_constraintStart_toStartOf="@id/txt_status_publicacao_desafio"
+            android:text="Data de inicio"/>
+
+        <TextView
+            android:id="@+id/txt_data_fim_publicacao_desafio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Data fim"
+            app:layout_constraintStart_toStartOf="@+id/txt_data_inicio_publicacao_desafio"
+            app:layout_constraintTop_toBottomOf="@+id/txt_data_inicio_publicacao_desafio" />
+
         <TextView
             android:id="@+id/headerMetas"
             style="@style/lista_header"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
             android:padding="8dp"
             android:text="@string/metas"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txt_data_status_desafio" />
+            app:layout_constraintTop_toBottomOf="@+id/txt_data_fim_publicacao_desafio" />
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_lista_metas_desafio"
             android:layout_width="0dp"
