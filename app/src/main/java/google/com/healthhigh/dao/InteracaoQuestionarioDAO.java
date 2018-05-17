@@ -91,7 +91,7 @@ public class InteracaoQuestionarioDAO extends DAO {
     private ContentValues getContentValues(InteracaoQuestionario i_q) {
         ContentValues cv = new ContentValues();
         cv.put(ID_QUESTIONARIO, i_q.getQuestionario().getId());
-        cv.put(ID_PUBLICACAO, i_q.getInteracao_desafio().getPublicacao().getId());
+        cv.put(ID_PUBLICACAO, i_q.getPublicacao().getId());
         cv.put(DATA_CRIACAO, i_q.getData_criacao());
         cv.put(DATA_INICIO, i_q.getData_inicio());
         cv.put(DATA_TERMINO, i_q.getData_termino());

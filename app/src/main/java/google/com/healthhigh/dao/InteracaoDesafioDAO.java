@@ -58,8 +58,10 @@ public class InteracaoDesafioDAO extends DAO {
 
     public static InteracaoDesafio getInteracaoDesafio(Cursor c) {
         InteracaoDesafio i_d = new InteracaoDesafio();
+        i_d.setData_aceito(c.getLong(c.getColumnIndex(InteracaoDesafioDAO.DATA_VISUALIZACAO)));
         i_d.setData_aceito(c.getLong(c.getColumnIndex(InteracaoDesafioDAO.DATA_ACEITO)));
         i_d.setDataConclusao(c.getLong(c.getColumnIndex(InteracaoDesafioDAO.DATA_CONCLUSAO)));
+        i_d.setData_cancelamento(c.getLong(c.getColumnIndex(InteracaoDesafioDAO.DATA_CANCELADO)));
         i_d.setRealizando_no_momento(c.getShort(c.getColumnIndex(InteracaoDesafioDAO.REALIZANDO)) > 0);
         i_d.setId(c.getLong(c.getColumnIndex(InteracaoDesafioDAO.ID)));
         return i_d;
@@ -72,5 +74,30 @@ public class InteracaoDesafioDAO extends DAO {
         } else {
             i_d = null;
         }
+    }
+
+    public boolean atualizarInteracaoDesafio(InteracaoDesafio i_d) {
+        boolean result = false;
+        try {
+            ContentValues cv = getContentValues(i_d);
+            result = update(TABLE_NAME, cv, ID + " = ?", new String[]{String.valueOf(i_d.getId())});
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    private ContentValues getContentValues(InteracaoDesafio i_d) throws Exception {
+        ContentValues cv = new ContentValues();
+        if(i_d.getIdDesafio() == 0) throw new Exception("Interacao sem desafio associado");
+        cv.put(ID_DESAFIO, i_d.getIdDesafio());
+        if(i_d.getIdPublicacao() == 0) throw new Exception("Interacao sem publicação associada");
+        cv.put(ID_PUBLICACAO, i_d.getIdPublicacao());
+        cv.put(DATA_ACEITO, i_d.getData_aceito());
+        cv.put(DATA_CANCELADO, i_d.getData_cancelamento());
+        cv.put(DATA_VISUALIZACAO, i_d.getData_visualizacao());
+        cv.put(DATA_CRIACAO, i_d.getData_criacao());
+        cv.put(REALIZANDO, i_d.estaRealizando());
+        return cv;
     }
 }

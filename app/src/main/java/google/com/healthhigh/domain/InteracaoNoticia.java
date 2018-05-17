@@ -1,6 +1,11 @@
 package google.com.healthhigh.domain;
 
 public class InteracaoNoticia extends Interacao {
+    public final static String
+            LIDA = "Lida",
+            NOVA = "Publicação",
+            ENCERRADA = "Publicação Encerrada",
+            NAO_PUBLICADA = "Não Publicada";
     private long tempo_leitura;
     private Noticia noticia;
     private InteracaoDesafio interacao_desafio;
@@ -11,15 +16,15 @@ public class InteracaoNoticia extends Interacao {
             if(getPublicacao().isVigente()){
                 //Publicação da notícia já foi visualizada
                 if(getData_visualizacao() > 0){
-                    status = "Lida";
+                    status = LIDA;
                 } else {
-                    status = "Publicação Nova";
+                    status = NOVA;
                 }
             } else {
-                status = "Publicação encerrada";
+                status = ENCERRADA;
             }
         } else {
-            status = "Não Publicada";
+            status = NAO_PUBLICADA;
         }
         return status;
     }

@@ -5,6 +5,13 @@ package google.com.healthhigh.domain;
  */
 
 public class InteracaoQuestionario extends Interacao{
+    public static final String
+            PENDENTE = "Pendente",
+            INICIADO = "Iniciado",
+            FINALIZADO = "Finalizado",
+            NOVA_PUBLICACAO = "Nova Publicação",
+            ENCERRADA = "Publicação Encerrada",
+            NAO_PUBLICADO = "Não publicado";
     private Questionario questionario;
     private InteracaoDesafio interacao_desafio;
     private long data_inicio, data_termino;
@@ -16,20 +23,20 @@ public class InteracaoQuestionario extends Interacao{
             //Publicação em vigência
             if (p.isVigente()) {
                 if(getData_visualizacao() > 0) {
-                    status = "Pendente";
+                    status = PENDENTE;
                     if(getData_inicio() > 0 && getData_termino() <= 0){
-                        status = "Iniciado";
+                        status = INICIADO;
                     } else if(getData_termino() > 0){
-                        status = "Finalizado";
+                        status = FINALIZADO;
                     }
                 } else {
-                    status = "Nova Publicação";
+                    status = NOVA_PUBLICACAO;
                 }
             } else {
-                status = "Publicação Encerrada";
+                status = ENCERRADA;
             }
         } else {
-            status = "Não publicado";
+            status = NAO_PUBLICADO;
         }
         return status;
     }

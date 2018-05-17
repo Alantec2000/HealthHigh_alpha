@@ -101,7 +101,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/txt_data_status_desafio"
+            android:id="@+id/txt_data_conclusao_desafio"
             android:text="@string/data_desafio_concluido_label"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txt_status_desafio"
@@ -118,7 +118,7 @@
             android:layout_marginTop="10dp"
             android:text="Status publicação"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/txt_data_status_desafio"
+            app:layout_constraintStart_toEndOf="@+id/txt_data_conclusao_desafio"
             app:layout_constraintTop_toBottomOf="@id/txt_descricao_desafio"/>
         <TextView
             android:layout_width="wrap_content"
@@ -162,7 +162,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp" />
         <Button
-            android:id="@+id/botaoIniciar"
+            android:id="@+id/btn_iniciar_desafio"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"

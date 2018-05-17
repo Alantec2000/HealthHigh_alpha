@@ -33,13 +33,14 @@ public class Desafio {
     public static final int EM_EXECUCAO = 3;
     public static final int CONCLUIDO = 4;
     public static final int ENCERRADO = 5;
+    public static final int NAO_PUBLICADO = 5;
 
     private Publicacao publicacao;
-    private InteracaoDesafio interacao_desafio
-            ;
+    private InteracaoDesafio interacao_desafio;
     private boolean aceito;
     private List<Meta> metas = new ArrayList<>();
-    private Map<Long, TipoMeta> metas_list = new TreeMap<>();
+    private List<TipoMeta> metas_list = new ArrayList<>();
+
     public Desafio() {}
 
     public Desafio(long id, String t, String d, int td, boolean fa, int tn) {
@@ -50,11 +51,11 @@ public class Desafio {
         this.tentativas = tn;
     }
 
-    public Map<Long, TipoMeta> getMetas_list() {
+    public List<TipoMeta> getMetas_list() {
         return metas_list;
     }
 
-    public void setMetas_list(Map<Long, TipoMeta> metas_list) {
+    public void setMetas_list(List<TipoMeta> metas_list) {
         this.metas_list = metas_list;
     }
 

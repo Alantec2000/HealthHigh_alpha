@@ -45,7 +45,7 @@ public class DetalhesDesafios extends AppCompatActivity implements View.OnClickL
     }
 
     private void setEventBotoes() {
-        btnInitDesafio = (Button) findViewById(R.id.botaoIniciar);
+        btnInitDesafio = (Button) findViewById(R.id.btn_iniciar_desafio);
         btnInitDesafio.setOnClickListener(this);
     }
 
@@ -73,14 +73,14 @@ public class DetalhesDesafios extends AppCompatActivity implements View.OnClickL
                 TextView data_criacao = (TextView) findViewById(R.id.dataCriacaoDetalheDesafio);
                 TextView statusDesafio = (TextView) findViewById(R.id.statusDesafio);
                 TextView dataConclusao = (TextView) findViewById(R.id.data_conclusao_desafio);
-                TextView dataConclusao_label = (TextView) findViewById(R.id.txt_data_status_desafio);
+                TextView dataConclusao_label = (TextView) findViewById(R.id.txt_data_conclusao_desafio);
                 data_criacao.setText(DataHelper.parseUT(d.getData_criacao(), "dd/MM/yy"));
                 statusDesafio.setText(Desafio.getStatusText(d.getStatus()));
                 titulo.setText(d.getTitulo());
                 descricao.setText(d.getDescricao());
                 String conclusao = "Indefinida";
                 if(d.getStatus() == Desafio.CONCLUIDO){
-                    Button botaoIniciar = (Button) findViewById(R.id.botaoIniciar);
+                    Button botaoIniciar = (Button) findViewById(R.id.btn_iniciar_desafio);
                     dataConclusao.setVisibility(View.VISIBLE);
                     dataConclusao_label.setVisibility(View.VISIBLE);
                     conclusao = d.getData_conclusao() == 0 ? "Indefinida" : DataHelper.parseUT(d.getData_conclusao(), "dd/MM/yy");
@@ -111,7 +111,7 @@ public class DetalhesDesafios extends AppCompatActivity implements View.OnClickL
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.botaoIniciar:
+            case R.id.btn_iniciar_desafio:
                 iniciarDesafio();
                 break;
         }

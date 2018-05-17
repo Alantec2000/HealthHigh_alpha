@@ -50,6 +50,70 @@ public class DesafioController extends DAO {
 
     }
 
+    public void iniciarDesafio(Desafio d) {
+        if(d.getStatus() == Desafio.PENDENTE){
+            if(verificarDesafioAceitoNoMomento(d).size() == 0){
+                d.getInteracao_desafio().setData_aceito(DataHelper.now());
+                d.getInteracao_desafio().setRealizando_no_momento(true);
+                InteracaoDesafioDAO i_d_d = new InteracaoDesafioDAO(context);
+                boolean iniciou = false;
+                try {
+                    iniciou = i_d_d.atualizarInteracaoDesafio(d.getInteracao_desafio());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                if(iniciou){
+                    MessageDialog.showMessage(context, "Desafio iniciado com sucesso!", "Sucesso: ");
+                } else {
+                    MessageDialog.showMessage(context, "Não foi possível iniciar o desafio!", "Erro ao iniciar desafio");
+                }
+            } else {
+                MessageDialog.showMessage(context, "Já existe um desafio em execução no momento!", "Erro:");
+            }
+        } else if(d.getStatus() == Desafio.NAO_PUBLICADO){
+            MessageDialog.showMessage(context, "Não foi possível iniciar o desafio!", "Erro:");
+        }
+    }
+
+    public void cancelarDesafio(Desafio d) {
+        if(d.getPublicacao() != null){
+            d.getInteracao_desafio().setData_cancelamento(DataHelper.now());
+            d.getInteracao_desafio().setRealizando_no_momento(false);
+            InteracaoDesafioDAO i_d_d = new InteracaoDesafioDAO(context);
+            boolean iniciou = false;
+            try {
+                iniciou = i_d_d.atualizarInteracaoDesafio(d.getInteracao_desafio());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            if(iniciou){
+                MessageDialog.showMessage(context, "Desafio cancelado!", "Sucesso:");
+            } else {
+                MessageDialog.showMessage(context, "Não foi possível cancelar o desafio!", "Erro:");
+            }
+        } else {
+            MessageDialog.showMessage(context, "Não foi possível cancelar o desafio!", "Erro:");
+        }
+    }
+
+    public List<Desafio> verificarDesafioAceitoNoMomento(Desafio d) {
+        String select =
+                "SELECT * FROM " + InteracaoDesafioDAO.TABLE_NAME + " as i_d " +
+                "INNER JOIN " + DesafioDAO.TABLE_NAME + " as d ON " +
+                " d." + DesafioDAO.ID + " = i_d." + InteracaoDesafioDAO.ID_DESAFIO + " " +
+                "WHERE i_d." + InteracaoDesafioDAO.REALIZANDO + " = 1 AND " + InteracaoDesafioDAO.ID_DESAFIO + " <> " + String.valueOf(d.getId()) + " ;";
+        DesafioBehavior d_b = new DesafioBehavior(context) {
+            @Override
+            public void setContent(Cursor c) {
+                long id_d = c.getLong(c.getColumnIndex(DesafioDAO.ID));
+                Desafio d = DesafioDAO.getDesafio(c);
+                desafios.put(id_d, d);
+            }
+        };
+        getSelectQueryContent(select, d_b);
+        return new ArrayList<>(d_b.getDesafios().values());
+    }
+
     private abstract class DesafioBehavior implements Behavior {
         protected final Context context;
         protected Desafio desafio;
@@ -158,13 +222,15 @@ public class DesafioController extends DAO {
 
     public Desafio getDesafioAtual() {
         Desafio d = null;
-        String select = "SELECT * FROM " + DesafioDAO.TABLE_NAME + " as d " +
+        String select =
+                "SELECT * FROM " + DesafioDAO.TABLE_NAME + " as d " +
                 "INNER JOIN " + PublicacaoDAO.TABLE_NAME + " as p ON" +
-                " p." + PublicacaoDAO.ID_DESAFIO + " = d." + DesafioDAO.ID + "" +
+                    " p." + PublicacaoDAO.ID_DESAFIO + " = d." + DesafioDAO.ID + "" +
                 " INNER JOIN " + InteracaoDesafioDAO.TABLE_NAME + " id ON " +
-                "id." + InteracaoDesafioDAO.ID_DESAFIO + " = d." + DesafioDAO.ID + " AND " +
-                " p." + PublicacaoDAO.ID + " = id." + InteracaoDesafioDAO.ID_PUBLICACAO + "" +
-                " WHERE " + InteracaoDesafioDAO.REALIZANDO + " = 1";
+                    "id." + InteracaoDesafioDAO.ID_DESAFIO + " = d." + DesafioDAO.ID + " AND " +
+                    " p." + PublicacaoDAO.ID + " = id." + InteracaoDesafioDAO.ID_PUBLICACAO + "" +
+                " WHERE " + DataHelper.now() + " BETWEEN p." + PublicacaoDAO.DATA_INICIO + " AND " + PublicacaoDAO.DATA_FIM + " AND " +
+                    "id." + InteracaoDesafioDAO.REALIZANDO + " = 1 LIMIT 1;";
         Cursor c = executeSelect(select);
         try {
             if (c.moveToFirst()) {
@@ -176,9 +242,6 @@ public class DesafioController extends DAO {
                     d.setPublicacao(p);
                     InteracaoDesafio i_d = InteracaoDesafioDAO.getInteracaoDesafio(c);
                     d.setInteracao_desafio(i_d);
-                    /*i_d = InteracaoDesafioDAO.getInteracaoDesafio(c);
-                    i_d.setDesafio(d);
-                    i_d.setPublicacao(p);*/
                 } while (c.moveToNext());
             }
         } catch (SQLiteException e) {
@@ -236,11 +299,13 @@ public class DesafioController extends DAO {
                 }
                 if(p != null){
                     InteracaoDesafio i_d = getInteracaoPublicacaoAtual(p, desafio);
+                    desafio.setInteracao_desafio(i_d);
                 }
                 desafio.setMetas_list(getMetasDesafio(desafio));
             }
         };
-        return desafio;
+        getSelectQueryContent(select, d_b);
+        return d_b.getDesafio();
     }
 
     private Publicacao getPublicacaoAnterior(Desafio d) {
@@ -334,20 +399,12 @@ public class DesafioController extends DAO {
         return d;
     }
 
-    public Map<Long, TipoMeta> getMetasDesafio(Desafio d) {
-        Map<Long, TipoMeta> metas = new TreeMap<Long, TipoMeta>();
+    public List<TipoMeta> getMetasDesafio(Desafio d) {
+        List<TipoMeta> metas = new ArrayList<>();
         QuestionarioController q_c = new QuestionarioController(context);
-        List<Questionario> questionarios = q_c.getQuestionariosDesafio(d);
-        for(Questionario q : questionarios)
-            metas.put(q.getId(), q);
+        metas.addAll(q_c.getQuestionariosDesafio(d));
         NoticiaController n_c = new NoticiaController(context);
-        List<Noticia> noticias = n_c.getNoticiasDesafio(d);
-        for(Noticia n : noticias)
-            metas.put(n.getId(), n);
-        /*
-        AtividadeController a_c = new AtividadeController(context);
-        List<Atividade> atividades = a_c.getAtividadesDesafio(d);
-        * */
+        metas.addAll(n_c.getNoticiasDesafio(d));
         return metas;
     }
 }

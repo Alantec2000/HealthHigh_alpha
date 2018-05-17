@@ -36,7 +36,7 @@ public class ListaQuestionariosActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_questionarios);
         q_controller = new QuestionarioController(this);
-        addQuestionarioTeste();
+//        addQuestionarioTeste();
         setListaQuestionario();
     }
 

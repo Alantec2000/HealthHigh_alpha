@@ -155,9 +155,7 @@ public class QuestionarioController extends DAO {
                 "dq." + DesafioQuestionarioDAO.ID_QUESTIONARIO + " = q." + QuestionarioDAO.ID +
                 " INNER JOIN " + DesafioDAO.TABLE_NAME + " as d ON " +
                 " d." + DesafioDAO.ID + " = dq." + DesafioQuestionarioDAO.ID_DESAFIO +
-                " WHERE d." + DesafioDAO.ID + " = " + String.valueOf(d) + ";";
-
-        DesafioController d_c = new DesafioController(context);
+                " WHERE d." + DesafioDAO.ID + " = " + String.valueOf(d.getId()) + ";";
         questionario_behavior q_b = new questionario_behavior(context) {
             @Override
             public void setContent(Cursor c) {
@@ -170,13 +168,13 @@ public class QuestionarioController extends DAO {
                     questionarios.put(id_q, q);
                 }
                 q.setDesafio_atual(desafio_atual);
-                getInteracaoQuestionarioAtual(q, desafio_atual.getPublicacao());
+                q.setInteracao_questionario(getInteracaoQuestionarioAtual(q, desafio_atual.getPublicacao()));
                 obterQuestoes(q);
             }
         };
         q_b.setDesafio_atual(d);
         getSelectQueryContent(select, q_b);
-        return new ArrayList<Questionario>(q_b.getQuestionarios().values());
+        return new ArrayList<>(q_b.getQuestionarios().values());
     }
 
     private List<Questionario> getQuestionariosCursor(String select) {
@@ -184,10 +182,12 @@ public class QuestionarioController extends DAO {
         List<Questionario> questionarios;
         DesafioController d_c = new DesafioController(this.context);
         Desafio d_a = d_c.getDesafioAtual();
-        try (Cursor c = executeSelect(select)) {
+        Cursor c = executeSelect(select);
+        try {
             if (c.moveToFirst()) {
                 Log.v("Cursor Object", DatabaseUtils.dumpCursorToString(c));
                 do {
+                    Map<Long, Desafio> d_as;
                     long id_q = c.getLong(c.getColumnIndex(QuestionarioDAO.ID));
                     Questionario q;
                     if (questionarioMap.containsKey(id_q)) {
@@ -196,29 +196,33 @@ public class QuestionarioController extends DAO {
                         q = getQuestionario(c);
                         questionarioMap.put(id_q, q);
                     }
+                    if(q.getDesafios_associados() == null) {
+                        d_as = d_c.getDesafiosAssociados(q);
+                        q.setDesafios_associados(d_as);
+                    } else {
+                        d_as = q.getDesafios_associados();
+                    }
                     if(d_a != null){
-                        Map<Long, Desafio> d_as = d_c.getDesafiosAssociados(q);
                         if(d_as.containsKey(d_a.getId())) {
                             q.setDesafio_atual(d_a);
-                        }
-                        if(d_a.getInteracao_desafio() != null && d_a.getInteracao_desafio().estaRealizando()){
-                            InteracaoQuestionario i_q = getInteracaoQuestionarioAtual(q, d_a.getInteracao_desafio());
+                            InteracaoQuestionario i_q = getInteracaoQuestionarioAtual(q, d_a.getPublicacao());
                             q.setInteracao_questionario(i_q);
                         }
-                        q.setDesafios_associados(d_as);
                     }
                     obterQuestoes(q);
                 } while (c.moveToNext());
             }
         } catch (SQLiteException e) {
             imprimeErroSQLite(e);
+        } finally {
+            c.close();
         }
         questionarios = new ArrayList<>(questionarioMap.values());
         return questionarios;
     }
 
     private void obterQuestoes(@NonNull Questionario q) {
-        if(q.getL_questoes() != null){
+        if(q.getL_questoes() == null){
             q.setL_questoes(new ArrayList<TipoQuestao>());
             Map<Long, QuestaoAlternativa> questoes_alternativa = getQuestaoAlternativaCursor(q);
             Map<Long, QuestaoOptativa> questoes_optativas = getQuestaoOptativaCursor(q);

@@ -1,5 +1,7 @@
 package google.com.healthhigh.domain;
 
+import google.com.healthhigh.utils.DataHelper;
+
 /**
  * Created by Alan on 25/04/2018.
  * Essa classe é responsável por armazenar a interação entre desafio e usuário
@@ -67,5 +69,49 @@ public class InteracaoDesafio extends Interacao {
 
     public void setDesafio(Desafio desafio) {
         this.desafio = desafio;
+    }
+
+    public static final String
+            PENDENTE = "Pendente",
+            EM_EXECUCAO = "Realizando",
+            CANCELADO = "Cancelado",
+            CONCLUIDO = "Concluído",
+            ENCERRADO = "Encerrado";
+
+    private String status;
+
+    public void setStatus(String new_status){
+        status = new_status;
+    }
+
+    public String getStatus(){
+        return status;
+    }
+
+    public String atualizaStatus() {
+        String status = "Indefinido";
+        if(getData_conclusao() > 0) {
+            setStatus(CONCLUIDO);
+            desafio.setStatus(Desafio.CONCLUIDO);
+        } else if(getData_aceito() > 0 && estaRealizando()){
+            setStatus(EM_EXECUCAO);
+            desafio.setStatus(Desafio.EM_EXECUCAO);
+        } else if(getData_cancelamento() > 0){
+            if(getPublicacao().isVigente()){
+                setStatus(PENDENTE);
+                desafio.setStatus(Desafio.PENDENTE);
+            } else{
+                setStatus(CANCELADO);
+                desafio.setStatus(Desafio.ENCERRADO);
+            }
+        } else if(!getPublicacao().isVigente()){
+            setStatus(ENCERRADO);
+            desafio.setStatus(Desafio.ENCERRADO);
+        }
+        return null;
+    }
+
+    public long getIdDesafio() {
+        return (getDesafio() != null ? getDesafio().getId() : 0);
     }
 }

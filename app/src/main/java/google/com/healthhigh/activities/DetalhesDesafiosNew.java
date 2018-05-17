@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -15,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
 
-import google.com.healthhigh.adapter.MetaListAdapter;
 import google.com.healthhigh.adapter.TipoMetaAdapter;
 import google.com.healthhigh.controller.DesafioController;
 import google.com.healthhigh.dao.DesafioXMetaDAO;
@@ -30,11 +30,19 @@ import google.com.healthhigh.utils.MessageDialog;
 public class DetalhesDesafiosNew extends AppCompatActivity implements View.OnClickListener {
     public static String DESAFIO_ACTION = "DESAFIO_ID";
     private int status;
-    private Button btnInitDesafio;
+    private Button btn_aceitar_desafio;
     private Desafio d = null;
     private DesafioController d_c;
     private RecyclerView rv;
-    private TextView titulo, descricao, data_criacao, statusDesafio, dataConclusao_label;
+    private TextView
+            titulo,
+            descricao,
+            data_criacao,
+            status_desafio,
+            status_publicacao,
+            data_conclusao_desafio,
+            data_fim_publicacao,
+            data_inicio_publicacao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +58,11 @@ public class DetalhesDesafiosNew extends AppCompatActivity implements View.OnCli
         titulo = (TextView) findViewById(R.id.tituloDetalhesDesafio);
         descricao = (TextView) findViewById(R.id.txt_descricao_desafio);
         data_criacao = (TextView) findViewById(R.id.dataCriacaoDetalheDesafio);
-        statusDesafio = (TextView) findViewById(R.id.statusDesafio);
-        dataConclusao_label = (TextView) findViewById(R.id.txt_data_status_desafio);
+        status_desafio = (TextView) findViewById(R.id.statusDesafio);
+        data_conclusao_desafio = (TextView) findViewById(R.id.txt_data_conclusao_desafio);
+        status_publicacao = (TextView) findViewById(R.id.txt_status_publicacao_desafio);
+        data_inicio_publicacao = (TextView) findViewById(R.id.txt_data_inicio_publicacao_desafio);
+        data_fim_publicacao = (TextView) findViewById(R.id.txt_data_fim_publicacao_desafio);
     }
 
     @Override
@@ -61,8 +72,8 @@ public class DetalhesDesafiosNew extends AppCompatActivity implements View.OnCli
     }
 
     private void setEventBotoes() {
-        btnInitDesafio = (Button) findViewById(R.id.botaoIniciar);
-        btnInitDesafio.setOnClickListener(this);
+        btn_aceitar_desafio = (Button) findViewById(R.id.btn_iniciar_desafio);
+        btn_aceitar_desafio.setOnClickListener(this);
     }
 
     private void associaMetasDesafios(Desafio d) {
@@ -92,45 +103,68 @@ public class DetalhesDesafiosNew extends AppCompatActivity implements View.OnCli
         } else {
             MessageDialog.showMessage(this, "Nenhum ID de Desafio informado!", "Desafio não informado");
         }
-        btnInitDesafio.setEnabled(d != null && (d.getStatus() != Desafio.CONCLUIDO && d.getStatus() != Desafio.ENCERRADO));
+//        btn_aceitar_desafio.setEnabled(d != null && (d.getStatus() != Desafio.CONCLUIDO && d.getStatus() != Desafio.ENCERRADO));
     }
 
     private void carregarInformacoesDesafio(Desafio d) {
         data_criacao.setText(DataHelper.toDateString(d.getData_criacao()));
         titulo.setText(d.getTitulo());
         descricao.setText(d.getDescricao());
-        setListaMetas(new ArrayList<TipoMeta>(d.getMetas_list().values()));
-        if(d.getPublicacao() == null){
-            statusDesafio.setText("Desafio não publicado");
-            dataConclusao_label.setVisibility(View.INVISIBLE);
-        } else {
-            dataConclusao_label.setVisibility(View.VISIBLE);
+        setListaMetas(new ArrayList<TipoMeta>(d.getMetas_list()));
+        data_conclusao_desafio.setVisibility(View.INVISIBLE);
+        atualizaStatusDesafio();
+    }
+
+    private void atualizaStatusDesafio() {
+        if(d.getPublicacao() != null){
+            data_inicio_publicacao.setText("Início: " + DataHelper.toDateString(d.getPublicacao().getData_inicio()));
+            data_fim_publicacao.setText("Fim: " + DataHelper.toDateString(d.getPublicacao().getData_fim()));
+            String status = "";
+            boolean is_vigente = d.getPublicacao().isVigente();
+            status = is_vigente ? "Vigente" : "Encerrada";
+            status_publicacao.setText(status);
             if(d.getInteracao_desafio() != null){
                 InteracaoDesafio i_d = d.getInteracao_desafio();
-                if(i_d.getData_conclusao() > 0) {
-                    dataConclusao_label.setText("Desafio concluído em: " + DataHelper.toDateString(i_d.getData_conclusao()));
-                    statusDesafio.setText("Status: Concluído");
-                    status = Desafio.CONCLUIDO;
-                } else if(i_d.getData_aceito() > 0 && i_d.estaRealizando()){
-                    dataConclusao_label.setText("Desafio iniciado em: " + DataHelper.toDateString(i_d.getData_aceito()));
-                    statusDesafio.setText("Status: Realizando");
-                    btnInitDesafio.setText("Cancelar desafio");
-                    status = Desafio.EM_EXECUCAO;
-                } else if(i_d.getData_cancelamento() > 0){
-                    dataConclusao_label.setText("Desafio cancelado em: " + DataHelper.toDateString(i_d.getData_conclusao()));
-                    if(i_d.getPublicacao().isVigente()){
-                        statusDesafio.setText("Status: Pendente");
-                        status = Desafio.PENDENTE;
-                    } else{
-                        statusDesafio.setText("Status: Cancelado");
-                        status = Desafio.ENCERRADO;
-                    }
-                } else if(!d.getPublicacao().isVigente()){
-                    status = Desafio.ENCERRADO;
-                    dataConclusao_label.setText("Encerrado");
-                    statusDesafio.setText("Publicação encerrada em: " + DataHelper.toDateString(d.getPublicacao().getData_fim()));
+                i_d.atualizaStatus();
+                switch (i_d.getStatus()) {
+                    case InteracaoDesafio.PENDENTE:
+                        status = "Pendente";
+                        btn_aceitar_desafio.setText("Iniciar Desafio");
+                        btn_aceitar_desafio.setEnabled(true);
+                        break;
+                    case InteracaoDesafio.EM_EXECUCAO:
+                        status = "Realizando";
+                        btn_aceitar_desafio.setText("Cancelar Desafio");
+                        btn_aceitar_desafio.setEnabled(true);
+                        break;
+                    case InteracaoDesafio.CONCLUIDO:
+                        status = "Concluído";
+                        data_conclusao_desafio.setVisibility(View.VISIBLE);
+                        btn_aceitar_desafio.setText("Desafio Concluído");
+                        btn_aceitar_desafio.setEnabled(false);
+                        break;
+                    case InteracaoDesafio.ENCERRADO:
+                        status = "Encerrado";
+                        btn_aceitar_desafio.setText("Desafio Encerrado");
+                        btn_aceitar_desafio.setEnabled(false);
+                        break;
+                    case InteracaoDesafio.CANCELADO:
+                        status = is_vigente ? "Pendente" : "Cancelado";
+                        if(is_vigente){
+                            btn_aceitar_desafio.setText("Iniciar Desafio");
+                            btn_aceitar_desafio.setEnabled(true);
+                        } else {
+                            btn_aceitar_desafio.setText("Desafio Cancelado");
+                            btn_aceitar_desafio.setEnabled(false);
+                        }
+                        break;
                 }
+                status_desafio.setText(status);
             }
+        } else {
+            d.setStatus(Desafio.NAO_PUBLICADO);
+            btn_aceitar_desafio.setText("Desafio Não Publicado");
+            btn_aceitar_desafio.setEnabled(false);
         }
     }
 /*
@@ -141,7 +175,7 @@ public class DetalhesDesafiosNew extends AppCompatActivity implements View.OnCli
             d = d_c.getDesafio(id);
             if(d != null){
                 data_criacao.setText(DataHelper.toDateString(d.getData_criacao()));
-                statusDesafio.setText(Desafio.getStatusText(d.getStatus()));
+                status_desafio.setText(Desafio.getStatusText(d.getStatus()));
                 titulo.setText(d.getTitulo());
                 descricao.setText(d.getDescricao());
                 d.setMetas_list(d_c.getMetasDesafio(d));
@@ -150,15 +184,15 @@ public class DetalhesDesafiosNew extends AppCompatActivity implements View.OnCli
                 if(d.getStatus() == Desafio.CONCLUIDO){
                     Button botaoIniciar = (Button) findViewById(R.id.botaoIniciar);
                     dataConclusao.setVisibility(View.VISIBLE);
-                    dataConclusao_label.setVisibility(View.VISIBLE);
+                    data_conclusao_desafio.setVisibility(View.VISIBLE);
                     conclusao = d.getData_conclusao() == 0 ? "Indefinida" : DataHelper.parseUT(d.getData_conclusao(), "dd/MM/yy");
                 } else if(d.getStatus() == Desafio.ENCERRADO){
                     dataConclusao.setVisibility(View.VISIBLE);
-                    dataConclusao_label.setVisibility(View.VISIBLE);
+                    data_conclusao_desafio.setVisibility(View.VISIBLE);
                     conclusao = d.getData_conclusao() == 0 ? "Desafio não foi concluído!" : DataHelper.parseUT(d.getData_conclusao(), "dd/MM/yy");
                 } else {
                     dataConclusao.setVisibility(View.INVISIBLE);
-                    dataConclusao_label.setVisibility(View.INVISIBLE);
+                    data_conclusao_desafio.setVisibility(View.INVISIBLE);
                 }
                 dataConclusao.setText(conclusao);*//*
 //                setListaMetas(d.getMetas());
@@ -168,7 +202,7 @@ public class DetalhesDesafiosNew extends AppCompatActivity implements View.OnCli
         } else {
             MessageDialog.showMessage(this, "Nenhum ID de Desafio informado!", "Desafio não informado");
         }
-        btnInitDesafio.setEnabled(d != null && (d.getStatus() != Desafio.CONCLUIDO && d.getStatus() != Desafio.ENCERRADO));
+        btn_aceitar_desafio.setEnabled(d != null && (d.getStatus() != Desafio.CONCLUIDO && d.getStatus() != Desafio.ENCERRADO));
     }*/
 
     private void setListaMetas(List<TipoMeta> metas){
@@ -179,15 +213,29 @@ public class DetalhesDesafiosNew extends AppCompatActivity implements View.OnCli
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.botaoIniciar:
-                iniciarDesafio();
+            case R.id.btn_iniciar_desafio:
+                if(d.getStatus() == Desafio.PENDENTE){
+                    iniciarDesafio();
+                    atualizaStatusDesafio();
+                } else if (d.getStatus() == Desafio.EM_EXECUCAO){
+                    cancelarExecucaoDesafio();
+                    atualizaStatusDesafio();
+                }
                 break;
         }
     }
 
-    private void iniciarDesafio() {
+    private void iniciarDesafio(){
+        d_c.iniciarDesafio(d);
+    }
+
+    private void cancelarExecucaoDesafio() {
+        d_c.cancelarDesafio(d);
+    }
+
+    /*private void iniciarDesafio() {
         Intent initDesafio = new Intent(this, RealizandoDesafioActivity.class);
         initDesafio.putExtra(RealizandoDesafioActivity.DESAFIO_ID, d.getId());
         startActivity(initDesafio);
-    }
+    }*/
 }
