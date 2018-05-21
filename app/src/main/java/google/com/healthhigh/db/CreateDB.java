@@ -11,11 +11,14 @@ import android.util.Log;
 import java.util.ArrayList;
 
 import google.com.healthhigh.dao.AlternativaDAO;
+import google.com.healthhigh.dao.AtividadeDAO;
 import google.com.healthhigh.dao.ColaboradorDAO;
 import google.com.healthhigh.dao.DesafioDAO;
 import google.com.healthhigh.dao.DesafioNoticiaDAO;
 import google.com.healthhigh.dao.DesafioQuestionarioDAO;
 import google.com.healthhigh.dao.DesafioXMetaDAO;
+import google.com.healthhigh.dao.ExecucaoAtividadeDAO;
+import google.com.healthhigh.dao.InteracaoAtividadeDAO;
 import google.com.healthhigh.dao.InteracaoDesafioDAO;
 import google.com.healthhigh.dao.InteracaoNoticiaDAO;
 import google.com.healthhigh.dao.InteracaoQuestionarioDAO;
@@ -23,6 +26,7 @@ import google.com.healthhigh.dao.ItemDAO;
 import google.com.healthhigh.dao.ItemXMetaDAO;
 import google.com.healthhigh.dao.MetaDAO;
 import google.com.healthhigh.dao.NoticiaDAO;
+import google.com.healthhigh.dao.PremiacaoDAO;
 import google.com.healthhigh.dao.PublicacaoDAO;
 import google.com.healthhigh.dao.QuestaoAlternativaDAO;
 import google.com.healthhigh.dao.QuestaoOpinativaDAO;
@@ -35,6 +39,7 @@ import google.com.healthhigh.dao.RespostaAlternativaDAO;
 import google.com.healthhigh.dao.RespostaDAO;
 import google.com.healthhigh.dao.RespostaOpinativaDAO;
 import google.com.healthhigh.dao.RespostaOptativaDAO;
+import google.com.healthhigh.domain.ExecucaoAtividade;
 
 public class CreateDB extends SQLiteOpenHelper{
     private static String NOME_BANCO = "healthHigh";
@@ -64,8 +69,14 @@ public class CreateDB extends SQLiteOpenHelper{
 
     private void createTables(SQLiteDatabase db) {
         db.execSQL(ColaboradorDAO.getCreateTableString());
+        db.execSQL(PremiacaoDAO.getCreateTableString());
         db.execSQL(DesafioDAO.getCreateTableString());
         db.execSQL(PublicacaoDAO.getCreateTableString());
+
+        db.execSQL(AtividadeDAO.getCreateTableString());
+        db.execSQL(InteracaoAtividadeDAO.getCreateTableString());
+        db.execSQL(ExecucaoAtividadeDAO.getCreateTableString());
+
         db.execSQL(InteracaoDesafioDAO.getCreateTableString());
         db.execSQL(DesafioXMetaDAO.getCreateTableString());
         db.execSQL(MetaDAO.getCreateTableString());

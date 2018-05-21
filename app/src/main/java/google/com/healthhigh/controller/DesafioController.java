@@ -2,7 +2,6 @@ package google.com.healthhigh.controller;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteException;
@@ -13,15 +12,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import google.com.healthhigh.activities.RealizandoDesafioActivity;
 import google.com.healthhigh.dao.DAO;
 import google.com.healthhigh.dao.DesafioDAO;
 import google.com.healthhigh.dao.DesafioQuestionarioDAO;
-import google.com.healthhigh.dao.DesafioXMetaDAO;
 import google.com.healthhigh.dao.InteracaoDesafioDAO;
 import google.com.healthhigh.dao.PublicacaoDAO;
 import google.com.healthhigh.dao.QuestionarioDAO;
 import google.com.healthhigh.domain.Desafio;
+import google.com.healthhigh.domain.Interacao;
 import google.com.healthhigh.domain.InteracaoDesafio;
 import google.com.healthhigh.domain.Meta;
 import google.com.healthhigh.domain.Noticia;
@@ -112,6 +110,46 @@ public class DesafioController extends DAO {
         };
         getSelectQueryContent(select, d_b);
         return new ArrayList<>(d_b.getDesafios().values());
+    }
+
+    public boolean verificarDesafioConcluido(Desafio d) {
+        boolean concluido = false;
+        if(d.getInteracao_desafio() != null){
+            int n_metas = d.getMetas_list().size(), n_metas_concluidas = 0;
+            QuestionarioController q_c = new QuestionarioController(context);
+            for(TipoMeta m : d.getMetas_list()){
+                boolean concluida = false;
+                switch (m.getTipo()){
+                    case TipoMeta.QUESTIONARIO:
+                        concluida = q_c.validar_respostas((Questionario) m);
+                        break;
+                    case TipoMeta.NOTICIA:
+                        Noticia n = (Noticia) m;
+                        concluida = (n.getInteracao_noticia() != null &&
+                                     n.getInteracao_noticia().getTempo_leitura() > 0);
+                    break;
+                    case TipoMeta.ATIVIDADE:
+                        break;
+                    case TipoMeta.EVENTO:
+                        break;
+                }
+
+                if(concluida){
+                    n_metas_concluidas++;
+                }
+            }
+            concluido = n_metas_concluidas >= n_metas;
+        }
+        return concluido;
+    }
+
+    public boolean concluirDesafio(InteracaoDesafio d) {
+        Log.i("DesafioController", "Desafio Concluído");
+        d.setDataConclusao(DataHelper.now());
+        d.setStatus(InteracaoDesafio.CONCLUIDO);
+        d.setRealizando_no_momento(false);
+        InteracaoDesafioDAO i_d = new InteracaoDesafioDAO(context);
+        return i_d.atualizarInteracaoDesafio(d);
     }
 
     private abstract class DesafioBehavior implements Behavior {

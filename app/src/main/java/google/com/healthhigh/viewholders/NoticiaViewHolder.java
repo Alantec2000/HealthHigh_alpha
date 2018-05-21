@@ -29,10 +29,10 @@ public class NoticiaViewHolder extends RecyclerView.ViewHolder implements View.O
     public NoticiaViewHolder(View v) {
         super(v);
         txt_titulo_noticia = (TextView) v.findViewById(R.id.txt_titulo_noticia);
-        txt_descricao = (TextView) v.findViewById(R.id.txt_descricao);
+        txt_descricao = (TextView) v.findViewById(R.id.txt_preview_corpo_noticia);
         img_icone_noticia = (ImageView) v.findViewById(R.id.img_icone_noticia);
-        txt_status_visualizacao = (TextView) v.findViewById(R.id.txt_data_criacao_noticia);
-        txt_status_publicacao = (TextView) v.findViewById(R.id.txt_status_publicacao_desafio);
+        txt_status_visualizacao = (TextView) v.findViewById(R.id.txt_status_visualizacao_noticia);
+        txt_status_publicacao = (TextView) v.findViewById(R.id.txt_status_publicacao_noticia);
         txt_data_criacao = (TextView) v.findViewById(R.id.txt_data_criacao_noticia);
         btn_ler = (Button) v.findViewById(R.id.btn_ler);
         btn_ler.setOnClickListener(this);

@@ -45,7 +45,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:id="@+id/txt_status_visualizacao"
+        android:id="@+id/txt_status_visualizacao_noticia"
         android:text="Nova"
         app:layout_constraintEnd_toStartOf="@+id/txt_data_criacao_noticia"
         app:layout_constraintStart_toEndOf="@+id/txt_titulo_noticia"

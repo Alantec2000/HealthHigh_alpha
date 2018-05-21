@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
+import android.text.TextUtils;
 import android.util.Log;
 
 import java.util.List;
@@ -24,6 +25,10 @@ public abstract class DAO extends CreateDB {
         this.context = context;
         write_db = CreateDB.getDBInstance(context).getWritableDatabase();
         read_db = CreateDB.getDBInstance(context).getReadableDatabase();
+    }
+
+    public static String createColumns(String[] columns){
+        return TextUtils.join(",", columns);
     }
 
     protected void imprimeErroSQLite(SQLiteException e) {

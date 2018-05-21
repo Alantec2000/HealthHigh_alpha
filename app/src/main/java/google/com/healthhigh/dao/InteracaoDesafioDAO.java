@@ -97,6 +97,7 @@ public class InteracaoDesafioDAO extends DAO {
         cv.put(DATA_CANCELADO, i_d.getData_cancelamento());
         cv.put(DATA_VISUALIZACAO, i_d.getData_visualizacao());
         cv.put(DATA_CRIACAO, i_d.getData_criacao());
+        cv.put(DATA_CONCLUSAO, i_d.getData_conclusao());
         cv.put(REALIZANDO, i_d.estaRealizando());
         return cv;
     }

@@ -63,6 +63,11 @@ public class Questionario extends TipoMeta {
         return QUESTIONARIO;
     }
 
+    @Override
+    public boolean isConcluida() {
+        return false;
+    }
+
     public void setId(long id) {
         this.id = id;
     }

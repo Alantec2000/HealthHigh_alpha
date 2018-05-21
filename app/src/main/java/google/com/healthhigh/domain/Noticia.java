@@ -17,6 +17,11 @@ public class Noticia extends TipoMeta{
     }
 
     @Override
+    public boolean isConcluida() {
+        return false;
+    }
+
+    @Override
     public Interacao getInteracao() {
         return getInteracao_noticia();
     }

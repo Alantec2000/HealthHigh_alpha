@@ -47,7 +47,8 @@ public class NoticiaAdapter extends RecyclerView.Adapter {
         if(n.getDesafio_atual() != null){
             status = n.getInteracao_noticia().statusNoticia();
         } else {
-            status = "Desafio Não Aceito";
+            n_holder.getTxt_status_publicacao().setVisibility(View.INVISIBLE );
+            status = "Nenhum Desafio Aceito";
         }
         n_holder.getTxt_status_publicacao().setText(status);
 

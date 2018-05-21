@@ -1,11 +1,11 @@
 package google.com.healthhigh.activities;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -47,13 +47,14 @@ public class DetalhesDesafiosNew extends AppCompatActivity implements View.OnCli
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_detalhes_desafios_new);
         d_c = new DesafioController(this);
-        setUIElements();
-        setEventBotoes();
+        setElementosUI();
+        setEventoBotao();
     }
 
-    private void setUIElements() {
+    private void setElementosUI() {
         rv = (RecyclerView) findViewById(R.id.rv_lista_metas_desafio);
         titulo = (TextView) findViewById(R.id.tituloDetalhesDesafio);
         descricao = (TextView) findViewById(R.id.txt_descricao_desafio);
@@ -71,7 +72,7 @@ public class DetalhesDesafiosNew extends AppCompatActivity implements View.OnCli
         carregaDesafio();
     }
 
-    private void setEventBotoes() {
+    private void setEventoBotao() {
         btn_aceitar_desafio = (Button) findViewById(R.id.btn_iniciar_desafio);
         btn_aceitar_desafio.setOnClickListener(this);
     }
@@ -103,7 +104,6 @@ public class DetalhesDesafiosNew extends AppCompatActivity implements View.OnCli
         } else {
             MessageDialog.showMessage(this, "Nenhum ID de Desafio informado!", "Desafio não informado");
         }
-//        btn_aceitar_desafio.setEnabled(d != null && (d.getStatus() != Desafio.CONCLUIDO && d.getStatus() != Desafio.ENCERRADO));
     }
 
     private void carregarInformacoesDesafio(Desafio d) {
@@ -126,6 +126,10 @@ public class DetalhesDesafiosNew extends AppCompatActivity implements View.OnCli
             if(d.getInteracao_desafio() != null){
                 InteracaoDesafio i_d = d.getInteracao_desafio();
                 i_d.atualizaStatus();
+                if(i_d.getStatus().equals(InteracaoDesafio.PENDENTE) ||
+                   i_d.getStatus().equals(InteracaoDesafio.EM_EXECUCAO) ){
+                    verificarDesafioConcluido();
+                }
                 switch (i_d.getStatus()) {
                     case InteracaoDesafio.PENDENTE:
                         status = "Pendente";
@@ -140,6 +144,7 @@ public class DetalhesDesafiosNew extends AppCompatActivity implements View.OnCli
                     case InteracaoDesafio.CONCLUIDO:
                         status = "Concluído";
                         data_conclusao_desafio.setVisibility(View.VISIBLE);
+                        data_conclusao_desafio.setText("Concluído em: " + DataHelper.toDateString(i_d.getData_conclusao()));
                         btn_aceitar_desafio.setText("Desafio Concluído");
                         btn_aceitar_desafio.setEnabled(false);
                         break;
@@ -165,6 +170,14 @@ public class DetalhesDesafiosNew extends AppCompatActivity implements View.OnCli
             d.setStatus(Desafio.NAO_PUBLICADO);
             btn_aceitar_desafio.setText("Desafio Não Publicado");
             btn_aceitar_desafio.setEnabled(false);
+        }
+    }
+
+    private void verificarDesafioConcluido() {
+        if(d_c.verificarDesafioConcluido(d)) {
+            if(d_c.concluirDesafio(d.getInteracao_desafio())){
+                MessageDialog.showMessage(this, "Desafio concluído com sucesso!", "Desafio concluído!");
+            }
         }
     }
 /*

@@ -2,36 +2,31 @@ package google.com.healthhigh.activities;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
+
 import com.google.healthhigh.R;
 
-import google.com.healthhigh.adapter.MetaListAdapter;
+import google.com.healthhigh.controller.AtividadeController;
+import google.com.healthhigh.controller.DesafioController;
 import google.com.healthhigh.dao.DesafioXMetaDAO;
 import google.com.healthhigh.domain.Desafio;
-import google.com.healthhigh.sensors.SensorUI;
 import google.com.healthhigh.sensors.SensorPasso;
+import google.com.healthhigh.sensors.SensorUI;
 import google.com.healthhigh.utils.MessageDialog;
 import google.com.healthhigh.utils.Toaster;
 
-public class RealizandoDesafioActivity extends AppCompatActivity{
+public class RealizandoDesafioActivityNew extends AppCompatActivity{
     public static String DESAFIO_ID = "desafio_id";
-    private DesafioXMetaDAO dao;
     private SensorPasso pedometro;
     private Intent intent;
     private Desafio d = null;
     private RecyclerView rv;
-    public boolean realizandoDesafio = false;
+    private DesafioController d_c;
+    private AtividadeController a_c;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,36 +35,30 @@ public class RealizandoDesafioActivity extends AppCompatActivity{
         setContentView(R.layout.activity_realizando_desafio);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 //        rv = (RecyclerView) findViewById(R.id.listaMetasRealizando);
-        dao = new DesafioXMetaDAO(this);
+        d_c = new DesafioController(this);
+        a_c = new AtividadeController(this);
     }
 
     private void setDesafioMetas() {
-        long id = intent.getLongExtra(Desafio.TAG_ID, -1);
-
-        if(id > -1){
-            d = dao.getDesafioMetas(id);
-            if(d != null){
-//                rv.setAdapter(new MetaListAdapter(this, d.getMetas()));
-//                rv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-            } else {
-                MessageDialog.showMessage(this, "Desafio não encontrado", "Desafio selecionado não foi encontrado!");
-            }
-        } else {
-            MessageDialog.showMessage(this, "Desafio não informado", "ID do desafio não encontrado!");
+        d = d_c.getDesafioAtual();
+        if(d != null) {
+            carregarAtividades();
         }
+    }
+
+    private void carregarAtividades() {
+
     }
 
     private void setPedometro() {
         pedometro = new SensorPasso(this);
         if(pedometro.getStepSensor() != null) {
             SensorUI hud = new SensorUI();
-            // hud.setMedia((TextView) findViewById(R.id.mediaEixos));
-//            hud.setnPassos((TextView) findViewById(R.id.nPassos));
-//            hud.setTempo((TextView) findViewById(R.id.tempoDecorrido));
+            hud.setnPassos((TextView) findViewById(R.id.txt_n_passos_atividade));
+            hud.setTempo((TextView) findViewById(R.id.txt_cronometro_atividade));
             pedometro.setEventListener(hud, d);
-            realizandoDesafio = true;
         } else {
-            Toaster.toastLongMessage(this, "Celular não possui sensor compatível para execução de atividades");
+            Toaster.toastLongMessage(this, "Celular não possui sensor compatível para execução das atividades");
         }
     }
 
@@ -82,7 +71,6 @@ public class RealizandoDesafioActivity extends AppCompatActivity{
 
     public void unsetPedometro(){
         pedometro.unsetEventListener();
-        realizandoDesafio = false;
     }
 
     @Override

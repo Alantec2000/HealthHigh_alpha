@@ -14,6 +14,8 @@ public abstract class TipoMeta {
 
     public abstract int getTipo();
 
+    public abstract boolean isConcluida();
+
     public long getData_criacao() {
         return data_criacao;
     }

@@ -88,8 +88,8 @@ public class InteracaoDesafio extends Interacao {
         return status;
     }
 
-    public String atualizaStatus() {
-        String status = "Indefinido";
+    public void atualizaStatus() {
+        status = "Indefinido";
         if(getData_conclusao() > 0) {
             setStatus(CONCLUIDO);
             desafio.setStatus(Desafio.CONCLUIDO);
@@ -107,8 +107,10 @@ public class InteracaoDesafio extends Interacao {
         } else if(!getPublicacao().isVigente()){
             setStatus(ENCERRADO);
             desafio.setStatus(Desafio.ENCERRADO);
+        } else {
+            setStatus(PENDENTE);
+            desafio.setStatus(Desafio.PENDENTE);
         }
-        return null;
     }
 
     public long getIdDesafio() {
