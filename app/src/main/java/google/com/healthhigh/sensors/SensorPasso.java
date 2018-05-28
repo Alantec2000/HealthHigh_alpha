@@ -4,24 +4,24 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
-import android.widget.Toast;
+import android.os.Handler;
 
-import google.com.healthhigh.domain.Desafio;
 import google.com.healthhigh.utils.Toaster;
 
 /**
  * Created by Alan on 21/07/2017.
+ * Classe de gerenciamento de estado do pedômetro.
  */
 
 public class SensorPasso {
     private Sensor stepSensor;
     private SensorUI UI;
-    private SensorPassoListener settedListener;
+    private SensorPassoListener listener;
     private SensorManager sensorManager;
-    private Context c;
+    private Context context;
 
     public SensorPasso(Context c) {
-        this.c = c;
+        this.context = c;
         sensorManager = (SensorManager) c.getSystemService(Context.SENSOR_SERVICE);
         setStepSensor();
     }
@@ -39,33 +39,34 @@ public class SensorPasso {
         return UI;
     }
 
-    public void setEventListener(Desafio d){
+    public void iniciarPedometro(){
         if(stepSensor != null){
-            settedListener = new SensorPassoListener(c, d);
-            sensorManager.registerListener(settedListener, stepSensor, SensorManager.SENSOR_DELAY_UI);
+            listener = new SensorPassoListener();
+            sensorManager.registerListener(listener, stepSensor, SensorManager.SENSOR_DELAY_UI);
         }
-    }
-    public void setEventListener(SensorUI hud, Desafio d){
-        if(stepSensor != null){
-            settedListener = new SensorPassoListener(c, d);
-            settedListener.setHUD(hud);
-            sensorManager.registerListener(settedListener, stepSensor, SensorManager.SENSOR_DELAY_UI);
-        }
-    }
-    public void unsetEventListener(){
-        sensorManager.unregisterListener(settedListener);
     }
 
-    public Sensor setStepSensor() {
+    public void unsetEventListener(){
+        sensorManager.unregisterListener(listener);
+    }
+
+    public int getPassos(){
+        return listener != null ? listener.getNumero_passos() : 0;
+    }
+
+    public void setHandler(Handler h){
+        listener.setHandler(h);
+    }
+
+    public void setStepSensor() {
         if(sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION) != null){
             stepSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
         } else {
             stepSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         }
-        PackageManager pm = c.getPackageManager();
+        PackageManager pm = context.getPackageManager();
         if (stepSensor == null) {
-            Toaster.toastLongMessage(c,"Seu celular não possui um sensor de aceleração.");
+            Toaster.toastLongMessage(context,"Seu celular não possui um sensor de aceleração.");
         }
-        return stepSensor;
     }
 }

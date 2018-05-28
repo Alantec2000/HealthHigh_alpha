@@ -68,9 +68,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.action_noticias:
                 startActivity(new Intent(this,NoticiaActivity.class));
             break;
-            case R.id.action_utilidades:
-                startActivity(new Intent(this,UtilidadesActivity.class));
-            break;
             case R.id.db_manager:
                 startActivity(new Intent(this, AndroidDatabaseManager.class));
             break;
@@ -80,6 +77,9 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             break;
             case R.id.action_desafios:
                 startActivity(new Intent(HomeActivity.this, ListaDesafiosActivity.class));
+            break;
+            case R.id.home_menu_atividade:
+                startActivity(new Intent(HomeActivity.this, RealizandoAtividadeActivity.class));
             break;
         }
         return super.onOptionsItemSelected(item);

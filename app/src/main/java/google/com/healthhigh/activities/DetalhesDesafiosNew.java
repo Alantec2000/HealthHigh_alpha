@@ -112,11 +112,17 @@ public class DetalhesDesafiosNew extends AppCompatActivity implements View.OnCli
         descricao.setText(d.getDescricao());
         setListaMetas(new ArrayList<TipoMeta>(d.getMetas_list()));
         data_conclusao_desafio.setVisibility(View.INVISIBLE);
+        status_publicacao.setVisibility(View.INVISIBLE);
+        data_inicio_publicacao.setVisibility(View.INVISIBLE);
+        data_fim_publicacao.setVisibility(View.INVISIBLE);
         atualizaStatusDesafio();
     }
 
     private void atualizaStatusDesafio() {
         if(d.getPublicacao() != null){
+            status_publicacao.setVisibility(View.VISIBLE);
+            data_inicio_publicacao.setVisibility(View.VISIBLE);
+            data_fim_publicacao.setVisibility(View.VISIBLE);
             data_inicio_publicacao.setText("Início: " + DataHelper.toDateString(d.getPublicacao().getData_inicio()));
             data_fim_publicacao.setText("Fim: " + DataHelper.toDateString(d.getPublicacao().getData_fim()));
             String status = "";
@@ -126,8 +132,7 @@ public class DetalhesDesafiosNew extends AppCompatActivity implements View.OnCli
             if(d.getInteracao_desafio() != null){
                 InteracaoDesafio i_d = d.getInteracao_desafio();
                 i_d.atualizaStatus();
-                if(i_d.getStatus().equals(InteracaoDesafio.PENDENTE) ||
-                   i_d.getStatus().equals(InteracaoDesafio.EM_EXECUCAO) ){
+                if((i_d.getStatus().equals(InteracaoDesafio.PENDENTE) || i_d.getStatus().equals(InteracaoDesafio.EM_EXECUCAO)) && d.getMetas_list().size() > 0){
                     verificarDesafioConcluido();
                 }
                 switch (i_d.getStatus()) {
@@ -168,6 +173,7 @@ public class DetalhesDesafiosNew extends AppCompatActivity implements View.OnCli
             }
         } else {
             d.setStatus(Desafio.NAO_PUBLICADO);
+            status_desafio.setText("Não Publicado");
             btn_aceitar_desafio.setText("Desafio Não Publicado");
             btn_aceitar_desafio.setEnabled(false);
         }

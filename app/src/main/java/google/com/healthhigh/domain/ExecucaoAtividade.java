@@ -2,12 +2,11 @@ package google.com.healthhigh.domain;
 
 public class ExecucaoAtividade {
     private long id, data_fim_execucao, tempo_execucao;
-    private final long data_inicio_execucao;
+    private long data_inicio_execucao;
     private int total_passos_dados;
-    private InteracaoAtividade interacao_atividade;
+    private SessaoAtividade sessao_atividade;
 
-    public ExecucaoAtividade(long d_i) {
-        this.data_inicio_execucao = d_i;
+    public ExecucaoAtividade() {
     }
 
     public long getId() {
@@ -20,6 +19,10 @@ public class ExecucaoAtividade {
 
     public long getData_inicio_execucao() {
         return data_inicio_execucao;
+    }
+
+    public void setData_inicio_execucao(long data_inicio_execucao) {
+        this.data_inicio_execucao = data_inicio_execucao;
     }
 
     public long getData_fim_execucao() {
@@ -46,7 +49,11 @@ public class ExecucaoAtividade {
         this.total_passos_dados = total_passos_dados;
     }
 
-    public InteracaoAtividade getInteracao_atividade() {
-        return interacao_atividade;
+    public SessaoAtividade getSessao_atividade() {
+        return sessao_atividade;
+    }
+
+    public void setSessao_atividade(SessaoAtividade sessao_atividade) {
+        this.sessao_atividade = sessao_atividade;
     }
 }

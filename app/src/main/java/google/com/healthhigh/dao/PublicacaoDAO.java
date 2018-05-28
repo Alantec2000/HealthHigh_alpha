@@ -4,8 +4,13 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
+import java.util.Map;
+import java.util.TreeMap;
+
 import google.com.healthhigh.domain.Desafio;
+import google.com.healthhigh.domain.InteracaoAtividade;
 import google.com.healthhigh.domain.Publicacao;
+import google.com.healthhigh.utils.DataHelper;
 
 /**
  * Created by Alan on 19/04/2018.
@@ -35,6 +40,37 @@ public class PublicacaoDAO extends DAO {
     }
     public PublicacaoDAO(Context context) {
         super(context);
+    }
+
+    public Publicacao get(Desafio d) {
+        Publicacao p = null;
+        if(d != null){
+            String select = "SELECT * FROM " + TABLE_NAME + " as p " +
+                    "INNER JOIN " + DesafioDAO.TABLE_NAME + " as d ON " +
+                    "d." + DesafioDAO.ID + " = p." + PublicacaoDAO.ID_DESAFIO + " " +
+                    "WHERE " + DesafioDAO.ID + " = " + String.valueOf(d.getId()) + " AND " +
+                    String.valueOf(DataHelper.now()) + " BETWEEN " + DATA_INICIO + " AND " + DATA_FIM;
+            select += ";";
+            PublicacaoBehavior p_b = new PublicacaoBehavior() {
+                @Override
+                public void setContent(Cursor c) {
+                    publicacao = get(c);
+                }
+            };
+            getSelectQueryContent(select, p_b);
+            p = p_b.publicacao;
+        }
+        return p;
+    }
+
+    private abstract static class PublicacaoBehavior implements Behavior {
+        protected Publicacao publicacao;
+        protected Map<Long, Publicacao> publicacoes;
+
+        public PublicacaoBehavior() {
+            publicacao = null;
+            publicacoes = new TreeMap<>();
+        }
     }
 
     public Publicacao inserePublicacao(Publicacao p){
@@ -70,17 +106,33 @@ public class PublicacaoDAO extends DAO {
         return cv;
     }
 
-    public static Publicacao getPublicacao(Cursor c) {
+    public static Publicacao get(Cursor c) {
         Publicacao p = new Publicacao();
-        p.setId(c.getLong(c.getColumnIndex(PublicacaoDAO.ID)));
-        p.setData_criacao(c.getLong(c.getColumnIndex(PublicacaoDAO.DATA_CRIACAO)));
-        p.setData_inicio(c.getLong(c.getColumnIndex(PublicacaoDAO.DATA_INICIO)));
-        p.setData_fim(c.getLong(c.getColumnIndex(PublicacaoDAO.DATA_FIM)));
+        p.setId(getLong(c, ID));
+        p.setData_criacao(getLong(c, DATA_CRIACAO));
+        p.setData_inicio(getLong(c, DATA_INICIO));
+        p.setData_fim(getLong(c, DATA_FIM));
         return p;
     }
 
     @Override
     protected void prepareContentReceiver() {
 
+    }
+
+    public Publicacao get(InteracaoAtividade i_a) {
+        String select = "SELECT * FROM " + TABLE_NAME + " as p " +
+                "INNER JOIN " + InteracaoAtividadeDAO.TABLE_NAME + " as ia  ON " +
+                "ia." + InteracaoAtividadeDAO.ID_PUBLICACAO + " = p." + PublicacaoDAO.ID + " " +
+                "WHERE p." + InteracaoAtividadeDAO.ID + " = " + String.valueOf(i_a);
+
+        PublicacaoBehavior p_b = new PublicacaoBehavior() {
+            @Override
+            public void setContent(Cursor c) {
+                publicacao = get(c);
+            }
+        };
+        getSelectQueryContent(select, p_b);
+        return p_b.publicacao;
     }
 }

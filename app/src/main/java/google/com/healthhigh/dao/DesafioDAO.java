@@ -7,9 +7,13 @@ import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import google.com.healthhigh.db.CreateDB;
+import google.com.healthhigh.domain.Atividade;
 import google.com.healthhigh.domain.Desafio;
+import google.com.healthhigh.utils.DataHelper;
 
 public class DesafioDAO extends DAO {
     private static final String QUANTIDADE = "i_quantidade";
@@ -87,8 +91,8 @@ public class DesafioDAO extends DAO {
         if(limit > 0){
             LIMIT = " LIMIT " + limit;
         }
-        getSelectQueryContent("SELECT * FROM " + DesafioDAO.getTableName() + " " +
-                              "ORDER BY " + DesafioDAO.getID() + " " + LIMIT + ";");
+        getSelectQueryContent("SELECT * FROM " + DesafioDAO.TABLE_NAME + " " +
+                              "ORDER BY " + DesafioDAO.ID + " " + LIMIT + ";");
         return listaDesafios;
     }
 
@@ -125,44 +129,42 @@ public class DesafioDAO extends DAO {
         ContentValues cv = new ContentValues();
         cv.put(STATUS, status);
         if(status == Desafio.CONCLUIDO){
-            cv.put(DATA_CONCLUSAO, System.currentTimeMillis()/1000);
+            cv.put(DATA_CONCLUSAO, DataHelper.now());
         }
         write_db.update(TABLE_NAME, cv, ID + " = ?", new String[] { Long.toString(d.getId()) });
     }
 
-    public static String getID() {
-        return ID;
+    private static abstract class DesafioBehavior implements Behavior {
+        protected Desafio desafio;
+        protected Map<Long, Desafio> desafios;
+        public DesafioBehavior(){
+            desafio = null;
+            desafios = new TreeMap<>();
+        }
     }
 
-    public static String getTITULO() {
-        return TITULO;
-    }
-
-    public static String getDESCRICAO() {
-        return DESCRICAO;
-    }
-
-    public static String getTENTATIVAS() {
-        return TENTATIVAS;
-    }
-
-    public static String getTIPO() {
-        return TIPO;
-    }
-
-    public static String getACEITO() {
-        return ACEITO;
-    }
-
-    public static String getDataCriacao() {
-        return DATA_CRIACAO;
-    }
-
-    public static String getDataAceito() {
-        return DATA_ACEITO;
-    }
-
-    public static String getTableName() {
-        return TABLE_NAME;
+    public Map<Long, Desafio> get(Atividade a) {
+        Map<Long, Desafio> desafios = null;
+        if(a != null){
+            String select = "SELECT * FROM " + TABLE_NAME + " as d " +
+                    "INNER JOIN " + DesafioAtividadeDAO.TABLE_NAME + " as ad ON " +
+                    "ad." + DesafioAtividadeDAO.ID_DESAFIO + " = d." + ID + " " +
+                    "INNER JOIN " + AtividadeDAO.TABLE_NAME + " as a ON " +
+                    "a." + AtividadeDAO.ID + " = ad." + DesafioAtividadeDAO.ID_DESAFIO + " " +
+                    "WHERE a." + AtividadeDAO.ID + " = " + String.valueOf(a.getId());
+            DesafioBehavior d_b = new DesafioBehavior() {
+                @Override
+                public void setContent(Cursor c) {
+                    long id = getLong(c, ID);
+                    if(!desafios.containsKey(id)){
+                        Desafio d = getDesafio(c);
+                        desafios.put(id, d);
+                    }
+                }
+            };
+            getSelectQueryContent(select, d_b);
+            desafios = d_b.desafios;
+        }
+        return desafios;
     }
 }

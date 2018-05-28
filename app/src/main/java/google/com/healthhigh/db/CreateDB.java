@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import google.com.healthhigh.dao.AlternativaDAO;
 import google.com.healthhigh.dao.AtividadeDAO;
 import google.com.healthhigh.dao.ColaboradorDAO;
+import google.com.healthhigh.dao.DesafioAtividadeDAO;
 import google.com.healthhigh.dao.DesafioDAO;
 import google.com.healthhigh.dao.DesafioNoticiaDAO;
 import google.com.healthhigh.dao.DesafioQuestionarioDAO;
@@ -39,11 +40,13 @@ import google.com.healthhigh.dao.RespostaAlternativaDAO;
 import google.com.healthhigh.dao.RespostaDAO;
 import google.com.healthhigh.dao.RespostaOpinativaDAO;
 import google.com.healthhigh.dao.RespostaOptativaDAO;
+import google.com.healthhigh.dao.SessaoAtividadeDAO;
 import google.com.healthhigh.domain.ExecucaoAtividade;
+import google.com.healthhigh.domain.SessaoAtividade;
 
 public class CreateDB extends SQLiteOpenHelper{
     private static String NOME_BANCO = "healthHigh";
-    private static int VERSAO = 23;
+    private static int VERSAO = 25;
     private static CreateDB db = null;
 
     public static CreateDB getDBInstance(Context context){
@@ -74,7 +77,9 @@ public class CreateDB extends SQLiteOpenHelper{
         db.execSQL(PublicacaoDAO.getCreateTableString());
 
         db.execSQL(AtividadeDAO.getCreateTableString());
+        db.execSQL(DesafioAtividadeDAO.getCreateTableString());
         db.execSQL(InteracaoAtividadeDAO.getCreateTableString());
+        db.execSQL(SessaoAtividadeDAO.getCreateTableString());
         db.execSQL(ExecucaoAtividadeDAO.getCreateTableString());
 
         db.execSQL(InteracaoDesafioDAO.getCreateTableString());
@@ -109,6 +114,11 @@ public class CreateDB extends SQLiteOpenHelper{
         db.execSQL(InteracaoNoticiaDAO.getDropTableString());
         db.execSQL(DesafioNoticiaDAO.getDropTableString());
         db.execSQL(NoticiaDAO.getDropTableString());
+
+        db.execSQL(ExecucaoAtividadeDAO.getCreateTableString());
+        db.execSQL(SessaoAtividadeDAO.getDropTableString());
+        db.execSQL(InteracaoAtividadeDAO.getDropTableString());
+        db.execSQL(AtividadeDAO.getDropTableString());
 
         db.execSQL(RespostaDAO.getDropTableString());
         db.execSQL(RespostaAlternativaDAO.getDropTableString());

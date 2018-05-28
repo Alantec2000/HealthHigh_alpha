@@ -17,7 +17,7 @@ public class PremiacaoDAO extends DAO {
                 DATA_CRIACAO + " INTEGER NOT NULL, " +
                 DATA_VISUALIZACAO + " INTEGER NOT NULL DEFAULT 0, " +
                 NOME + " TEXT NOT NULL, " +
-                DESCRICAO + " TEXT NOT NULL, " +
+                DESCRICAO + " TEXT NOT NULL " +
                 ");";
     }
 

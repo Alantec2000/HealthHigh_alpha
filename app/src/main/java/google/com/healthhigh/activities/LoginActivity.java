@@ -25,7 +25,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        Button btLogin = (Button) findViewById(R.id.btnLogin);
+        Button btLogin = (Button) findViewById(R.id.btn_autenticar);
         btLogin.setOnClickListener(onClickLogin());
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
@@ -38,8 +38,8 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 try {
-                    TextView tLogin = (TextView)findViewById(R.id.tLogin);
-                    TextView tSenha = (TextView)findViewById(R.id.tSenha);
+                    TextView tLogin = (TextView)findViewById(R.id.txt_login);
+                    TextView tSenha = (TextView)findViewById(R.id.txt_senha);
                     String login = tLogin.getText().toString();
                     String senha = tSenha.getText().toString();
                     rslt="START";

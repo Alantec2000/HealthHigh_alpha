@@ -66,7 +66,7 @@ public class RealizandoDesafioActivity extends AppCompatActivity{
             // hud.setMedia((TextView) findViewById(R.id.mediaEixos));
 //            hud.setnPassos((TextView) findViewById(R.id.nPassos));
 //            hud.setTempo((TextView) findViewById(R.id.tempoDecorrido));
-            pedometro.setEventListener(hud, d);
+//            pedometro.iniciarPedometro(hud, d);
             realizandoDesafio = true;
         } else {
             Toaster.toastLongMessage(this, "Celular não possui sensor compatível para execução de atividades");

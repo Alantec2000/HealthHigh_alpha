@@ -19,21 +19,15 @@ public class InteracaoQuestionario extends Interacao{
     public String statusQuestionario() {
         String status = "Indefinido";
         if(getPublicacao() != null){
-            Publicacao p = getPublicacao();
-            //Publicação em vigência
-            if (p.isVigente()) {
-                if(getData_visualizacao() > 0) {
-                    status = PENDENTE;
-                    if(getData_inicio() > 0 && getData_termino() <= 0){
-                        status = INICIADO;
-                    } else if(getData_termino() > 0){
-                        status = FINALIZADO;
-                    }
-                } else {
-                    status = NOVA_PUBLICACAO;
+            if(getData_visualizacao() > 0) {
+                status = PENDENTE;
+                if(getData_inicio() > 0 && getData_termino() <= 0){
+                    status = INICIADO;
+                } else if(getData_termino() > 0){
+                    status = FINALIZADO;
                 }
             } else {
-                status = ENCERRADA;
+                status = NOVA_PUBLICACAO;
             }
         } else {
             status = NAO_PUBLICADO;

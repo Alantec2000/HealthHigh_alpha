@@ -3,6 +3,7 @@ package google.com.healthhigh.dao;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.text.TextUtils;
@@ -17,7 +18,7 @@ public abstract class DAO extends CreateDB {
     public final String TABLE_NAME = "";
     protected SQLiteDatabase write_db = null;
     protected SQLiteDatabase read_db = null;//Não tem diferença do write_db, somente na legibilidade do código...
-    protected Context context;
+    protected final Context context;
 
 
     public DAO(Context context) {
@@ -53,8 +54,8 @@ public abstract class DAO extends CreateDB {
                     behavior.setContent(c);
                 } while (c.moveToNext());
             }
-        } catch (Exception e){
-           Log.e(SQLITE_ERROR, e.getMessage());
+        } catch (SQLiteException e){
+           imprimeErroSQLite(e);
         } finally {
             c.close();
         }
@@ -77,23 +78,27 @@ public abstract class DAO extends CreateDB {
     }
 
     protected long insert(String table_name, ContentValues cv){
-        long ret = 0;
-        try{
-            ret = write_db.insert(table_name, null, cv);
-        } catch (SQLiteException e){
-            imprimeErroSQLite(e);
+        synchronized (this){
+            long ret = 0;
+            try{
+                ret = write_db.insert(table_name, null, cv);
+            } catch (SQLiteException e){
+                imprimeErroSQLite(e);
+            }
+            return ret;
         }
-        return ret;
     }
 
     protected boolean update(String table_name, ContentValues cv, String where, String[] where_params){
-        int rows = 0;
-        try{
-            rows = write_db.update(table_name, cv, where, where_params);
-        } catch (SQLiteException e){
-            imprimeErroSQLite(e);
+        synchronized (this){
+            int rows = 0;
+            try{
+                rows = write_db.update(table_name, cv, where, where_params);
+            } catch (SQLiteException e){
+                imprimeErroSQLite(e);
+            }
+            return (rows > 0);
         }
-        return (rows > 0);
     }
 
     protected void setContent(Cursor c, List<Object> o){}
@@ -101,4 +106,22 @@ public abstract class DAO extends CreateDB {
     protected void setContent(Cursor c){}
 
     protected abstract void prepareContentReceiver();
+
+    public static int getInt(Cursor c, String col) {
+        return !c.isNull(c.getColumnIndex(col)) ? c.getInt(c.getColumnIndex(col)) : 0;
+    }
+
+    public static long getLong(Cursor c, String col) {
+        return !c.isNull(c.getColumnIndex(col)) ? c.getLong(c.getColumnIndex(col)) : 0;
+    }
+
+    public static String getString(Cursor c, String col) {
+        return !c.isNull(c.getColumnIndex(col)) ? c.getString(c.getColumnIndex(col)) : "";
+    }
+
+    public interface Container<T> {
+        public void add(T o);
+        public void remove(long o);
+        public T get(long id);
+    }
 }

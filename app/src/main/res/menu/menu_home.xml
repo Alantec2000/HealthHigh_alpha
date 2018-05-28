@@ -3,30 +3,30 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="alexandre.healthhigh.NoticiaActivityOLD">
     <item
-        android:id="@+id/action_noticias"
-        android:title="@string/action_noticias"
-        app:showAsAction="never" />
-    <item
         android:id="@+id/db_manager"
         android:title="DB Manager"
         app:showAsAction="never"/>
     <item
-        android:id="@+id/action_questionario"
-        android:title="@string/action_questionario"
-        app:showAsAction="never" />
-
-    <item
-        android:id="@+id/action_utilidades"
-        android:orderInCategory="100"
-        android:title="@string/action_utilidades"
-        app:showAsAction="never" />
-    <item
         android:id="@+id/action_configuracao"
         android:title="@string/action_configuracao"
-        app:showAsAction="never" />
+        app:showAsAction="never"
+        android:visible="false"/>
     <item
         android:id="@+id/action_desafios"
         android:title="Desafios"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/home_menu_atividade"
+        android:title="Atividade"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/action_noticias"
+        android:title="@string/action_noticias"
         app:showAsAction="never"
-        />
+        android:visible="false"/>
+    <item
+        android:id="@+id/action_questionario"
+        android:title="@string/action_questionario"
+        app:showAsAction="never"
+        android:visible="false"/>
 </menu>

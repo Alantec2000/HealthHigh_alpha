@@ -2,6 +2,8 @@ package google.com.healthhigh.domain;
 
 import google.com.healthhigh.utils.DataHelper;
 
+import static google.com.healthhigh.domain.Desafio.NAO_PUBLICADO;
+
 /**
  * Created by Alan on 25/04/2018.
  * Essa classe é responsável por armazenar a interação entre desafio e usuário
@@ -76,6 +78,7 @@ public class InteracaoDesafio extends Interacao {
             EM_EXECUCAO = "Realizando",
             CANCELADO = "Cancelado",
             CONCLUIDO = "Concluído",
+            SEM_PUBLICACAO = "Não publicado",
             ENCERRADO = "Encerrado";
 
     private String status;
@@ -104,12 +107,17 @@ public class InteracaoDesafio extends Interacao {
                 setStatus(CANCELADO);
                 desafio.setStatus(Desafio.ENCERRADO);
             }
-        } else if(!getPublicacao().isVigente()){
-            setStatus(ENCERRADO);
-            desafio.setStatus(Desafio.ENCERRADO);
+        } else if(getPublicacao() != null) {
+            if (!getPublicacao().isVigente()) {
+                setStatus(ENCERRADO);
+                desafio.setStatus(Desafio.ENCERRADO);
+            } else {
+                setStatus(PENDENTE);
+                desafio.setStatus(Desafio.PENDENTE);
+            }
         } else {
-            setStatus(PENDENTE);
-            desafio.setStatus(Desafio.PENDENTE);
+            setStatus(SEM_PUBLICACAO);
+            desafio.setStatus(Desafio.NAO_PUBLICADO);
         }
     }
 

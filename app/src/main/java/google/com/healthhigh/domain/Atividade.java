@@ -13,11 +13,13 @@ public class Atividade extends TipoMeta {
 
     @Override
     public boolean isConcluida() {
-        boolean concluida = false;
+        int total_passos = 0, total_tempo = 0;
         if(interacao_atividade != null){
-            concluida = (interacao_atividade.getTempoExecucaoTotal() >= total_tempo_execucao && interacao_atividade.getTotalPassosDados() >= total_tempo_execucao);
+            for(SessaoAtividade s_a : interacao_atividade.getSessoes_atividade().values()) {
+               total_passos += s_a.getTotalPassosDados();
+            }
         }
-        return concluida;
+        return (total_passos >= total_passos_dados);
     }
 
     @Override
@@ -63,5 +65,9 @@ public class Atividade extends TipoMeta {
 
     public void setTotal_tempo_execucao(long total_tempo_execucao) {
         this.total_tempo_execucao = total_tempo_execucao;
+    }
+
+    public long getIdPremiacao() {
+        return (getPremiacao() != null ? getPremiacao().getId() : 0);
     }
 }

@@ -5,6 +5,7 @@ import java.util.Map;
 public abstract class TipoMeta {
     public static final int QUESTIONARIO = 1, NOTICIA = 2, ATIVIDADE = 3, EVENTO = 4;
     protected long id, data_criacao, data_visualizacao;
+    protected Premiacao premiacao;
     protected Desafio desafio_atual;
     protected Map<Long, Desafio> desafios_associados;
 
@@ -60,5 +61,13 @@ public abstract class TipoMeta {
 
     public void setDesafios_associados(Map<Long, Desafio> desafios_associados) {
         this.desafios_associados = desafios_associados;
+    }
+
+    public Premiacao getPremiacao() {
+        return premiacao;
+    }
+
+    public void setPremiacao(Premiacao premiacao) {
+        this.premiacao = premiacao;
     }
 }

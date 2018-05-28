@@ -17,15 +17,15 @@
         android:theme="@style/AppTheme">
         <activity
             android:name="google.com.healthhigh.activities.LoginActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name="google.com.healthhigh.activities.HomeActivity"
             android:label="HHM">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name="google.com.healthhigh.activities.MedalhasActivity"
@@ -72,6 +72,7 @@
             android:name="google.com.healthhigh.activities.RealizandoDesafioActivity"
             android:label="@string/realizando_desafio" />
         <activity android:name="google.com.healthhigh.activities.FormularioDesafioActivity" />
+        <activity android:name="google.com.healthhigh.activities.RealizandoAtividadeActivity" />
         <activity android:name="google.com.healthhigh.activities.FormularioMetaActivity" />
         <activity android:name="google.com.healthhigh.activities.ListaQuestionariosActivity" />
         <activity android:name="google.com.healthhigh.activities.ListaQuestionariosFakeActivity" />

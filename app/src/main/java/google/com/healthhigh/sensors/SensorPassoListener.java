@@ -1,7 +1,6 @@
 package google.com.healthhigh.sensors;
 
-import android.app.Activity;
-import android.content.Context;
+import android.annotation.SuppressLint;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -9,89 +8,83 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
-import google.com.healthhigh.dao.DesafioDAO;
-import google.com.healthhigh.domain.Desafio;
-import google.com.healthhigh.utils.Toaster;
-
 /**
  * Created by Alan on 21/07/2017.
+ * Classe que tem como responsabilidade obter os dados do sensor de aceleração e contar os passos dados
+ * de acordo com o algoritmo de contagem.
  */
 
 public class SensorPassoListener implements SensorEventListener {
-    private Desafio desafio = null;
-    private DesafioDAO desafio_dao = null;
     private String TAG = "sensor_aceleração_passo";
     private int valorAnterior = 0;
-    private int nPassos = 0;
+    private int numero_passos = 0;
     private int totalult = 3;
+
+    private Handler handler_conta_passos;
+
     //    A sensibilidade poderá ser alterada pelo próprio usuário mais pra frente
     private double sensibilidade = 0.75;
-    private double[] ultimosValores = new double[totalult];
-    private int ultimoValorIndex = 0;
+    private double[] ultimos_valores = new double[totalult];
+    private int ultimo_valor_index = 0;
     private SensorUI hud;
-    private Context context;
     private double avg = 0;
-    Handler handle_n_passos = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            hud.getnPassos().setText(String.valueOf(nPassos));
-        }
-    };
-    Handler handle_conclusao = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            Toaster.toastShortMessage(context, "Desafio concluído");
-            desafio.setStatus(Desafio.CONCLUIDO);
-            desafio_dao.updateStatus(desafio, desafio.getStatus());
-            ((Activity) context).finish();
-        }
-    };
+
     private Thread t = new Thread(new Runnable() {
         @Override
         public void run() {
-            synchronized(this){
-                ultimosValores[ultimoValorIndex] = avg;
-                ultimoValorIndex++;
-                if(ultimoValorIndex >= totalult){
-                    ultimoValorIndex = 0;
-                }
-                double avg_ult = getMediaUltimosValores();
-                if ((avg_ult < sensibilidade) && avg > sensibilidade) {
-                    nPassos++;
-                    if (hud != null) {
+            if(!t.isInterrupted()){
+                synchronized(this){
+                    ultimos_valores[ultimo_valor_index] = avg;
+                    ultimo_valor_index++;
+                    if(ultimo_valor_index >= totalult){
+                        ultimo_valor_index = 0;
+                    }
+                    double avg_ult = getMediaUltimosValores();
+                    if ((avg_ult < sensibilidade) && avg > sensibilidade) {
+                        numero_passos++;
+                        Log.i("Passos", String.valueOf(numero_passos));
                         try {
-                            handle_n_passos.sendEmptyMessage(0);
+                            handler_conta_passos.sendEmptyMessage(0);
                         } catch (Exception e) {
                             Log.e("Error EventoPasso", e.getMessage());
                         }
-                    } else {
-                        Log.i("Media", String.valueOf(avg));
-                        Log.i("Passos", String.valueOf(nPassos));
                     }
-                }
-                if(desafio != null &&
-                   desafio.getStatus() != Desafio.CONCLUIDO &&
-                   nPassos >= desafio.getQuantidade()){
-                    handle_conclusao.sendEmptyMessage(0);
                 }
             }
         }
     });
 
-    public SensorPassoListener(Context c, Desafio d) {
-        desafio = d;
-        context = c;
-        desafio_dao = new DesafioDAO(context);
-        t.start();
+    SensorPassoListener() {
         reiniciaUltimosValores();
+    }
+
+    public void iniciarSensor(){
+        t.start();
+    }
+
+    public void PararSensor(){
+        t.interrupt();
     }
 
     private void reiniciaUltimosValores(){
         for(int i = 0; i < totalult ; i++){
-            ultimosValores[i] = 0;
+            ultimos_valores[i] = 0;
         }
+    }
+
+    @SuppressLint("HandlerLeak")
+    private void voidHandler(){
+        handler_conta_passos = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                Log.i("",String.valueOf(numero_passos));
+            }
+        };
+    }
+
+    public void setHandler(Handler h){
+        handler_conta_passos = h;
     }
 
     public void setHUD(SensorUI hud){
@@ -115,10 +108,14 @@ public class SensorPassoListener implements SensorEventListener {
         t.run();
     }
 
-    public double getMediaUltimosValores() {
+    public int getNumero_passos() {
+        return numero_passos;
+    }
+
+    private double getMediaUltimosValores() {
         double result = 0;
         for(int i = 0; i < totalult; i++){
-            result += ultimosValores[i];
+            result += ultimos_valores[i];
         }
         if(result != 0){
             result/=totalult;

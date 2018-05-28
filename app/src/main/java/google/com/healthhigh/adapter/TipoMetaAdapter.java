@@ -12,12 +12,13 @@ import com.google.healthhigh.R;
 import java.util.Arrays;
 import java.util.List;
 
+import google.com.healthhigh.domain.Atividade;
+import google.com.healthhigh.domain.InteracaoAtividade;
 import google.com.healthhigh.domain.InteracaoNoticia;
 import google.com.healthhigh.domain.InteracaoQuestionario;
 import google.com.healthhigh.domain.Noticia;
 import google.com.healthhigh.domain.Questionario;
 import google.com.healthhigh.domain.TipoMeta;
-import google.com.healthhigh.viewholders.MetaViewHolder;
 import google.com.healthhigh.viewholders.TipoMetaViewHolder;
 
 /**
@@ -43,7 +44,7 @@ public class TipoMetaAdapter extends RecyclerView.Adapter {
         TipoMeta tm = metas.get(position);
         TipoMetaViewHolder tm_vh = (TipoMetaViewHolder) holder;
         tm_vh.setMeta(tm);
-        String status = "Status: Indefinido";
+        String status = "Indefinido";
         switch (tm.getTipo()){
             case TipoMeta.QUESTIONARIO:
                 Questionario q = (Questionario) tm;
@@ -62,16 +63,21 @@ public class TipoMetaAdapter extends RecyclerView.Adapter {
                 }
             break;
             case TipoMeta.ATIVIDADE:
-                tm_vh.getTxt_nome_meta().setText("Atividade");
+                Atividade a = (Atividade) tm;
+                tm_vh.getTxt_tipo_meta().setText("Atividade");
+                tm_vh.getTxt_nome_meta().setText(a.getNome());
+                if(a.getInteracao_atividade() != null){
+                    status = a.getInteracao_atividade().getStatusText();
+                }
             break;
             case TipoMeta.EVENTO:
-                tm_vh.getTxt_nome_meta().setText("Evento");
+                tm_vh.getTxt_tipo_meta().setText("Evento");
             break;
         }
-        if(Arrays.asList(InteracaoNoticia.LIDA, InteracaoQuestionario.FINALIZADO).contains(status)){
+        if(Arrays.asList(InteracaoNoticia.LIDA, InteracaoQuestionario.FINALIZADO, InteracaoAtividade.statusToText(InteracaoAtividade.FINALIZADA)).contains(status)){
             tm_vh.itemView.setBackgroundColor(Color.parseColor("#EEFFEE"));
         }
-        tm_vh.getTxt_status_meta().setText("Status: "+status);
+        tm_vh.getTxt_status_meta().setText("Status: " + status);
     }
 
     @Override

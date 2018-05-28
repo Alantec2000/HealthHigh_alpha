@@ -18,8 +18,8 @@ import google.com.healthhigh.dao.DesafioQuestionarioDAO;
 import google.com.healthhigh.dao.InteracaoDesafioDAO;
 import google.com.healthhigh.dao.PublicacaoDAO;
 import google.com.healthhigh.dao.QuestionarioDAO;
+import google.com.healthhigh.domain.Atividade;
 import google.com.healthhigh.domain.Desafio;
-import google.com.healthhigh.domain.Interacao;
 import google.com.healthhigh.domain.InteracaoDesafio;
 import google.com.healthhigh.domain.Meta;
 import google.com.healthhigh.domain.Noticia;
@@ -36,11 +36,11 @@ import google.com.healthhigh.utils.MessageDialog;
 
 public class DesafioController extends DAO {
     private static String tag = "DesafioController";
-    private DesafioDAO d_d;
+    private DesafioDAO d_dao;
 
     public DesafioController(Context context) {
         super(context);
-        d_d = new DesafioDAO(context);
+        d_dao = new DesafioDAO(context);
     }
 
     @Override
@@ -63,13 +63,13 @@ public class DesafioController extends DAO {
                 if(iniciou){
                     MessageDialog.showMessage(context, "Desafio iniciado com sucesso!", "Sucesso: ");
                 } else {
-                    MessageDialog.showMessage(context, "Não foi possível iniciar o desafio!", "Erro ao iniciar desafio");
+                    MessageDialog.showMessage(context, "Não foi possível iniciarPressionado o desafio!", "Erro ao iniciarPressionado desafio");
                 }
             } else {
                 MessageDialog.showMessage(context, "Já existe um desafio em execução no momento!", "Erro:");
             }
         } else if(d.getStatus() == Desafio.NAO_PUBLICADO){
-            MessageDialog.showMessage(context, "Não foi possível iniciar o desafio!", "Erro:");
+            MessageDialog.showMessage(context, "Não foi possível iniciarPressionado o desafio!", "Erro:");
         }
     }
 
@@ -129,6 +129,8 @@ public class DesafioController extends DAO {
                                      n.getInteracao_noticia().getTempo_leitura() > 0);
                     break;
                     case TipoMeta.ATIVIDADE:
+                        Atividade a = (Atividade) m;
+                        concluida = a.isConcluida();
                         break;
                     case TipoMeta.EVENTO:
                         break;
@@ -150,6 +152,14 @@ public class DesafioController extends DAO {
         d.setRealizando_no_momento(false);
         InteracaoDesafioDAO i_d = new InteracaoDesafioDAO(context);
         return i_d.atualizarInteracaoDesafio(d);
+    }
+
+    public Map<Long, Desafio> getDesafiosAssociados(Atividade a) {
+        Map<Long, Desafio> desafios = new TreeMap<>();
+        if(a != null) {
+            desafios = d_dao.get(a);
+        }
+        return desafios;
     }
 
     private abstract class DesafioBehavior implements Behavior {
@@ -199,7 +209,7 @@ public class DesafioController extends DAO {
                 if (c.moveToFirst()) {
                     Log.v("Cursor Object", DatabaseUtils.dumpCursorToString(c));
                     do {
-                        p = PublicacaoDAO.getPublicacao(c);
+                        p = PublicacaoDAO.get(c);
                         p.setDesafio(d);
                         d.setPublicacao(p);
                     } while (c.moveToNext());
@@ -254,6 +264,7 @@ public class DesafioController extends DAO {
             cv.put(InteracaoDesafioDAO.DATA_CRIACAO, DataHelper.now());
             cv.put(InteracaoDesafioDAO.REALIZANDO, false);
             i_d_dao.insertNovaInteracao(i_d, cv);
+            i_d.setPublicacao(p);
         }
         return i_d;
     }
@@ -276,7 +287,7 @@ public class DesafioController extends DAO {
                 do {
                     d = DesafioDAO.getDesafio(c);
                     Publicacao p;
-                    p = PublicacaoDAO.getPublicacao(c);
+                    p = PublicacaoDAO.get(c);
                     d.setPublicacao(p);
                     InteracaoDesafio i_d = InteracaoDesafioDAO.getInteracaoDesafio(c);
                     d.setInteracao_desafio(i_d);
@@ -334,10 +345,12 @@ public class DesafioController extends DAO {
                 Publicacao p = getPublicacaoAtual(desafio);
                 if(p == null){
                     p = getPublicacaoAnterior(desafio);
+                    desafio.setPublicacao(p);
                 }
                 if(p != null){
                     InteracaoDesafio i_d = getInteracaoPublicacaoAtual(p, desafio);
                     desafio.setInteracao_desafio(i_d);
+                    i_d.setPublicacao(p);
                 }
                 desafio.setMetas_list(getMetasDesafio(desafio));
             }
@@ -347,21 +360,25 @@ public class DesafioController extends DAO {
     }
 
     private Publicacao getPublicacaoAnterior(Desafio d) {
-        String select = "SELECT MAX(" + PublicacaoDAO.ID + ") as last_p, * FROM " + PublicacaoDAO.TABLE_NAME + " " +
-                "WHERE " + PublicacaoDAO.ID_DESAFIO + " = " + String.valueOf(d.getId());
-
-        Cursor c = executeSelect(select);
-        try {
-            if(c.moveToFirst()){
-                do{
-                    Publicacao p = PublicacaoDAO.getPublicacao(c);
-                }while(c.moveToNext());
+        Publicacao p = null;
+        if(d != null){
+            String select =
+                    "SELECT * FROM " + PublicacaoDAO.TABLE_NAME + " " +
+                    "WHERE " + PublicacaoDAO.ID_DESAFIO + " = " + String.valueOf(d.getId()) + " " +
+                    "GROUP BY " + PublicacaoDAO.ID_DESAFIO + " " +
+                    "HAVING " + PublicacaoDAO.ID + " = MAX(" + PublicacaoDAO.ID + ");";
+            Cursor c = executeSelect(select);
+            try {
+                if(c.moveToFirst()){
+                    do{
+                        p = PublicacaoDAO.get(c);
+                    }while(c.moveToNext());
+                }
+            } catch (SQLiteException e){
+                imprimeErroSQLite(e);
             }
-        } catch (SQLiteException e){
-            imprimeErroSQLite(e);
         }
-
-        return null;
+        return p;
     }
 
     public List<Desafio> getDesafios(long id) {
@@ -398,7 +415,7 @@ public class DesafioController extends DAO {
                     if(!c.isNull(c.getColumnIndex(PublicacaoDAO.ID))){
                         // Obtenho a publicação e verifico se ela é a última inserida.
                         // Se for, então ela substituirá a que estiver associada ao desafio na iteração atual
-                        Publicacao p = PublicacaoDAO.getPublicacao(c);
+                        Publicacao p = PublicacaoDAO.get(c);
                         if(d.getPublicacao() == null || (d.getPublicacao() != null && d.getPublicacao().getData_criacao() < p.getData_criacao())){
                             d.setPublicacao(p);
                             InteracaoDesafio i_d;
@@ -443,6 +460,8 @@ public class DesafioController extends DAO {
         metas.addAll(q_c.getQuestionariosDesafio(d));
         NoticiaController n_c = new NoticiaController(context);
         metas.addAll(n_c.getNoticiasDesafio(d));
+        AtividadeController a_c = new AtividadeController(context);
+        metas.addAll(a_c.getAtividades(d).values());
         return metas;
     }
 }
