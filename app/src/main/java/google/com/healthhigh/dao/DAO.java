@@ -13,19 +13,24 @@ import java.util.List;
 
 import google.com.healthhigh.db.CreateDB;
 
-public abstract class DAO extends CreateDB {
+public abstract class DAO {
     public static final String SQLITE_ERROR = "SQLITE ERROR";
     public final String TABLE_NAME = "";
-    protected SQLiteDatabase write_db = null;
-    protected SQLiteDatabase read_db = null;//Não tem diferença do write_db, somente na legibilidade do código...
+    final CreateDB db;
     protected final Context context;
 
 
     public DAO(Context context) {
-        super(context);
+        db = CreateDB.getDBInstance(context);
         this.context = context;
-        write_db = CreateDB.getDBInstance(context).getWritableDatabase();
-        read_db = CreateDB.getDBInstance(context).getReadableDatabase();
+    }
+
+    public SQLiteDatabase getReadableDatabase(){
+        return db.getWrite();
+    }
+
+    public SQLiteDatabase getWritableDatabase(){
+        return db.getWrite();
     }
 
     public static String createColumns(String[] columns){
@@ -37,12 +42,13 @@ public abstract class DAO extends CreateDB {
         e.printStackTrace();
     }
 
-    protected interface Behavior{
+    public static interface Behavior{
         void setContent(Cursor c);
     }
 
     protected Cursor executeSelect(String select) {
-        return read_db.rawQuery(select, null);
+        Cursor c = getReadableDatabase().rawQuery(select, null);
+        return c;
     }
 
     protected void getSelectQueryContent(String select, Behavior behavior) {
@@ -81,7 +87,7 @@ public abstract class DAO extends CreateDB {
         synchronized (this){
             long ret = 0;
             try{
-                ret = write_db.insert(table_name, null, cv);
+                ret = getWritableDatabase().insert(table_name, null, cv);
             } catch (SQLiteException e){
                 imprimeErroSQLite(e);
             }
@@ -93,7 +99,7 @@ public abstract class DAO extends CreateDB {
         synchronized (this){
             int rows = 0;
             try{
-                rows = write_db.update(table_name, cv, where, where_params);
+                rows = getWritableDatabase().update(table_name, cv, where, where_params);
             } catch (SQLiteException e){
                 imprimeErroSQLite(e);
             }

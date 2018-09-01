@@ -86,7 +86,7 @@ public class ItemDAO extends DAO {
 
     public void insereItem(Item i) {
         ContentValues cv =  createInsertItem(i);
-        write_db.insert(TABLE_NAME, null, cv);
+        insert(TABLE_NAME, cv);
     }
 
     @Override

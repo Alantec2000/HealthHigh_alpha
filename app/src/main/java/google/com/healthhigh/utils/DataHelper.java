@@ -41,4 +41,16 @@ public abstract class DataHelper {
         c.setTime(d);
         return c;
     }
+
+    public static long milliSeg(){
+        return 1000L;
+    }
+
+    public static long milliMin(){
+        return 60000L;
+    }
+
+    public static long milliDia(){
+        return 86400193L;
+    }
 }

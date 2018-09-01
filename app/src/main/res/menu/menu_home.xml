@@ -4,7 +4,7 @@
     tools:context="alexandre.healthhigh.NoticiaActivityOLD">
     <item
         android:id="@+id/db_manager"
-        android:title="DB Manager"
+        android:title="Desenvolvimento"
         app:showAsAction="never"/>
     <item
         android:id="@+id/action_configuracao"
@@ -20,6 +20,10 @@
         android:title="Atividade"
         app:showAsAction="never"/>
     <item
+        android:id="@+id/home_menu_atualizar_base"
+        android:title="Atualizar conteúdo"
+        app:showAsAction="never"/>
+    <item
         android:id="@+id/action_noticias"
         android:title="@string/action_noticias"
         app:showAsAction="never"
@@ -29,4 +33,8 @@
         android:title="@string/action_questionario"
         app:showAsAction="never"
         android:visible="false"/>
+    <item
+        android:id="@+id/home_menu_logout"
+        android:title="Logout"
+        app:showAsAction="never"/>
 </menu>

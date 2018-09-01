@@ -1,9 +1,23 @@
 package google.com.healthhigh.domain;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Premiacao {
-    private long id, data_criacao, data_visualizacao;
-    private boolean status;
+    @SerializedName("id")
+    private long id;
+
+    @SerializedName("data_criacao_premiacao")
+    private transient long data_criacao;
+
+    private transient long data_visualizacao;
+
+    @SerializedName("status_premiacao")
+    private transient boolean status_a;
+
+    @SerializedName("experiencia")
     private int experiencia;
+
+    @SerializedName("nome")
     private String nome;
 
     public long getId() {
@@ -31,11 +45,11 @@ public class Premiacao {
     }
 
     public boolean isStatus() {
-        return status;
+        return status_a;
     }
 
     public void setStatus(boolean status) {
-        this.status = status;
+        this.status_a = status;
     }
 
     public int getExperiencia() {

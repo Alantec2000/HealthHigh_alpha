@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:id="@+id/opcoesMenuFacanha">
     <TextView
-        android:id="@+id/headerFacanhas"
+        android:id="@+id/txt_facanha_header"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -19,7 +19,7 @@
         app:layout_constraintRight_toRightOf="parent"/>
     <ImageButton
         android:contentDescription="@string/cD_medalhas"
-        android:id="@+id/btnMenuMedalhas"
+        android:id="@+id/btn_menu_medalhas"
         android:background="@null"
         android:layout_width="100dp"
         android:layout_height="70dp"
@@ -27,8 +27,8 @@
         android:src="@drawable/medalhacolorida1"
         android:layout_marginTop="8dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/btnMenuTrofeus"
-        app:layout_constraintTop_toBottomOf="@id/headerFacanhas" />
+        app:layout_constraintRight_toLeftOf="@+id/btn_menu_trofeus"
+        app:layout_constraintTop_toBottomOf="@id/txt_facanha_header" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -39,23 +39,23 @@
         android:text="@string/medalhas"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="@+id/btnMenuMedalhas"
-        app:layout_constraintRight_toRightOf="@+id/btnMenuMedalhas"
-        app:layout_constraintTop_toBottomOf="@+id/btnMenuMedalhas"
+        app:layout_constraintLeft_toLeftOf="@+id/btn_menu_medalhas"
+        app:layout_constraintRight_toRightOf="@+id/btn_menu_medalhas"
+        app:layout_constraintTop_toBottomOf="@+id/btn_menu_medalhas"
         app:layout_constraintHorizontal_bias="0.526"
         app:layout_constraintVertical_bias="1.0" />
     <ImageButton
         android:contentDescription="@string/cD_trofeu"
-        android:id="@+id/btnMenuTrofeus"
+        android:id="@+id/btn_menu_trofeus"
         android:src="@drawable/trofeucolorido1"
         android:background="@null"
         android:scaleType="fitCenter"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:textSize="14sp"
-        app:layout_constraintLeft_toRightOf="@+id/btnMenuMedalhas"
-        app:layout_constraintRight_toLeftOf="@+id/btnMenuConquistas"
-        app:layout_constraintTop_toBottomOf="@id/headerFacanhas"
+        app:layout_constraintLeft_toRightOf="@+id/btn_menu_medalhas"
+        app:layout_constraintRight_toLeftOf="@+id/btn_menu_conquistas"
+        app:layout_constraintTop_toBottomOf="@id/txt_facanha_header"
         android:layout_marginTop="8dp" />
     <TextView
         android:id="@+id/textView4"
@@ -69,32 +69,32 @@
         android:textSize="14sp"
         android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="@+id/btnMenuTrofeus"
-        app:layout_constraintRight_toRightOf="@+id/btnMenuTrofeus"
-        app:layout_constraintTop_toBottomOf="@+id/btnMenuTrofeus" />
+        app:layout_constraintLeft_toLeftOf="@+id/btn_menu_trofeus"
+        app:layout_constraintRight_toRightOf="@+id/btn_menu_trofeus"
+        app:layout_constraintTop_toBottomOf="@+id/btn_menu_trofeus" />
     <ImageButton
         android:contentDescription="@string/cD_conquistas"
         android:src="@drawable/conquista"
         android:background="@null"
-        android:id="@+id/btnMenuConquistas"
+        android:id="@+id/btn_menu_conquistas"
         android:layout_width="100dp"
         android:layout_height="80dp"
         android:scaleType="fitCenter"
         android:layout_marginTop="8dp"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toRightOf="@+id/btnMenuTrofeus"
-        app:layout_constraintTop_toBottomOf="@id/headerFacanhas"/>
+        app:layout_constraintLeft_toRightOf="@+id/btn_menu_trofeus"
+        app:layout_constraintTop_toBottomOf="@id/txt_facanha_header"/>
     <TextView
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:text="@string/conquistas"
         android:layout_marginLeft="8dp"
-        app:layout_constraintLeft_toLeftOf="@+id/btnMenuConquistas"
+        app:layout_constraintLeft_toLeftOf="@+id/btn_menu_conquistas"
         android:layout_marginRight="8dp"
-        app:layout_constraintRight_toRightOf="@+id/btnMenuConquistas"
+        app:layout_constraintRight_toRightOf="@+id/btn_menu_conquistas"
         app:layout_constraintHorizontal_bias="0.538"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnMenuConquistas"
+        app:layout_constraintTop_toBottomOf="@+id/btn_menu_conquistas"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         app:layout_constraintVertical_bias="1.0" />

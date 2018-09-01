@@ -68,7 +68,7 @@ public class InteracaoDesafioDAO extends DAO {
     }
 
     public void insertNovaInteracao(InteracaoDesafio i_d, ContentValues cv) {
-        long new_id = write_db.insert(TABLE_NAME, null, cv);
+        long new_id = insert(TABLE_NAME, cv);
         if(new_id > 0){
             i_d.setId(new_id);
         } else {

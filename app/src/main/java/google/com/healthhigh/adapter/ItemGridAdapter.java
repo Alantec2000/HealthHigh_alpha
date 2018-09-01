@@ -12,15 +12,16 @@ import com.google.healthhigh.R;
 import java.util.List;
 
 import google.com.healthhigh.domain.Item;
+import google.com.healthhigh.domain.Premiacao;
 import google.com.healthhigh.utils.BitmapUtil;
 import google.com.healthhigh.utils.DataHelper;
 import google.com.healthhigh.viewholders.MedalhaViewHolder;
 
 public class ItemGridAdapter extends RecyclerView.Adapter{
-    private List<Item> itens;
+    private List<Premiacao> itens;
     private String E_TAG = "ITEM_GRID_ADAPTER_ERROR";
     private Context c;
-    public ItemGridAdapter(List<Item> itens, Context c){
+    public ItemGridAdapter(List<Premiacao> itens, Context c){
         this.itens = itens;
         this.c = c;
     }
@@ -34,7 +35,7 @@ public class ItemGridAdapter extends RecyclerView.Adapter{
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         MedalhaViewHolder medalhaVHolder = (MedalhaViewHolder) holder;
-        Item i = null;
+        Premiacao i = null;
         try {
             i = itens.get(position);
         } catch (Exception e) {
@@ -42,9 +43,8 @@ public class ItemGridAdapter extends RecyclerView.Adapter{
         }
         if(i != null){
             medalhaVHolder.getNome().setText(i.getNome());
-            medalhaVHolder.getImg().setImageBitmap(BitmapUtil.getImage(i.getImg()));
-            String xp = "Experiência: " + Integer.toString(i.getXp());
-            String data = DataHelper.parseUT(i.getData()/1000, "dd/MM/y");
+            String xp = "Experiência: " + Integer.toString(i.getExperiencia());
+            String data = DataHelper.toDateString(i.getData_criacao());
             data = "Criada em: " + data;
             medalhaVHolder.getXP().setText(xp);
             medalhaVHolder.getData().setText(data);

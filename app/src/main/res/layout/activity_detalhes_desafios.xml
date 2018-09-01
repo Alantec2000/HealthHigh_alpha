@@ -122,7 +122,7 @@
             <!--android:layout_width="0dp"-->
             <!--android:layout_height="wrap_content"-->
             <!--android:id="@+id/headerMetas"-->
-            <!--android:text="@string/metas"-->
+            <!--android:text="@string/metas_TO_OLD"-->
             <!--android:padding="8dp"-->
             <!--style="@style/lista_header"-->
             <!--app:layout_constraintRight_toRightOf="parent"-->

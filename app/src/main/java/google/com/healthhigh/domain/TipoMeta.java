@@ -1,13 +1,19 @@
 package google.com.healthhigh.domain;
 
+import com.google.gson.annotations.SerializedName;
+
+import java.util.Collection;
 import java.util.Map;
 
 public abstract class TipoMeta {
     public static final int QUESTIONARIO = 1, NOTICIA = 2, ATIVIDADE = 3, EVENTO = 4;
-    protected long id, data_criacao, data_visualizacao;
+    protected long id;
+    protected long data_criacao, data_visualizacao;
+    @SerializedName("premiacao")
     protected Premiacao premiacao;
     protected Desafio desafio_atual;
     protected Map<Long, Desafio> desafios_associados;
+Collection teste;
 
     public long getId() {
         return id;

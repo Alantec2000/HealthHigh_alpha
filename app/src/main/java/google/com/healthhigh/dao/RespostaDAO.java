@@ -47,7 +47,7 @@ public class RespostaDAO extends DAO {
     }
 
     public void insertResposta(Resposta r){
-        write_db.insert(TABLE_NAME, null, createInstert(r));
+        insert(TABLE_NAME, createInstert(r));
     }
 
     private ContentValues createInstert(Resposta r){

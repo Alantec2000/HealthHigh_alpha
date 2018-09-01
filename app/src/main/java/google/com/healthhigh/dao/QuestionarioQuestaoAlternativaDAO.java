@@ -39,16 +39,8 @@ public class QuestionarioQuestaoAlternativaDAO extends DAO {
     }
 
     public void insereAssociacaoQuestaoAlternativaQuestionario(QuestaoAlternativa qa){
-        write_db.beginTransaction();
-        try {
-            ContentValues cv = getContentValues(qa);
-            long new_id = write_db.insertOrThrow(TABLE_NAME, null, cv);
-            write_db.setTransactionSuccessful();
-        } catch (SQLiteException e){
-            Log.e(SQLITE_ERROR, e.getMessage());
-        } finally {
-            write_db.endTransaction();
-        }
+        ContentValues cv = getContentValues(qa);
+        long new_id = insert(TABLE_NAME, cv);
     }
 
     private ContentValues getContentValues(QuestaoAlternativa qa) {

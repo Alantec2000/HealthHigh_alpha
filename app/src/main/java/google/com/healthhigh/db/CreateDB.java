@@ -46,12 +46,16 @@ import google.com.healthhigh.domain.SessaoAtividade;
 
 public class CreateDB extends SQLiteOpenHelper{
     private static String NOME_BANCO = "healthHigh";
-    private static int VERSAO = 25;
+    private static int VERSAO = 28;
     private static CreateDB db = null;
-
+    private static SQLiteDatabase write = null;
+    private static SQLiteDatabase read = null;
     public static CreateDB getDBInstance(Context context){
-        if(db == null)
+        if(db == null){
             db = new CreateDB(context);
+            write = db.getWritableDatabase();
+            read = db.getWritableDatabase();
+        }
         return db;
     }
 
@@ -144,6 +148,7 @@ public class CreateDB extends SQLiteOpenHelper{
         db.execSQL(ItemXMetaDAO.getDropTableString());
         db.execSQL(MetaDAO.getDropTableString());
         db.execSQL(DesafioDAO.getDropTableString());
+        db.execSQL(PremiacaoDAO.getDropTableString());
     }
 
     public void closeDB() {
@@ -194,5 +199,13 @@ public class CreateDB extends SQLiteOpenHelper{
             alc.set(1,Cursor2);
             return alc;
         }
+    }
+
+    public SQLiteDatabase getWrite() {
+        return write;
+    }
+
+    public SQLiteDatabase getRead() {
+        return read;
     }
 }

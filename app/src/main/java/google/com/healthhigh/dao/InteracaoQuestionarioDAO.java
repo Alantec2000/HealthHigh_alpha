@@ -63,11 +63,7 @@ public class InteracaoQuestionarioDAO extends DAO {
 
     public void insereInteracaoQuestionario(ContentValues cv, InteracaoQuestionario i_q) {
         long new_id = 0;
-        try {
-            new_id = write_db.insertOrThrow(TABLE_NAME, null, cv);
-        } catch (SQLiteException e){
-            imprimeErroSQLite(e);
-        }
+        new_id = insert(TABLE_NAME, cv);
         if(new_id > 0){
             i_q.setId(new_id);
         } else {
@@ -77,14 +73,8 @@ public class InteracaoQuestionarioDAO extends DAO {
 
     public boolean atualizaQuestionario(InteracaoQuestionario i_q) {
         ContentValues cv = getContentValues(i_q);
-        int rows = 0;
-        try {
-            rows = write_db.update(TABLE_NAME, cv, ID + "=?",new String[]{String.valueOf(i_q.getId())});
-        } catch (SQLiteException e){
-            imprimeErroSQLite(e);
-        }
-
-        return rows > 0;
+        boolean rows = update(TABLE_NAME, cv, ID + "=?",new String[]{String.valueOf(i_q.getId())});
+        return rows;
 
     }
 

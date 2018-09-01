@@ -28,12 +28,14 @@
             android:layout_height="wrap_content"
             android:textStyle="bold"
             android:text="@string/descricao_label"
+            android:visibility="gone"
             android:id="@+id/descricaoMedalha_label"
             android:layout_below="@id/nomeMedalha"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/dscMedalha"
+            android:visibility="gone"
             android:text="@string/txt_dsc_medalha"
             android:padding="5dp"
             android:layout_below="@id/descricaoMedalha_label"/>
@@ -79,6 +81,7 @@
             android:id="@+id/qtdMedalhasObtidas_label"
             style="@style/oneLineText"
             android:textStyle="bold"
+            android:visibility="gone"
             android:layout_below="@id/qtdXPMedalha_label"
             android:layout_marginEnd="10dp"
             android:text="@string/qtd_owned_by_user_label"/>
@@ -87,6 +90,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/nMedalhasAssociadas"
             style="@style/oneLineText"
+            android:visibility="gone"
             android:layout_below="@id/qtdMedalhasObtidas_label"
             android:layout_marginStart="10dp"
             android:text="@string/zero"/>

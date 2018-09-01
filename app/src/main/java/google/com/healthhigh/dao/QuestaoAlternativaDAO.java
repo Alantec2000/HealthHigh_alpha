@@ -51,7 +51,7 @@ public class QuestaoAlternativaDAO extends DAO {
         long new_id = 0;
         ContentValues cv = createInstertQuestionario(qa);
         try {
-            new_id = write_db.insertOrThrow(TABLE_NAME, null, cv);
+            new_id = insert(TABLE_NAME, cv);
         } catch (SQLiteException e){
             Log.e(SQLITE_ERROR, e.getMessage());
         }

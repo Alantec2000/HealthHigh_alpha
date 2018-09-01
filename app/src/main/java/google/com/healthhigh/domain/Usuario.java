@@ -1,15 +1,45 @@
 package google.com.healthhigh.domain;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by Alan on 17/04/2018.
  */
 
 public class Usuario {
-    private String nome, sobrenome, login, matricula;
+    private String nome;
+    private String login, matricula, email;
     private char sexo;
-    private long data_nascimento, data_cadastro;
+    private long id, data_nascimento, data_cadastro;
     private String foto;
+    @SerializedName("tem_deficiencia")
     private boolean deficiente;
+    @SerializedName("status")
+    private boolean desativado;
+
+    public boolean isDesativado() {
+        return desativado;
+    }
+
+    public void setDesativado(boolean desativado) {
+        this.desativado = desativado;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public String getNome() {
         return nome;
@@ -17,14 +47,6 @@ public class Usuario {
 
     public void setNome(String nome) {
         this.nome = nome;
-    }
-
-    public String getSobrenome() {
-        return sobrenome;
-    }
-
-    public void setSobrenome(String sobrenome) {
-        this.sobrenome = sobrenome;
     }
 
     public String getLogin() {

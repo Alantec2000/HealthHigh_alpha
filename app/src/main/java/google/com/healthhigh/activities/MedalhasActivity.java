@@ -1,5 +1,7 @@
 package google.com.healthhigh.activities;
 
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -18,10 +20,13 @@ import google.com.healthhigh.tarefas_assincronas.CarregaListaMedalhas;
 import google.com.healthhigh.utils.BitmapUtil;
 
 public class MedalhasActivity extends AppCompatActivity {
+    public final static String SOMENTE_NOVAS = "mostrar_somente_premiacoes_novas";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_medalhas);
+        NotificationManager n_m = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        n_m.cancel(R.layout.activity_medalhas);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);

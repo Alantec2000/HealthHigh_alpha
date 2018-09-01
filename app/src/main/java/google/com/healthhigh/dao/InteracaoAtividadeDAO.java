@@ -131,35 +131,35 @@ public class InteracaoAtividadeDAO extends DAO {
                     long a_id = getLong(c, AtividadeDAO.ID);
                     Atividade a = atividades.get(a_id);
                     if(a.getInteracao_atividade() == null){
-                        InteracaoAtividade interacao = get(c);
+                        interacao = get(c);
                         a.setInteracao_atividade(interacao);
                         interacao.setPublicacao(p);
                         interacao.setAtividade(a);
                     } else {
-                        InteracaoAtividade interacao = a.getInteracao_atividade();
-                        if(interacao.getSessoes_atividade() == null){
-                            interacao.setSessoes_atividade(new TreeMap<Long, SessaoAtividade>());
+                        interacao = a.getInteracao_atividade();
+                    }
+                    if(interacao.getSessoes_atividade() == null){
+                        interacao.setSessoes_atividade(new TreeMap<Long, SessaoAtividade>());
+                    }
+                    if(!c.isNull(c.getColumnIndex(SessaoAtividadeDAO.ID))){
+                        long id_s_a = getLong(c, SessaoAtividadeDAO.ID);
+                        SessaoAtividade s_a;
+                        if(!interacao.getSessoes_atividade().containsKey(id_s_a)){
+                            s_a = SessaoAtividadeDAO.getSessaoAtividade(c);
+                            interacao.getSessoes_atividade().put(id_s_a, s_a);
+                        } else {
+                            s_a = interacao.getSessoes_atividade().get(id_s_a);
+                            s_a.setInteracao_atividade(interacao);
                         }
-                        if(!c.isNull(c.getColumnIndex(SessaoAtividadeDAO.ID))){
-                            long id_s_a = getLong(c, SessaoAtividadeDAO.ID);
-                            SessaoAtividade s_a;
-                            if(!interacao.getSessoes_atividade().containsKey(id_s_a)){
-                                s_a = SessaoAtividadeDAO.getSessaoAtividade(c);
-                                interacao.getSessoes_atividade().put(id_s_a, s_a);
+                        if(s_a != null){
+                            long id_e_a = getLong(c, ExecucaoAtividadeDAO.ID);
+                            ExecucaoAtividade e_a;
+                            if(s_a.getAtividades().containsKey(id_e_a)){
+                                e_a = s_a.getAtividades().get(id_e_a);
                             } else {
-                                s_a = interacao.getSessoes_atividade().get(id_s_a);
-                                s_a.setInteracao_atividade(interacao);
-                            }
-                            if(s_a != null){
-                                long id_e_a = getLong(c, ExecucaoAtividadeDAO.ID);
-                                ExecucaoAtividade e_a;
-                                if(s_a.getAtividades().containsKey(id_e_a)){
-                                    e_a = s_a.getAtividades().get(id_e_a);
-                                } else {
-                                    e_a = ExecucaoAtividadeDAO.get(c);
-                                    e_a.setSessao_atividade(s_a);
-                                    s_a.getAtividades().put(id_e_a, e_a);
-                                }
+                                e_a = ExecucaoAtividadeDAO.get(c);
+                                e_a.setSessao_atividade(s_a);
+                                s_a.getAtividades().put(id_e_a, e_a);
                             }
                         }
                     }

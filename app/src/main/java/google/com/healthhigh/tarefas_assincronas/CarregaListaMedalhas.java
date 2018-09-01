@@ -9,10 +9,12 @@ import android.support.v7.widget.RecyclerView;
 import java.util.List;
 
 import google.com.healthhigh.adapter.ItemGridAdapter;
+import google.com.healthhigh.controller.PremiacaoController;
 import google.com.healthhigh.domain.Item;
+import google.com.healthhigh.domain.Premiacao;
 import google.com.healthhigh.utils.ItemList;
 
-public class CarregaListaMedalhas extends AsyncTask<Void, String, List<Item>> {
+public class CarregaListaMedalhas extends AsyncTask<Void, String, List<Premiacao>> {
     private Context c;
     private RecyclerView rv;
     private ProgressDialog p;
@@ -28,9 +30,9 @@ public class CarregaListaMedalhas extends AsyncTask<Void, String, List<Item>> {
         p.show();
     }
     @Override
-    protected List<Item> doInBackground(Void... params) {
-        ItemList iL = new ItemList(c);
-        List<Item> itens = iL.getItensList();
+    protected List<Premiacao> doInBackground(Void... params) {
+        PremiacaoController p_c = new PremiacaoController(c);
+        List<Premiacao> itens = p_c.getListaPremiacoes();
         return itens;
     }
 
@@ -41,7 +43,7 @@ public class CarregaListaMedalhas extends AsyncTask<Void, String, List<Item>> {
     }
 
     @Override
-    protected void onPostExecute(List<Item> itens) {
+    protected void onPostExecute(List<Premiacao> itens) {
         super.onPostExecute(itens);
         rv.setAdapter(new ItemGridAdapter(itens,c));
         rv.setLayoutManager(new GridLayoutManager(c, 2));

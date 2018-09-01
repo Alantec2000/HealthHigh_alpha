@@ -6,8 +6,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 import google.com.healthhigh.db.CreateDB;
@@ -23,6 +25,7 @@ public class DesafioDAO extends DAO {
     public static String
             TABLE_NAME = "phh_desafio",
             ID = "id_desafio",
+            PREMIACAO = "id_premiacao_desafio",
             TITULO = "s_titulo_desafio",
             DESCRICAO = "s_descricao_desafio",
             TENTATIVAS = "i_tentativas",
@@ -43,6 +46,7 @@ public class DesafioDAO extends DAO {
     public static String getCreateTableString() {
         return "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "(" +
                 ID + " INTEGER PRIMARY KEY NOT NULL, " +
+                PREMIACAO + " INTEGER NOT NULL, " +
                 TITULO + " TEXT NOT NULL, " +
                 DESCRICAO + " TEXT NOT NULL, " +
                 ACEITO + " INTEGER DEFAULT 0, " +
@@ -53,7 +57,9 @@ public class DesafioDAO extends DAO {
                 DATA_ACEITO + " INTEGER DEFAULT '', " +
                 DATA_CRIACAO + " INTEGER NOT NULL, " +
                 DATA_CONCLUSAO + " INTEGER DEFAULT '', " +
-                TENTATIVAS + " INTEGER DEFAULT 0);";
+                TENTATIVAS + " INTEGER DEFAULT 0," +
+                "FOREIGN KEY(" + PREMIACAO + ") REFERENCES " + PremiacaoDAO.TABLE_NAME + "(" + PremiacaoDAO.ID + ")" +
+                ");";
     }
 
     public static String getDropTableString() {
@@ -62,16 +68,17 @@ public class DesafioDAO extends DAO {
 
     public static Desafio getDesafio(Cursor c){
         Desafio d = new Desafio();
-        d.setId(c.getInt(c.getColumnIndex(ID)));
-        d.setDescricao(c.getString(c.getColumnIndex(DESCRICAO)));
-        d.setTentativas(c.getInt(c.getColumnIndex(TENTATIVAS)));
-        d.setTitulo(c.getString(c.getColumnIndex(TITULO)));
-        d.setQuantidade(c.getInt(c.getColumnIndex(QUANTIDADE)));
-        d.setStatus(c.getInt(c.getColumnIndex(STATUS)));
-        d.setTipo(c.getInt(c.getColumnIndex(TIPO)));
-        d.setData_aceito(c.getLong(c.getColumnIndex(DATA_ACEITO)));
-        d.setData_criacao(c.getLong(c.getColumnIndex(DATA_CRIACAO)));
-        d.setData_conclusao(c.getLong(c.getColumnIndex(DATA_CONCLUSAO)));
+        d.setId(getLong(c, ID));
+        d.setDescricao(getString(c, DESCRICAO));
+        d.setTentativas(getInt(c, TENTATIVAS));
+        d.setTitulo(getString(c, TITULO));
+        d.setQuantidade(getInt(c, QUANTIDADE));
+        d.setStatus(getInt(c, STATUS));
+        d.setTipo(getInt(c, TIPO));
+        d.setData_aceito(getLong(c, DATA_ACEITO));
+        d.setData_criacao(getLong(c, DATA_CRIACAO));
+        d.setData_conclusao(getLong(c, DATA_CONCLUSAO));
+        d.setData_visualizacao(getLong(c, DATA_VISUALIZACAO));
         return d;
     }
 
@@ -108,12 +115,21 @@ public class DesafioDAO extends DAO {
         return desafio;
     }
 
-    public void insereDesafio(Desafio d) {
-        write_db.insert(TABLE_NAME, null, createInsertDesafio(d));
+    public boolean insereDesafio(Desafio d) {
+        ContentValues cv = getContentValues(d);
+        long id = insert(TABLE_NAME, cv);
+        d.setId(id);
+        return id > 0;
     }
 
-    private ContentValues createInsertDesafio(Desafio d) {
+    private ContentValues getContentValues(Desafio d) {
         ContentValues cv = new ContentValues();
+        if(d.getId() > 0){
+            cv.put(ID, d.getId());
+        }
+        if(d.getPremiacao() != null  && d.getPremiacao().getId() > 0){
+            cv.put(PREMIACAO, d.getPremiacao().getId());
+        }
         cv.put(TITULO, d.getTitulo());
         cv.put(DESCRICAO, d.getDescricao());
         cv.put(TENTATIVAS, d.getTentativas());
@@ -122,6 +138,7 @@ public class DesafioDAO extends DAO {
         cv.put(TIPO, d.getTipo());
         cv.put(DATA_CRIACAO, d.getData_criacao());
         cv.put(DATA_ACEITO, "");
+        cv.put(DATA_VISUALIZACAO, d.getData_visualizacao());
         return cv;
     }
 
@@ -132,6 +149,41 @@ public class DesafioDAO extends DAO {
             cv.put(DATA_CONCLUSAO, DataHelper.now());
         }
         write_db.update(TABLE_NAME, cv, ID + " = ?", new String[] { Long.toString(d.getId()) });
+    }
+
+    public Set<Long> getDesafios() {
+        final Set<Long> desafio_set = new HashSet<>();
+        String select = "SELECT " + ID + " FROM " + TABLE_NAME;
+        DesafioBehavior d_b = new DesafioBehavior() {
+            @Override
+            public void setContent(Cursor c) {
+                long id = getLong(c, ID);
+                desafio_set.add(id);
+            }
+        };
+        getSelectQueryContent(select, d_b);
+        return desafio_set;
+    }
+
+    public Map<Long, Desafio> getMapDesafios() {
+        final Map<Long, Desafio> desafio_map = new TreeMap<>();
+        String select = "SELECT " + ID + " FROM " + TABLE_NAME;
+        DesafioBehavior d_b = new DesafioBehavior() {
+            @Override
+            public void setContent(Cursor c) {
+                long id = getLong(c, ID);
+                if(!desafio_map.containsKey(id)){
+                    desafio_map.put(id, getDesafio(c));
+                }
+            }
+        };
+        getSelectQueryContent(select, d_b);
+        return desafio_map;
+    }
+
+    public boolean update(Desafio d) {
+        ContentValues cv = getContentValues(d);
+        return update(TABLE_NAME, cv, ID + " = ?", new String[] {String.valueOf(d.getId())});
     }
 
     private static abstract class DesafioBehavior implements Behavior {

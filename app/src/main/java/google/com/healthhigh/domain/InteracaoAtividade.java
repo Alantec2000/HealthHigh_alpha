@@ -98,7 +98,7 @@ public class InteracaoAtividade extends Interacao {
                 for (SessaoAtividade s_a : sessoes_atividade.values()) {
                     total_passos += s_a.getTotalPassosDados();
                 }
-                resposta = total_passos > a.getTotal_passos_dados();
+                resposta = total_passos >= a.getTotal_passos_dados();
             }
         }
         return resposta;

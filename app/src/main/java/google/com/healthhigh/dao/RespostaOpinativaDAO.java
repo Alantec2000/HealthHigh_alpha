@@ -45,30 +45,17 @@ public class RespostaOpinativaDAO extends DAO {
 
     public void inserirResposta(RespostaOpinativa ropn) {
         ContentValues cv = getContentValues(ropn);
-        long new_id = 0;
-        try{
-            new_id = write_db.insertOrThrow(TABLE_NAME, null, cv);
-        }catch (SQLiteException e) {
-            imprimeErroSQLite(e);
-        } finally {
-            if(new_id > 0) {
-                ropn.setId(new_id);
-            } else {
-                ropn = null;
-            }
+        long new_id = insert(TABLE_NAME, cv);
+        if(new_id > 0) {
+            ropn.setId(new_id);
+        } else {
+            ropn = null;
         }
     }
 
     public boolean atualizarResposta(RespostaOpinativa ropn) {
         ContentValues cv = getContentValues(ropn);
-        int rows_updated = 0;
-        try{
-            rows_updated = write_db.update(TABLE_NAME, cv, ID+"="+String.valueOf(ropn.getId()), null);
-        }catch (SQLiteException e) {
-            imprimeErroSQLite(e);
-        }
-
-        return rows_updated > 0;
+        return update(TABLE_NAME, cv, ID+"="+String.valueOf(ropn.getId()), null);
     }
 
     private ContentValues getContentValues(RespostaOpinativa ropn){

@@ -53,51 +53,15 @@ public class Questionario_QuestaoAlternativaDAO extends DAO {
         questionario.setQuestoes(lista_questoes);
         questao = new Questao();
     }
-
-    /*public Questionario getQuestionarioQuestoesRespostas(long id){
-        *//* Obtém um questionário, suas questões e respostas associadas *//*
-        String sql = "SELECT * FROM " + QuestionarioDAO.TABLE_NAME + " as qio " +
-                " LEFT JOIN " + Questionario_QuestaoAlternativaDAO.TABLE_NAME + " as qio_qao ON qio." + QuestionarioDAO.ID + " = qio_qao." + ID_QUESTIONARIO +
-                " LEFT JOIN " + QuestaoAlternativaDAO.TABLE_NAME + " qao ON qao." + QuestaoAlternativaDAO.ID + " = qio_qao." + Questionario_QuestaoAlternativaDAO.ID_QUESTAO +
-                " LEFT JOIN " + RespostaDAO.TABLE_NAME + " r ON r." + RespostaDAO.ID_QUESTIONARIO + " = qao." + QuestaoAlternativaDAO.ID +
-                " WHERE qio." + QuestionarioDAO.ID + " = " + Long.toString(id) + ";";
-
-        getSelectQueryContent(sql, new Behavior(){
-            @Override
-            public void setContent(Cursor c) {
-                Resposta r = null;
-                QuestaoAlte q = null;
-                if(!c.isNull(c.getColumnIndex(QuestaoAlternativaDAO.ID))){
-                    q = QuestaoAlternativaDAO.getQuestao(c);
-
-                    if(!c.isNull(c.getColumnIndex(RespostaDAO.ID))){
-                        r = RespostaDAO.getResposta(c);
-                        if(q != null) q.setResposta(r);
-                    }
-                }
-
-                if(questionario.getId() == 0){
-                    questionario = QuestionarioDAO.getQuestionario(c);
-                }
-
-                if(questionario.getId() > 0 && q != null){
-                    q.setQuestionario(questionario);
-                    questionario.getQuestoes().add(q);
-                }
-            }
-        });
-        return questionario;
-    }
-*/
     public void insertQuestaoInQuestionario(Questionario q, Questao qs){
-        write_db.insert(TABLE_NAME, null, createInsert(q, qs));
+        insert(TABLE_NAME, createInsert(q, qs));
     }
 
     public void insertQuestaoInQuestionario(Questionario questionario){
-        questionario.setId(write_db.insert(QuestionarioDAO.TABLE_NAME, null, createInstertQuestionario(questionario)));
+        questionario.setId(insert(QuestionarioDAO.TABLE_NAME, createInstertQuestionario(questionario)));
         for(Questao questao : questionario.getQuestoes()){
-            questao.setId(write_db.insert(QuestaoAlternativaDAO.TABLE_NAME, null,  createInstertQuestao(questao)));
-            write_db.insert(TABLE_NAME, null, createInsert(questionario, questao));
+            questao.setId(insert(QuestaoAlternativaDAO.TABLE_NAME, createInstertQuestao(questao)));
+            insert(TABLE_NAME, createInsert(questionario, questao));
         }
     }
 

@@ -48,15 +48,7 @@ public class Questionario_QuestaoOptativaDAO extends DAO{
 
     public void inserirQuestionarioQuestaoOptativa(QuestaoOptativa qo){
         ContentValues cv = getContentValues(qo);
-        try {
-            write_db.beginTransaction();
-            long new_id = write_db.insertOrThrow(TABLE_NAME, null, cv);
-            write_db.setTransactionSuccessful();
-        } catch (SQLiteException e) {
-            Log.e(SQLITE_ERROR, e.getMessage());
-        } finally {
-            write_db.endTransaction();
-        }
+        long new_id = insert(TABLE_NAME, cv);
     }
 
     private ContentValues getContentValues(QuestaoOptativa qo) {

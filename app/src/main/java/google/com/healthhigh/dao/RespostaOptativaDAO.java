@@ -46,30 +46,17 @@ public class RespostaOptativaDAO extends DAO{
 
     public void inserirResposta(RespostaOptativa ropt) {
         ContentValues cv = getContentValues(ropt);
-        long new_id = 0;
-        try{
-            new_id = write_db.insert(TABLE_NAME, null, cv);
-        }catch (SQLiteException e) {
-            imprimeErroSQLite(e);
-        } finally {
-            if(new_id > 0) {
-                ropt.setId(new_id);
-            } else {
-                ropt = null;
-            }
+        long new_id = insert(TABLE_NAME, cv);;
+        if(new_id > 0) {
+            ropt.setId(new_id);
+        } else {
+            ropt = null;
         }
     }
 
     public boolean atualizarResposta(RespostaOptativa ropt) {
         ContentValues cv = getContentValues(ropt);
-        int rows_updated = 0;
-        try{
-            rows_updated = write_db.update(TABLE_NAME, cv, ID+"="+String.valueOf(ropt.getId()), null);
-        }catch (SQLiteException e) {
-            imprimeErroSQLite(e);
-        }
-
-        return rows_updated > 0;
+        return update(TABLE_NAME, cv, ID+"="+String.valueOf(ropt.getId()), null);
     }
 
     private ContentValues getContentValues(RespostaOptativa ropt){

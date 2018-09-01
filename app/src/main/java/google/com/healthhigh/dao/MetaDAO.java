@@ -66,7 +66,7 @@ public class MetaDAO extends DAO{
 
     public void insereMeta(Meta m){
         ContentValues cv = getContentValues(m);
-        write_db.insert(TABLE_NAME, null, cv);
+        insert(TABLE_NAME, cv);
     }
 
     private ContentValues getContentValues(Meta m){

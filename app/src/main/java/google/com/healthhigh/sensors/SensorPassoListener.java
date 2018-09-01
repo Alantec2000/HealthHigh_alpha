@@ -23,7 +23,7 @@ public class SensorPassoListener implements SensorEventListener {
     private Handler handler_conta_passos;
 
     //    A sensibilidade poderá ser alterada pelo próprio usuário mais pra frente
-    private double sensibilidade = 0.75;
+    private double sensibilidade = 1;
     private double[] ultimos_valores = new double[totalult];
     private int ultimo_valor_index = 0;
     private SensorUI hud;

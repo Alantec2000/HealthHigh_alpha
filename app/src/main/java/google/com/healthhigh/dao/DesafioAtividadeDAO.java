@@ -1,6 +1,10 @@
 package google.com.healthhigh.dao;
 
+import android.content.ContentValues;
 import android.content.Context;
+
+import google.com.healthhigh.domain.Atividade;
+import google.com.healthhigh.domain.Desafio;
 
 public class DesafioAtividadeDAO extends DAO {
     public static final String
@@ -27,5 +31,18 @@ public class DesafioAtividadeDAO extends DAO {
     @Override
     protected void prepareContentReceiver() {
 
+    }
+
+    public boolean associarAtividade(Atividade a, Desafio d) {
+        ContentValues cv = getDesafioAtividade(a, d);
+        long id = insert(TABLE_NAME, cv);
+        return id > 0;
+    }
+
+    private ContentValues getDesafioAtividade(Atividade a, Desafio d) {
+        ContentValues cv = new ContentValues();
+        cv.put(ID_ATIVIDADE, a.getId());
+        cv.put(ID_DESAFIO, d.getId());
+        return cv;
     }
 }

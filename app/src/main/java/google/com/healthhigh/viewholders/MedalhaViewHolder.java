@@ -11,13 +11,14 @@ import com.google.healthhigh.R;
 
 import google.com.healthhigh.activities.DetalhesMedalhaActivity;
 import google.com.healthhigh.domain.Item;
+import google.com.healthhigh.domain.Premiacao;
 
 /**
  * Created by Alan on 24/06/2017.
  */
 
 public class MedalhaViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-    private Item i;
+    private Premiacao i;
     final ImageView img;
     final TextView nome;
     final TextView data;
@@ -49,7 +50,7 @@ public class MedalhaViewHolder extends RecyclerView.ViewHolder implements View.O
         return XP;
     }
 
-    public void setItem(Item i){
+    public void setItem(Premiacao i){
         this.i = i;
     }
 

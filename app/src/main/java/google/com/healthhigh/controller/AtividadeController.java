@@ -1,18 +1,13 @@
 package google.com.healthhigh.controller;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.text.TextUtils;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 import google.com.healthhigh.dao.AtividadeDAO;
-import google.com.healthhigh.dao.DesafioDAO;
+import google.com.healthhigh.dao.DesafioAtividadeDAO;
 import google.com.healthhigh.dao.ExecucaoAtividadeDAO;
 import google.com.healthhigh.dao.InteracaoAtividadeDAO;
 import google.com.healthhigh.domain.Atividade;
@@ -21,6 +16,7 @@ import google.com.healthhigh.domain.Publicacao;
 
 public class AtividadeController {
     final AtividadeDAO a_dao;
+    final DesafioAtividadeDAO a_d_dao;
     final InteracaoAtividadeDAO i_a_dao;
     final ExecucaoAtividadeDAO e_a_dao;
     final Context context;
@@ -30,6 +26,7 @@ public class AtividadeController {
         this.a_dao = new AtividadeDAO(c);
         this.i_a_dao = new InteracaoAtividadeDAO(c);
         this.e_a_dao = new ExecucaoAtividadeDAO(c);
+        this.a_d_dao = new DesafioAtividadeDAO(c);
     }
 
     // Função: obter uma lista de atividades a partir de um desafio
@@ -42,6 +39,12 @@ public class AtividadeController {
                 a_c.getInteracaoAtividade(atividades, d.getPublicacao());
             }
         }
+        return atividades;
+    }
+
+    public Map<Long, Atividade> getAtividades(){
+        Map<Long, Atividade> atividades = new TreeMap<>();
+        atividades = a_dao.getAtividades(null);
         return atividades;
     }
 
@@ -84,5 +87,18 @@ public class AtividadeController {
             }
         }
         return d;
+    }
+
+    public Set<Long> getIdAtividades() {
+        Set<Long> atividades = a_dao.getIdAtividades();
+        return null;
+    }
+
+    public boolean inserir(Atividade a) {
+        return a_dao.inserirAtividade(a);
+    }
+
+    public boolean associarDesafio(Atividade a, Desafio d) {
+        return a_d_dao.associarAtividade(a, d);
     }
 }

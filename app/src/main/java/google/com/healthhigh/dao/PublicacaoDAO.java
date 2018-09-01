@@ -73,33 +73,22 @@ public class PublicacaoDAO extends DAO {
         }
     }
 
-    public Publicacao inserePublicacao(Publicacao p){
-        DesafioDAO d_dao = new DesafioDAO(context);
-
-        //Verifica se o desafio existe antes de inserir a publicacao
-        if(p.getDesafio() != null){
-            Desafio d_aux = d_dao.getDesafio(p.getDesafio().getId());
-
-            if(d_aux != null && d_aux.getId() == p.getDesafio().getId()){
-                ContentValues cv = setContentValues(p);
-                long new_id = write_db.insert(TABLE_NAME, null, cv);
-                if(new_id > 0){
-                    p.setId(new_id);
-                } else {
-                    return null;
-                }
-            } else {
-                return null;
-            }
+    public boolean inserePublicacao(Publicacao p){
+        ContentValues cv = getContentValues(p);
+        long id = insert(TABLE_NAME, cv);
+        if(id > 0){
+            p.setId(id);
         } else {
-            return null;
+            p = null;
         }
-        return p;
+        return id > 0;
     }
 
-    private ContentValues setContentValues(Publicacao p){
+    private ContentValues getContentValues(Publicacao p){
         ContentValues cv = new ContentValues();
-        cv.put(ID_DESAFIO, p.getDesafio().getId());
+        if(p.getDesafio() != null && p.getDesafio().getId() > 0){
+            cv.put(ID_DESAFIO, p.getDesafio().getId());
+        }
         cv.put(DATA_INICIO, p.getData_inicio());
         cv.put(DATA_FIM, p.getData_fim());
         cv.put(DATA_CRIACAO, p.getData_criacao());

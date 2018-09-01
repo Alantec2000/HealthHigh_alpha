@@ -42,7 +42,7 @@ public class AlternativaDAO extends DAO {
 
     public void inserirAlternativa(Alternativa a) {
         ContentValues cv = getContentValues(a);
-        long new_id = write_db.insert(TABLE_NAME, null, cv);
+        long new_id = insert(TABLE_NAME, cv);
         if(new_id > 0){
             a.setId(new_id);
         } else {

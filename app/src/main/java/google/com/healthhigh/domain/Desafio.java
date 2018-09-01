@@ -1,9 +1,9 @@
 package google.com.healthhigh.domain;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
 import google.com.healthhigh.utils.DataHelper;
 
@@ -12,36 +12,52 @@ import google.com.healthhigh.utils.DataHelper;
  */
 
 public class Desafio {
-    private String TAG = "DESAFIO";
-    public static final String TAG_ID = "desafio_id";
+    private transient  String TAG = "DESAFIO";
+    public transient static final String TAG_ID = "desafio_id";
+    @SerializedName("titulo")
     private String titulo;
+    @SerializedName("descricao")
     private String descricao;
 
-    private int status = 1;
+    @SerializedName("publicacoes")
+    private List<Publicacao> publicacoes;
+
+    private transient int status = 1;
+    @SerializedName("id")
     private long id;
+    @SerializedName("id_premiacao_desafio")
+    private long id_premiacao;
+    @SerializedName("id_grupo_desafio")
+    private long id_grupo;
+    @SerializedName("data_criacao_desafio")
     private long data_criacao;
-    private long data_aceito;
-    private long data_conclusao;
-    private long data_visualizacao;
 
-    private int tipo;
-    private int quantidade;
-    private int tentativas;
+    private transient long data_aceito;
+    private transient long data_conclusao;
+    private transient long data_visualizacao;
 
-    public static final int PENDENTE = 1;
-    public static final int VISUALIZADO = 2;
-    public static final int EM_EXECUCAO = 3;
-    public static final int CONCLUIDO = 4;
-    public static final int ENCERRADO = 5;
-    public static final int NAO_PUBLICADO = 5;
+    private transient int tipo;
+    private transient int quantidade;
+    private transient int tentativas;
 
-    private Publicacao publicacao;
-    private InteracaoDesafio interacao_desafio;
-    private boolean aceito;
-    private List<Meta> metas = new ArrayList<>();
-    private List<TipoMeta> metas_list = new ArrayList<>();
+    public transient static final int PENDENTE = 1;
+    public transient static final int VISUALIZADO = 2;
+    public transient static final int EM_EXECUCAO = 3;
+    public transient static final int CONCLUIDO = 4;
+    public transient static final int ENCERRADO = 5;
+    public transient static final int NAO_PUBLICADO = 5;
 
-    public Desafio() {}
+    private transient Publicacao publicacao;
+    private Premiacao premiacao;
+    private transient InteracaoDesafio interacao_desafio;
+    private transient boolean aceito;
+    private transient List<Meta> metas_TO_OLD = new ArrayList<>();
+    private List<Atividade> atividades = new ArrayList<>();
+    private List<TipoMeta> metas = new ArrayList<>();
+
+    public Desafio() {
+        publicacoes = new ArrayList<>();
+    }
 
     public Desafio(long id, String t, String d, int td, boolean fa, int tn) {
         this.id = id;
@@ -51,12 +67,28 @@ public class Desafio {
         this.tentativas = tn;
     }
 
-    public List<TipoMeta> getMetas_list() {
-        return metas_list;
+    public Premiacao getPremiacao() {
+        return premiacao;
     }
 
-    public void setMetas_list(List<TipoMeta> metas_list) {
-        this.metas_list = metas_list;
+    public void setPremiacao(Premiacao premiacao) {
+        this.premiacao = premiacao;
+    }
+
+    public List<Atividade> getAtividades() {
+        return atividades;
+    }
+
+    public void setAtividades(List<Atividade> atividades) {
+        this.atividades = atividades;
+    }
+
+    public List<TipoMeta> getMetas() {
+        return metas;
+    }
+
+    public void setMetas(List<TipoMeta> metas) {
+        this.metas = metas;
     }
 
     public boolean isAceito() {return aceito;}
@@ -71,14 +103,14 @@ public class Desafio {
 
     public void setData_aceito(long data_aceito) {this.data_aceito = data_aceito;}
 
-    public void addMeta(Meta m){this.metas.add(m);}
+    public void addMeta(Meta m){this.metas_TO_OLD.add(m);}
 
-    public List<Meta> getMetas() {
-        return metas;
+    public List<Meta> getMetas_TO_OLD() {
+        return metas_TO_OLD;
     }
 
-    public void setMetas(List<Meta> metas) {
-        this.metas = metas;
+    public void setMetas_TO_OLD(List<Meta> metas_TO_OLD) {
+        this.metas_TO_OLD = metas_TO_OLD;
     }
 
     public int getTentativas() {
@@ -219,5 +251,17 @@ public class Desafio {
             status = "Não publicado";
         }
         return null;
+    }
+
+    public List<Publicacao> getPublicacoes() {
+        return this.publicacoes;
+    }
+
+    public long getId_premiacao() {
+        return id_premiacao;
+    }
+
+    public void setId_premiacao(long id_premiacao) {
+        this.id_premiacao = id_premiacao;
     }
 }

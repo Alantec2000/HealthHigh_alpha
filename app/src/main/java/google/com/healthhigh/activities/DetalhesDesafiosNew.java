@@ -16,6 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import google.com.healthhigh.adapter.TipoMetaAdapter;
 import google.com.healthhigh.controller.DesafioController;
 import google.com.healthhigh.dao.DesafioXMetaDAO;
@@ -27,54 +30,36 @@ import google.com.healthhigh.domain.TipoMeta;
 import google.com.healthhigh.utils.DataHelper;
 import google.com.healthhigh.utils.MessageDialog;
 
-public class DetalhesDesafiosNew extends AppCompatActivity implements View.OnClickListener {
+public class DetalhesDesafiosNew extends AppCompatActivity {
     public static String DESAFIO_ACTION = "DESAFIO_ID";
     private int status;
-    private Button btn_aceitar_desafio;
     private Desafio d = null;
     private DesafioController d_c;
-    private RecyclerView rv;
-    private TextView
-            titulo,
-            descricao,
-            data_criacao,
-            status_desafio,
-            status_publicacao,
-            data_conclusao_desafio,
-            data_fim_publicacao,
-            data_inicio_publicacao;
+
+    @BindView(R.id.btn_iniciar_desafio) Button btn_aceitar_desafio;
+    @BindView(R.id.rv_lista_metas_desafio) RecyclerView  rv;
+    @BindView(R.id.tituloDetalhesDesafio) TextView  titulo;
+    @BindView(R.id.txt_descricao_desafio) TextView descricao;
+    @BindView(R.id.dataCriacaoDetalheDesafio) TextView data_criacao;
+    @BindView(R.id.statusDesafio) TextView status_desafio;
+    @BindView(R.id.txt_status_publicacao_desafio) TextView status_publicacao;
+    @BindView(R.id.txt_data_conclusao_desafio) TextView data_conclusao_desafio;
+    @BindView(R.id.txt_data_inicio_publicacao_desafio) TextView data_fim_publicacao;
+    @BindView(R.id.txt_data_fim_publicacao_desafio) TextView data_inicio_publicacao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_detalhes_desafios_new);
+        ButterKnife.bind(this);
         d_c = new DesafioController(this);
-        setElementosUI();
-        setEventoBotao();
-    }
-
-    private void setElementosUI() {
-        rv = (RecyclerView) findViewById(R.id.rv_lista_metas_desafio);
-        titulo = (TextView) findViewById(R.id.tituloDetalhesDesafio);
-        descricao = (TextView) findViewById(R.id.txt_descricao_desafio);
-        data_criacao = (TextView) findViewById(R.id.dataCriacaoDetalheDesafio);
-        status_desafio = (TextView) findViewById(R.id.statusDesafio);
-        data_conclusao_desafio = (TextView) findViewById(R.id.txt_data_conclusao_desafio);
-        status_publicacao = (TextView) findViewById(R.id.txt_status_publicacao_desafio);
-        data_inicio_publicacao = (TextView) findViewById(R.id.txt_data_inicio_publicacao_desafio);
-        data_fim_publicacao = (TextView) findViewById(R.id.txt_data_fim_publicacao_desafio);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         carregaDesafio();
-    }
-
-    private void setEventoBotao() {
-        btn_aceitar_desafio = (Button) findViewById(R.id.btn_iniciar_desafio);
-        btn_aceitar_desafio.setOnClickListener(this);
     }
 
     private void associaMetasDesafios(Desafio d) {
@@ -110,12 +95,20 @@ public class DetalhesDesafiosNew extends AppCompatActivity implements View.OnCli
         data_criacao.setText(DataHelper.toDateString(d.getData_criacao()));
         titulo.setText(d.getTitulo());
         descricao.setText(d.getDescricao());
-        setListaMetas(new ArrayList<TipoMeta>(d.getMetas_list()));
+        setListaMetas(new ArrayList<TipoMeta>(d.getMetas()));
         data_conclusao_desafio.setVisibility(View.INVISIBLE);
         status_publicacao.setVisibility(View.INVISIBLE);
         data_inicio_publicacao.setVisibility(View.INVISIBLE);
         data_fim_publicacao.setVisibility(View.INVISIBLE);
         atualizaStatusDesafio();
+        atualizaDataVisualizacaoDesafio();
+    }
+
+    private void atualizaDataVisualizacaoDesafio() {
+        if(d != null && d.getData_visualizacao() == 0){
+            d.setData_visualizacao(DataHelper.now());
+            d_c.atualizar(d);
+        }
     }
 
     private void atualizaStatusDesafio() {
@@ -132,7 +125,7 @@ public class DetalhesDesafiosNew extends AppCompatActivity implements View.OnCli
             if(d.getInteracao_desafio() != null){
                 InteracaoDesafio i_d = d.getInteracao_desafio();
                 i_d.atualizaStatus();
-                if((i_d.getStatus().equals(InteracaoDesafio.PENDENTE) || i_d.getStatus().equals(InteracaoDesafio.EM_EXECUCAO)) && d.getMetas_list().size() > 0){
+                if((i_d.getStatus().equals(InteracaoDesafio.PENDENTE) || i_d.getStatus().equals(InteracaoDesafio.EM_EXECUCAO)) && d.getMetas().size() > 0){
                     verificarDesafioConcluido();
                 }
                 switch (i_d.getStatus()) {
@@ -183,64 +176,25 @@ public class DetalhesDesafiosNew extends AppCompatActivity implements View.OnCli
         if(d_c.verificarDesafioConcluido(d)) {
             if(d_c.concluirDesafio(d.getInteracao_desafio())){
                 MessageDialog.showMessage(this, "Desafio concluído com sucesso!", "Desafio concluído!");
+                Intent i = new Intent("google.com.healthhigh.EnviarDesafioConcluido");
+                sendBroadcast(i);
             }
         }
     }
-/*
-    private void carregaDesafio() {
-        Intent i = getIntent();
-        long id = i.getLongExtra(DESAFIO_ACTION, 0);
-        if(id > 0){
-            d = d_c.getDesafio(id);
-            if(d != null){
-                data_criacao.setText(DataHelper.toDateString(d.getData_criacao()));
-                status_desafio.setText(Desafio.getStatusText(d.getStatus()));
-                titulo.setText(d.getTitulo());
-                descricao.setText(d.getDescricao());
-                d.setMetas_list(d_c.getMetasDesafio(d));
-//                String conclusao = "Indefinida";
-                *//* Reconstruir depois para um método da classe Desafio
-                if(d.getStatus() == Desafio.CONCLUIDO){
-                    Button botaoIniciar = (Button) findViewById(R.id.botaoIniciar);
-                    dataConclusao.setVisibility(View.VISIBLE);
-                    data_conclusao_desafio.setVisibility(View.VISIBLE);
-                    conclusao = d.getData_conclusao() == 0 ? "Indefinida" : DataHelper.parseUT(d.getData_conclusao(), "dd/MM/yy");
-                } else if(d.getStatus() == Desafio.ENCERRADO){
-                    dataConclusao.setVisibility(View.VISIBLE);
-                    data_conclusao_desafio.setVisibility(View.VISIBLE);
-                    conclusao = d.getData_conclusao() == 0 ? "Desafio não foi concluído!" : DataHelper.parseUT(d.getData_conclusao(), "dd/MM/yy");
-                } else {
-                    dataConclusao.setVisibility(View.INVISIBLE);
-                    data_conclusao_desafio.setVisibility(View.INVISIBLE);
-                }
-                dataConclusao.setText(conclusao);*//*
-//                setListaMetas(d.getMetas());
-            } else {
-                MessageDialog.showMessage(this,"Desafio não foi encontrado no sistema, tente novamente!", "Desafio não encontrado");
-            }
-        } else {
-            MessageDialog.showMessage(this, "Nenhum ID de Desafio informado!", "Desafio não informado");
-        }
-        btn_aceitar_desafio.setEnabled(d != null && (d.getStatus() != Desafio.CONCLUIDO && d.getStatus() != Desafio.ENCERRADO));
-    }*/
 
     private void setListaMetas(List<TipoMeta> metas){
         rv.setAdapter(new TipoMetaAdapter(this,metas));
         rv.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.btn_iniciar_desafio:
-                if(d.getStatus() == Desafio.PENDENTE){
-                    iniciarDesafio();
-                    atualizaStatusDesafio();
-                } else if (d.getStatus() == Desafio.EM_EXECUCAO){
-                    cancelarExecucaoDesafio();
-                    atualizaStatusDesafio();
-                }
-                break;
+    @OnClick(R.id.btn_iniciar_desafio)
+    public void iniciarDesafioPress(){
+        if(d.getStatus() == Desafio.PENDENTE){
+            iniciarDesafio();
+            atualizaStatusDesafio();
+        } else if (d.getStatus() == Desafio.EM_EXECUCAO){
+            cancelarExecucaoDesafio();
+            atualizaStatusDesafio();
         }
     }
 
@@ -251,10 +205,4 @@ public class DetalhesDesafiosNew extends AppCompatActivity implements View.OnCli
     private void cancelarExecucaoDesafio() {
         d_c.cancelarDesafio(d);
     }
-
-    /*private void iniciarDesafio() {
-        Intent initDesafio = new Intent(this, RealizandoDesafioActivity.class);
-        initDesafio.putExtra(RealizandoDesafioActivity.DESAFIO_ID, d.getId());
-        startActivity(initDesafio);
-    }*/
 }

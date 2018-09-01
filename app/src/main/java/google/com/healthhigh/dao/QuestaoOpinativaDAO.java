@@ -31,7 +31,7 @@ public class QuestaoOpinativaDAO extends DAO {
 
     public void insereQuestaoOpinativa(QuestaoOpinativa qo){
         ContentValues cv = getContentValues(qo);
-        long new_id = write_db.insert(TABLE_NAME, null, cv);
+        long new_id = insert(TABLE_NAME, cv);
         if(new_id > 0){
             qo.setId(new_id);
         } else {

@@ -43,28 +43,17 @@ public class RespostaAlternativaDAO extends DAO {
     public void inserirRespostaAlternativa(RespostaAlternativa ra){
         ContentValues cv = getContentValues(ra);
         long new_id = 0;
-        try{
-            new_id = write_db.insertOrThrow(TABLE_NAME, null, cv);
-        }catch (SQLiteException e) {
-            imprimeErroSQLite(e);
-        } finally {
-            if(new_id > 0) {
-                ra.setId(new_id);
-            } else {
-                ra = null;
-            }
+        new_id = insert(TABLE_NAME, cv);
+        if(new_id > 0) {
+            ra.setId(new_id);
+        } else {
+            ra = null;
         }
     }
     public boolean atualizarRespostaAlternativa(RespostaAlternativa ra){
         ContentValues cv = getContentValues(ra);
-        int rows_updated = 0;
-        try{
-            rows_updated = write_db.update(TABLE_NAME, cv, ID+"="+String.valueOf(ra.getId()), null);
-        }catch (SQLiteException e) {
-            imprimeErroSQLite(e);
-        }
-
-        return rows_updated > 0;
+        boolean rows_updated = update(TABLE_NAME, cv, ID+"="+String.valueOf(ra.getId()), null);
+        return rows_updated;
     }
 
     private ContentValues getContentValues(RespostaAlternativa ra) {

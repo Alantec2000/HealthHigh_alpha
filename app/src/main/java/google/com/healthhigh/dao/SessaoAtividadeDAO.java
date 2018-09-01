@@ -7,9 +7,12 @@ import android.database.DatabaseUtils;
 import android.database.SQLException;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import google.com.healthhigh.domain.ExecucaoAtividade;
 import google.com.healthhigh.domain.InteracaoAtividade;
 import google.com.healthhigh.domain.SessaoAtividade;
 
@@ -119,5 +122,44 @@ public class SessaoAtividadeDAO extends DAO {
         };
         getSelectQueryContent(select, s_b);
         return s_b.sessao;
+    }
+
+    public List<SessaoAtividade> getSessoes(InteracaoAtividade i_a) {
+        List<SessaoAtividade> sessoes = new ArrayList<>();
+        if(i_a != null && i_a.getId() > 0){
+            String select = "SELECT * FROM " + TABLE_NAME + " as sa " +
+                    "INNER JOIN " + ExecucaoAtividadeDAO.TABLE_NAME + " as ea ON " +
+                    "ea." + ExecucaoAtividadeDAO.ID_SESSAO_ATIVIDADE + " = sa." + ID + " " +
+                    "INNER JOIN " + InteracaoAtividadeDAO.TABLE_NAME + " as ia ON " +
+                "ia." + InteracaoAtividadeDAO.ID + " = sa." + ID_INTERACAO_ATIVIDADE + " " +
+                "WHERE sa." + DATA_FIM + " <> 0 ";
+            select += " AND ia." + InteracaoAtividadeDAO.ID + " = " + String.valueOf(i_a.getId());
+            select += " ORDER BY " + ID + " DESC LIMIT 1";
+            SessaoAtividadeBehavior s_b = new SessaoAtividadeBehavior() {
+                @Override
+                public void setContent(Cursor c) {
+                    Log.v("Cursor Object", DatabaseUtils.dumpCursorToString(c));
+                    long id = getLong(c, ID);
+                    SessaoAtividade sa;
+                    if(!sessoes.containsKey(id)){
+                        sa = getSessaoAtividade(c);
+                        sessoes.put(id, sa);
+                    } else {
+                        sa = sessoes.get(id);
+                    }
+                    ExecucaoAtividade ea;
+                    long id_ea = getLong(c, ExecucaoAtividadeDAO.ID);
+                    if(sa.getAtividades().containsKey(id_ea)){
+                        ea = sa.getAtividades().get(id_ea);
+                    } else {
+                        ea = ExecucaoAtividadeDAO.get(c);
+                        sa.getAtividades().put(id_ea, ea);
+                    }
+                }
+            };
+            getSelectQueryContent(select, s_b);
+            sessoes = new ArrayList<>(s_b.sessoes.values());
+        }
+        return sessoes;
     }
 }

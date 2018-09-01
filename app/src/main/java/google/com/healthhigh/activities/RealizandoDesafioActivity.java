@@ -49,7 +49,7 @@ public class RealizandoDesafioActivity extends AppCompatActivity{
         if(id > -1){
             d = dao.getDesafioMetas(id);
             if(d != null){
-//                rv.setAdapter(new MetaListAdapter(this, d.getMetas()));
+//                rv.setAdapter(new MetaListAdapter(this, d.getMetas_TO_OLD()));
 //                rv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
             } else {
                 MessageDialog.showMessage(this, "Desafio não encontrado", "Desafio selecionado não foi encontrado!");

@@ -1,5 +1,6 @@
 package google.com.healthhigh.activities;
 
+import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
@@ -9,15 +10,17 @@ import android.widget.TextView;
 
 import com.google.healthhigh.R;
 
+import google.com.healthhigh.controller.PremiacaoController;
 import google.com.healthhigh.dao.ItemDAO;
 import google.com.healthhigh.domain.Item;
+import google.com.healthhigh.domain.Premiacao;
 import google.com.healthhigh.utils.BitmapUtil;
 import google.com.healthhigh.utils.DataHelper;
 
 public class DetalhesMedalhaActivity extends AppCompatActivity {
     private Handler h = new Handler();
     private ItemDAO iDao = null;
-    private Item i;
+    private Premiacao i;
     private TextView nomeMedalha;
     private TextView dscMedalha;
     private TextView dataInsercaoMedalha;
@@ -30,6 +33,7 @@ public class DetalhesMedalhaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detalhes_medalha);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        final long id = getIntent().getLongExtra("ITEM_ID",0);
         new Thread(){
             public void run(){
                 iDao = new ItemDAO(DetalhesMedalhaActivity.this);
@@ -39,10 +43,8 @@ public class DetalhesMedalhaActivity extends AppCompatActivity {
                 qtdXPMedalha = (TextView) findViewById(R.id.qtdXPMedalha);
                 nMedalhasAssociadas = (TextView) findViewById(R.id.nMedalhasAssociadas);
                 medalhaIcone = (ImageView) findViewById(R.id.medalhaIcone);
-                int id = getIntent().getIntExtra("ITEM_ID",0);
                 if(id > 0){
-                    i = iDao.getItem("SELECT * FROM " + ItemDAO.TABLE_NAME +
-                            " WHERE " + ItemDAO.ID + " = " + id + ";");
+                    i = (new PremiacaoController(getContext())).getPremiacao(id);
                 }
                 if(i != null){
                     h.post(new Runnable() {
@@ -62,13 +64,15 @@ public class DetalhesMedalhaActivity extends AppCompatActivity {
 
     }
 
-    private void setItemContent(Item i) {
+    public Context getContext(){
+        return this;
+    }
+
+    private void setItemContent(Premiacao i) {
         nomeMedalha.setText(i.getNome());
-        dscMedalha.setText(i.getDescricao());
-        String data = DataHelper.parseUT(i.getData()/1000, "dd/MM/y");
+        String data = DataHelper.toDateString(i.getData_criacao());
         dataInsercaoMedalha.setText(data);
-        medalhaIcone.setImageBitmap(BitmapUtil.getImage(i.getImg()));
-        String xp = Integer.toString(i.getXp()) + " Pontos";
+        String xp = Integer.toString(i.getExperiencia()) + " Pontos";
         qtdXPMedalha.setText(xp);
         nMedalhasAssociadas.setText("00");
     }

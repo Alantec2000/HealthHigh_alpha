@@ -1,5 +1,7 @@
 package google.com.healthhigh.domain;
 
+import com.google.gson.annotations.SerializedName;
+
 import google.com.healthhigh.utils.DataHelper;
 
 /**
@@ -7,8 +9,19 @@ import google.com.healthhigh.utils.DataHelper;
  */
 
 public class Publicacao {
-    private long id, data_inicio, data_fim, data_criacao;
-    private Desafio desafio;
+    @SerializedName("id_publicacao")
+    private long id;
+
+    @SerializedName("vigencia_inicio_publicacao")
+    private long data_inicio;
+
+    @SerializedName("vigencia_fim_publicacao")
+    private long data_fim;
+
+    @SerializedName("data_criacao_publicacao")
+    private long data_criacao;
+
+    private transient Desafio desafio;
 
     public static final int PENDENTE = 1;
     public static final int VISUALIZADO = 2;

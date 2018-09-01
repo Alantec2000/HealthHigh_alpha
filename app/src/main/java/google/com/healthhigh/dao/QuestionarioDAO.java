@@ -88,7 +88,7 @@ public class QuestionarioDAO extends DAO {
     };
 
     public void insereQuestionario(Questionario q){
-        long id = write_db.insert(TABLE_NAME, null, getContentValues(q));
+        long id = insert(TABLE_NAME, getContentValues(q));
         if(id > 0){
             q.setId(id);
         } else {
@@ -112,13 +112,6 @@ public class QuestionarioDAO extends DAO {
 
     public boolean atualizaQuestionario(Questionario q) {
         ContentValues cv = getContentValues(q);
-        int rows_updated = 0;
-        try{
-            rows_updated = write_db.update(TABLE_NAME, cv, ID + "=?", new String[]{String.valueOf(q.getId())});
-        }catch (SQLiteException e) {
-            imprimeErroSQLite(e);
-        }
-
-        return rows_updated > 0;
+        return update(TABLE_NAME, cv, ID + "=?", new String[]{String.valueOf(q.getId())});
     }
 }

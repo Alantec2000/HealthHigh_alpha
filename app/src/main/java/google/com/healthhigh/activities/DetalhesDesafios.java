@@ -93,7 +93,7 @@ public class DetalhesDesafios extends AppCompatActivity implements View.OnClickL
                     dataConclusao_label.setVisibility(View.INVISIBLE);
                 }
                 dataConclusao.setText(conclusao);
-//                setListaMetas(d.getMetas());
+//                setListaMetas(d.getMetas_TO_OLD());
             } else {
                 MessageDialog.showMessage(this,"Desafio não foi encontrado no sistema, tente novamente!", "Desafio não encontrado");
             }

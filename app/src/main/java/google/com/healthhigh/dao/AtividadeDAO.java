@@ -6,7 +6,9 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.util.Log;
 
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 import google.com.healthhigh.domain.Atividade;
@@ -79,6 +81,19 @@ public class AtividadeDAO extends DAO {
         return atividades;
     }
 
+    public Set<Long> getIdAtividades() {
+        final Set<Long> atividades_set = new HashSet<>();
+        String select = "SELECT " + ID + " FROM " + TABLE_NAME;
+        getSelectQueryContent(select, new AtividadeBehavior() {
+            @Override
+            public void setContent(Cursor c) {
+                long id = getLong(c, ID);
+                if(id > 0) atividades_set.add(id);
+            }
+        });
+        return atividades_set;
+    }
+
     public abstract class AtividadeBehavior implements Behavior {
         protected final Map<Long, Atividade> atividades;
         protected final Atividade atividade;
@@ -129,17 +144,25 @@ public class AtividadeDAO extends DAO {
         return a_b.atividades;
     }
 
-    private void inserirAtividade(Atividade a){
+    public boolean inserirAtividade(Atividade a){
         ContentValues cv = getContentValues(a);
+        long id = insert(TABLE_NAME, cv);
+        a.setId(id);
+        return id > 0;
     }
 
     private ContentValues getContentValues(Atividade a) {
         ContentValues cv = new ContentValues();
+        if(a.getId() > 0){
+            cv.put(ID, a.getId());
+        }
         if(a.getIdPremiacao() > 0) {
             cv.put(ID_PREMIACAO, a.getIdPremiacao());
         } else {
             cv.putNull(ID_PREMIACAO);
         }
+        cv.put(NOME , a.getNome());
+        cv.put(DESCRICAO , a.getDescricao());
         cv.put(DATA_CRIACAO, a.getData_criacao());
         cv.put(DATA_VISUALIZACAO, a.getData_visualizacao());
         cv.put(TEMPO_TOTAL, a.getTotal_tempo_execucao());

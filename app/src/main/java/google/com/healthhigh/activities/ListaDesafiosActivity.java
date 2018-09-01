@@ -26,7 +26,7 @@ public class ListaDesafiosActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_desafios);
         d_c = new DesafioController(this);
-        addDesafioTeste();
+//        addDesafioTeste();
 //        addMetaTeste();
         setDesafioList();
     }

@@ -106,7 +106,7 @@ public class DesafioXMetaDAO extends DAO {
         });
 
         if(desafio != null)
-            desafio.setMetas(listaMetas);
+            desafio.setMetas_TO_OLD(listaMetas);
 
         return desafio;
     }
@@ -160,7 +160,7 @@ public class DesafioXMetaDAO extends DAO {
 
     public void insereDesafioAssocMeta(Desafio d, Meta m){
         ContentValues cv = getContentValues(d, m);
-        write_db.insert(TABLE_NAME, null, cv);
+        insert(TABLE_NAME, cv);
     }
 
     private ContentValues getContentValues(Desafio d, Meta m){

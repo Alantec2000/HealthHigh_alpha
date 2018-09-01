@@ -145,7 +145,7 @@
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
             android:padding="8dp"
-            android:text="@string/metas"
+            android:text="@string/metas_TO_OLD"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txt_data_fim_publicacao_desafio" />
